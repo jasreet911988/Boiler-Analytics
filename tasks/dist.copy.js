@@ -32,9 +32,10 @@ module.exports = function(gulp) {
 
     var publicFiles = gulp.src(['public/*.*']).pipe(gulp.dest('./dist/public'));
     var docsFiles = gulp.src(['public/docs/**/*.*']).pipe(gulp.dest('./dist/public/docs'));
+    var imageFiles = gulp.src(['public/images/*.*']).pipe(gulp.dest('./dist/public/images'));
     var server = gulp.src(['server/**/*.*']).pipe(gulp.dest('./dist/server'))
     var packageFile = gulp.src(['package.json']).pipe(gulp.dest('dist'));
 
-    return merge(server, packageFile, extraStreams, publicFiles, docsFiles);
+    return merge(server, packageFile, extraStreams, publicFiles, docsFiles, imageFiles);
   };
 };

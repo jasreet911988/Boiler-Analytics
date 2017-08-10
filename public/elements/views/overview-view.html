@@ -1,0 +1,562 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/px-dropdown/px-dropdown.html">
+<link rel="import" href="../../bower_components/px-rangepicker/px-rangepicker.html">
+<link rel="import" href="../../bower_components/px-vis-timeseries/px-vis-timeseries.html">
+<link rel="import" href="../../bower_components/px-vis-xy-chart/px-vis-xy-chart.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
+<link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<!-- <link rel="import" href="temp-view.html"> -->
+<link rel="import" href="pump-performance-view.html">
+<dom-module id="overview-view">
+<template>
+<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+<style>
+:host {
+display: block;
+}
+.vertical-text{
+  max-width: 8px;
+  transform: rotate(270deg);
+  transform-origin: left top 0;
+  position: relative;
+  top: 180px;
+}
+#dropdownDiv {
+max-width: 200px;
+}
+#row1{
+display:flex;
+flex-direction:row;
+justify-content: space-around;
+}
+#column1{
+display:flex;
+flex-direction:column;
+}
+#column2{
+display:flex;
+flex-direction:column;
+}
+.flex-row {
+display:flex;
+flex-direction:row;
+justify-content: space-around;
+width : 50%;
+}
+.flex-col {
+display:flex;
+flex-direction:column;
+min-width: 45%;
+margin : 10px;
+}
+.spanStyle {
+font-weight: bolder;
+font-size: 20px;
+}
+.redColor {
+color : red;
+}
+.greenColor {
+color : green;
+}
+.orangeColor {
+color : orange;
+}
+</style>
+<div class="layout horizontal">
+  <div style="width:16%;background-color:#3b3b3f;color:white;">
+    <div style="overflow-wrap: break-word; padding:20px;">
+      <span style="font-weight:bold;text-align:center;text-transform:uppercase;">{{assetName}}</span>
+    </div>
+    <img src="../../images/pump.png">
+    <hr>
+    <span style="padding:10px;font-size:12px;color:darkgrey;">UPCOMING SERVICE</span><br>
+    <span style="padding:10px;font-weight:bold;">31st Aug 2017</span>
+    <hr>
+    <span style="padding:10px;font-size:12px;color:darkgrey;">INSTALLATION DATE</span><br>
+    <span style="padding:10px;font-weight:bold;">29th Feb 2017</span>
+  </div>
+  <div style="width:84%;">
+    <px-card id="tempCardId">
+      <template is="dom-if" if="{{temp}}">
+      <div class="layout horizontal center-center" style="padding:10px;margin-bottom:-25px;">
+        <div style="width:49%; border-right: 1px solid black;">
+          <div class="layout horizontal center-center">
+            <div>
+              <img src="../../images/temperature.png">
+            </div>
+            <div>
+              <span style="font-weight: bold">Temparature</span><br>
+              <span id="tempSpan" class$="{{getClasses()}}">{{temp}}C</span>
+            </div>
+          </div>
+        </div>
+        <div style="width:49%;">
+          <div class="layout horizontal center-center">
+            <div>
+              <img src="../../images/battery.png">
+            </div>
+            <div>
+              <span style="font-weight: bold">Battery Voltage</span><br>
+              <span id="batterySpan" class="spanStyle greenColor">90%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      </template>
+    </px-card>
+    <px-card id="overviewCard" header-text="Load Profile" chevron>
+      <!-- <div id="row1"> -->
+        <div id="column1" style="">
+          <div class="layout horizontal">
+          <div>
+            <px-rangepicker id="loadProfileRangeId" range="{{selectedRange}}">
+          </px-rangepicker>
+          </div>          
+          <div id="dropdownDiv" style="margin-left:20px;">
+            <px-dropdown
+              id="dayWeekId"
+              display-value="day">
+              <px-dropdown-content
+                extend-dropdown='true'
+                extend-dropdown-by='25'
+                max-cont-character-width='10'
+                items='[{"key":"week","val":"week"},{"key":"day","val":"day"}]'>
+              </px-dropdown-content>
+            </px-dropdow>
+          </div>
+          </div>
+          <!-- <nvd3-line
+          id="lineLoad"
+          data="{{LoadData}}"
+          height="300"
+          width="400"
+          use-interactive-guideline>
+          </nvd3-line> -->
+          <px-vis-timeseries 
+          debounce-resize-timing="250" 
+          width="700" 
+          height="290.5" 
+          chart-horizontal-alignment="center" 
+          chart-vertical-alignment="center" 
+          margin='{"top":10,"bottom":35,"left":65,"right":65}' 
+          tooltip-config='{}' 
+          register-config='{"type":"horizontal"}' 
+          selection-type="xy" 
+          chart-data='{{LoadData}}' 
+          series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}' 
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' 
+          x-axis-config='{"title":"Date"}' 
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+        </px-vis-timeseries>
+        </div>
+      </px-card>
+      <px-card id="overviewCard" header-text="Monthly Energy Consumption" chevron>
+        <div id="column2" >
+          <px-rangepicker id="energyRangeId" range="{{energySelectedRange}}">
+          </px-rangepicker>
+          <div class="layout horizontal">
+            <div class="vertical-text">
+              Energy Consumption
+            </div>
+            <div>
+              <nvd3-multi-bar
+          data="{{data}}"
+          height="300"
+          width="400"
+          >
+          </nvd3-multi-bar>
+            </div>
+          </div>
+          
+        </div>
+      <!-- </div> -->    
+    </px-card>
+    <!-- new card starts-->
+    <px-card id="secondCard" header-text="Gravity Profile" chevron>
+        <div id="column1" style="padding-right:10px;">
+          <div class="layout horizontal">
+            <div>
+              <px-rangepicker id="gravityRangeId" range="{{selectedGravityRange}}">
+              </px-rangepicker>
+            </div>
+            <div id="gravityDropdownDiv" style="max-width:200px;margin-left:20px;">
+            <px-dropdown
+              id="gravityDropdownId"
+              display-value="GravityX">
+              <px-dropdown-content
+                extend-dropdown='true'
+                extend-dropdown-by='25'
+                max-cont-character-width='10'
+                items='[{"key":"GravityX","val":"GravityX"},{"key":"GravityY","val":"GravityY"},{"key":"GravityZ","val":"GravityZ"}]'>
+              </px-dropdown-content>
+            </px-dropdow>
+          </div>
+          </div>            
+          <!-- <nvd3-line
+          id="gravityGraphId"
+          data="{{gravityData}}"
+          height="300"
+          width="400"
+          use-interactive-guideline>
+          </nvd3-line> -->
+          <px-vis-timeseries 
+          debounce-resize-timing="250" 
+          width="700" 
+          height="290.5" 
+          chart-horizontal-alignment="center" 
+          chart-vertical-alignment="center" 
+          margin='{"top":10,"bottom":35,"left":65,"right":65}' 
+          tooltip-config='{}' 
+          register-config='{"type":"horizontal"}' 
+          selection-type="xy" 
+          chart-data='{{gravityData}}' 
+          series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}' 
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' 
+          x-axis-config='{"title":"Date"}' 
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+        </px-vis-timeseries>
+        </div>
+      </px-card>
+      <px-card id="secondCard" header-text="Flow & Speed" chevron>
+        <div id="column2" >
+          <h3></h3>
+          <px-rangepicker id="flowspeedRangeId" range="{{flowspeedSelectedRange}}">
+          </px-rangepicker>
+          <px-vis-xy-chart
+          debounce-resize-timing="250"
+          width="700"
+          height="311.5"
+          chart-horizontal-alignment="center"
+          chart-vertical-alignment="center"
+          margin='{"top":30,"bottom":60,"left":75,"right":20}'
+          tooltip-config='{"forceDateTimeDisplay":false}'
+          register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+          selection-type="xy"
+          chart-data="{{flowspeedData}}"
+          series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
+          x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+          y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
+        </px-vis-xy-chart>          
+        </div>
+    </px-card>
+   <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> --> 
+    <px-card id="CanvasCard" header-text="Pump Efficiency" chevron>
+        <div id="column2" >
+          <px-rangepicker id="peRangeId" range="{{peSelectedRange}}">
+          </px-rangepicker>                  
+        </div>
+        <px-vis-xy-chart
+          debounce-resize-timing="250"
+          width="700"
+          height="311.5"
+          chart-horizontal-alignment="center"
+          chart-vertical-alignment="center"
+          margin='{"top":30,"bottom":60,"left":75,"right":20}'
+          tooltip-config='{"forceDateTimeDisplay":false}'
+          register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+          selection-type="xy"
+          chart-data="{{effChartData}}"
+          series-config='{"firstSerie":{"type":"line","name":"HeadVsFlow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"line","name":"EfficiencyVsFlow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":2,"side":"left"}}}'
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
+          x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+          y-axis-config='{"title":"Y","labelPosition":"center","orientation":"left"}'>
+        </px-vis-xy-chart>
+    </px-card>
+    <!-- <pump-performance-view></pump-performance-view> -->
+    <iron-ajax id="aboutContentAjaxEl"></iron-ajax>
+    <iron-ajax id="overviewAjaxEl"></iron-ajax>
+    <iron-ajax id="loadProfileAjaxEl"></iron-ajax>
+    <iron-ajax id="gravityAjaxEl"></iron-ajax>
+    <iron-ajax id="flowspeedAjaxEl"></iron-ajax>
+    <iron-ajax id="pumpEfficiencyAjaxEl"></iron-ajax>
+  </div>
+</div>
+</template>
+<script>
+Polymer({
+  is: 'overview-view',
+  properties: {
+    selectedRange: {
+      type: Object
+    },
+    energySelectedRange: {
+      type: Object
+    },
+    assetName : {
+      type : String,
+      value : ''
+    },
+    assetId : {
+      type : String,
+      value : ''
+    }
+  },
+  _getDefaultRange: function(months) {
+    var from = moment().subtract(months, 'months'),
+    to = moment().subtract(months-1, 'months');
+    console.log("here in rangepicker", + to);
+    return {"from":from.toISOString(),"to":to.toISOString()};
+  },
+  _setEnergyTimes: function(){
+    this.energyStartTime = new Date(this.energySelectedRange.from).getTime();
+    this.energyEndTime = new Date(this.energySelectedRange.to).getTime();
+  },
+  _setLoadTimes: function(){
+    this.loadStartTime = new Date(this.selectedRange.from).getTime();
+    this.loadEndTime = new Date(this.selectedRange.to).getTime();
+  },
+  _setGravityTimes: function(){
+    this.gravityStartTime = new Date(this.selectedGravityRange.from).getTime();
+    this.gravityEndTime = new Date(this.selectedGravityRange.to).getTime();
+  },
+  _setFlowspeedTimes: function(){
+    this.flowspeedStartTime = new Date(this.flowspeedSelectedRange.from).getTime();
+    this.flowspeedEndTime = new Date(this.flowspeedSelectedRange.to).getTime();
+  },
+  _setPeTimes: function(){
+    this.peStartTime = new Date(this.peSelectedRange.from).getTime();
+    this.peEndTime = new Date(this.peSelectedRange.to).getTime();
+  },
+  getClasses: function () {
+    var spanStyle = 'spanStyle';
+    var tempNum = parseInt(this.temp, 10);
+    if(tempNum < 55){
+      spanStyle += ' greenColor';
+    }else if (tempNum > 65){
+      spanStyle += ' redColor';
+    }else {
+      spanStyle += ' orangeColor';
+    }
+    return spanStyle;
+  },
+  ready: function() {
+    this.assetName = document.getElementById('contextName').value;
+    this.assetId = document.getElementById('contextId').value;
+    this.selectedRange = this._getDefaultRange(2);
+    this.energySelectedRange = this._getDefaultRange(2);
+    this.selectedGravityRange = this._getDefaultRange(2);
+    this.flowspeedSelectedRange = this._getDefaultRange(2);
+    this.peSelectedRange = this._getDefaultRange(2);
+    this._setLoadTimes();
+    this._setEnergyTimes();
+    this._setGravityTimes();
+    this._setFlowspeedTimes();
+    this._setPeTimes();
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ];
+    var that = this;
+    that.effChartData = [];
+    this.dayWeek = this.$.dayWeekId.displayValue;
+    this.gravityVal = this.$.gravityDropdownId.displayValue;
+
+    this.$.overviewAjaxEl.url = "/api/v1/monthlyenergyconsumption?tagId="+that.assetId+"&startTime="+this.energyStartTime+"&endTime="+this.energyEndTime;
+
+    this.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+this.loadStartTime+"&endTime="+this.loadEndTime+"&groupType="+this.dayWeek;
+
+    this.$.gravityAjaxEl.url = "/api/v1/gravitygraph?tagId="+that.assetId+"&startTime="+this.gravityStartTime+"&endTime="+this.gravityEndTime+"&vibration="+this.gravityVal;
+
+    this.$.flowspeedAjaxEl.url = "/api/v1/flowspeed?tagId="+that.assetId+"&startTime="+this.flowspeedStartTime+"&endTime="+this.flowspeedEndTime;
+
+    that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
+
+    this.$.aboutContentAjaxEl.url = "/api/v1/temperature";
+
+    this.$.aboutContentAjaxEl.addEventListener('response', function(evt) {
+      that.temp = evt.detail.response;
+    });
+    this.$.overviewAjaxEl.addEventListener('response', function(evt) {
+      var reqData = evt.detail.response;
+      var i;
+      for(i = 0; i < reqData.length; i++){
+        reqData[i].x = monthNames[new Date(reqData[i]['x']).getMonth()];
+        reqData[i].y = reqData[i]['y'];
+      }
+      that.data = [{
+        "key" : "Energy Consumption",
+        "values" : reqData
+      }];
+    });
+    this.$.loadProfileAjaxEl.addEventListener('response', function(evt) {
+      var reqData1 = evt.detail.response;
+      var i;
+      for(i = 0; i < reqData1.length; i++){
+        reqData1[i].timeStamp = new Date(reqData1[i]['x']);
+        reqData1[i].y0 = Math.round(reqData1[i]['y']*100)/100;
+      }
+      that.LoadData = reqData1;
+    });
+    this.$.gravityAjaxEl.addEventListener('response', function(evt) {
+      var reqData1 = evt.detail.response;
+      var i;
+      for(i = 0; i < reqData1.length; i++){
+        reqData1[i].timeStamp = new Date(reqData1[i]['x']);
+        reqData1[i].y0 = parseFloat(reqData1[i]['y'].toFixed(4));
+      }
+      that.gravityData = reqData1;
+    });
+    this.$.flowspeedAjaxEl.addEventListener('response', function(evt) {
+      var reqData1 = evt.detail.response;
+      that.flowspeedData = reqData1;
+      /*for(i = 0; i < reqData1.length; i++){
+        that.xAxisValues[reqData1[i]['x']] = reqData1[i]['x'];
+        reqData1[i].y = parseFloat(reqData1[i]['y'].toFixed(4));
+      }
+      that.flowspeedData = [{
+        "key" : "Flow Speed Profile",
+        "values" : reqData1
+      }];*/
+    });
+    this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
+      console.log(evt.detail.response);
+      that.effChartData = evt.detail.response;
+      /*that.effChartData = [{
+  "Date": 1468213850000,
+  "T48A": 1332,
+  "T48B": 1346,
+  "T48C": 1330,
+  "T48D": 1342,
+  "Line": 1340
+}, {
+  "Date": 1468213968000,
+  "T48A": 1336,
+  "T48B": 1343,
+  "T48C": 1336,
+  "T48D": 1340,
+  "Line": 1343
+}, {
+  "Date": 1468214133000,
+  "T48A": 1341,
+  "T48B": 1345,
+  "T48C": 1331,
+  "T48D": 1333,
+  "Line": 1345
+}, {
+  "Date": 1468214253000,
+  "T48A": 1348,
+  "T48B": 1344,
+  "T48C": 1343,
+  "T48D": 1339,
+  "Line": 1350
+}, {
+  "Date": 1468214374000,
+  "T48A": 1352,
+  "T48B": 1346,
+  "T48C": 1335,
+  "T48D": 1342,
+  "Line": 1357
+}, {
+  "Date": 1468214564000,
+  "T48A": 1341,
+  "T48B": 1342,
+  "T48C": 1344,
+  "T48D": 1346
+}, {
+  "Date": 1468214682000,
+  "T48A": 1348,
+  "T48B": 1353,
+  "T48C": 1337,
+  "T48D": 1331
+}, {
+  "Date": 1468214852000,
+  "T48A": 1346,
+  "T48B": 1348,
+  "T48C": 1339,
+  "T48D": 1335
+}, {
+  "Date": 1468231470000,
+  "T48A": 1353,
+  "T48B": 1355
+}, {
+  "Date": 1468231590000,
+  "T48A": 1359,
+  "T48B": 1359
+}, {
+  "Date": 1468232041000,
+  "T48A": 1357,
+  "T48B": 1359
+}, {
+  "Date": 1468232184000,
+  "T48A": 1357,
+  "T48B": 1359
+}, {
+  "Date": 1468232301000,
+  "T48A": 1353,
+  "T48B": 1359
+}, {
+  "Date": 1468232417000,
+  "T48A": 1353,
+  "T48B": 1357
+}, {
+  "Date": 1468232576000,
+  "T48A": 1353,
+  "T48B": 1355
+}, {
+  "Date": 1468232693000,
+  "T48A": 1355,
+  "T48B": 1360
+}, {
+  "Date": 1468232845000,
+  "T48A": 1355,
+  "T48B": 1355
+}, {
+  "Date": 1468232966000,
+  "T48A": 1353,
+  "T48B": 1359
+}, {
+  "Date": 1468233083000,
+  "T48A": 1355,
+  "T48B": 1357
+}];*/
+    });
+    this.$.dayWeekId.addEventListener('px-dropdown-value-changed', function(evt) {
+      that.dayWeek = evt.detail.key;
+      that.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+that.loadStartTime+"&endTime="+that.loadEndTime+"&groupType="+that.dayWeek;
+      that.$.loadProfileAjaxEl.generateRequest();
+    });
+    this.$.gravityDropdownId.addEventListener('px-dropdown-value-changed', function(evt) {
+      that.gravityVal = evt.detail.key;
+      that.$.gravityAjaxEl.url = "/api/v1/gravitygraph?tagId="+that.assetId+"&startTime="+that.gravityStartTime+"&endTime="+that.gravityEndTime+"&vibration="+that.gravityVal;
+      that.$.gravityAjaxEl.generateRequest();
+    });
+    this.$.loadProfileRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
+      that._setLoadTimes();
+      that.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+that.loadStartTime+"&endTime="+that.loadEndTime+"&groupType="+that.dayWeek;
+      that.$.loadProfileAjaxEl.generateRequest();
+    });
+    this.$.energyRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
+      that._setEnergyTimes();
+      that.$.overviewAjaxEl.url = "/api/v1/monthlyenergyconsumption?tagId="+that.assetId+"&startTime="+that.energyStartTime+"&endTime="+that.energyEndTime;
+      that.$.overviewAjaxEl.generateRequest();
+    });
+    this.$.flowspeedRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
+      that._setFlowspeedTimes();
+      that.$.flowspeedAjaxEl.url = "/api/v1/flowspeed?tagId="+that.assetId+"&startTime="+that.flowspeedStartTime+"&endTime="+that.flowspeedEndTime;
+      that.$.flowspeedAjaxEl.generateRequest();
+    });
+    this.$.peRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
+      that._setPeTimes();
+      that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
+      that.$.pumpEfficiencyAjaxEl.generateRequest();
+    });
+    this.$.gravityRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
+      that._setGravityTimes();
+      that.$.gravityAjaxEl.url = "/api/v1/gravitygraph?tagId="+that.assetId+"&startTime="+that.gravityStartTime+"&endTime="+that.gravityEndTime+"&vibration="+that.gravityVal;
+      that.$.gravityAjaxEl.generateRequest();
+    });
+    this.$.aboutContentAjaxEl.generateRequest();
+    this.$.overviewAjaxEl.generateRequest();
+    this.$.loadProfileAjaxEl.generateRequest();
+    this.$.gravityAjaxEl.generateRequest();
+    this.$.flowspeedAjaxEl.generateRequest();
+    this.$.pumpEfficiencyAjaxEl.generateRequest();
+  }
+});
+</script>
+</dom-module>

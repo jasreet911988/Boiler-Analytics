@@ -30,7 +30,8 @@
     <header role="banner">
       <div class="viewport flex flex--justify flex--middle">
         <h3>
-          <ge-svg-logo class="u-mr--"></ge-svg-logo> [[appHeader]]
+          <!-- <ge-svg-logo class="u-mr--"></ge-svg-logo> -->
+          <img src="../../images/armstrong-pumps-logo.png" height="25" width="25" style="position:relative; top:5px;"> [[appHeader]]
         </h3>
         <div>
           <px-login style="margin-left: auto;"></px-login>
@@ -48,6 +49,8 @@
         </px-app-nav>
 
         <main class="u-pt-- u-pr-- u-pl--" role="main">
+          <input type="hidden" id="contextId" value="">
+          <input type="hidden" id="contextName" value="">
 
           <!-- app-location captures url and assigns _route value -->
           <app-location
@@ -59,28 +62,48 @@
           <!-- main /rmd route and view -->
           <app-route
             route="[[_route]]"
-            pattern="/rmd"
-            active="{{_rmdActive}}">
+            pattern="/pumpManager"
+            active="{{_pumpManagerActive}}">
           </app-route>
-          <px-view id="rmdPxView"
-            active="[[_rmdActive]]"
+          <px-view id="pumpManagerPxView"
+            active="[[_pumpManagerActive]]"
             element-href="/elements/views/rmd-view.html"
             load-async="true">
+          </px-view>
+
+          <app-route
+            route="[[_route]]"
+            pattern="/temp"
+            active="{{_tempActive}}">
+          </app-route>
+          <px-view id="tempPxView"
+            active="[[_tempActive]]"
+            element-href="/elements/views/temp-view.html">
           </px-view>
 
           <!-- about route and view -->
           <app-route
             route="[[_route]]"
-            pattern="/about"
-            active="{{_aboutActive}}">
+            pattern="/overview"
+            active="{{_overviewActive}}">
           </app-route>
-          <px-view
-            active="[[_aboutActive]]"
-            element-href="/elements/views/about-view.html">
+          <px-view id="overviewPxView"
+            active="[[_overviewActive]]"
+            element-href="/elements/views/overview-view.html">
+          </px-view>
+
+          <app-route
+            route="[[_route]]"
+            pattern="/performance"
+            active="{{_performanceActive}}">
+          </app-route>
+          <px-view id="performancePxView"
+            active="[[_performanceActive]]"
+            element-href="/elements/views/pump-performance-view.html">
           </px-view>
 
           <!-- /simple-asset route and view -->
-          <app-route
+          <!-- <app-route
             route="[[_route]]"
             pattern="/simple-asset"
             active="{{_simple-assetActive}}">
@@ -88,7 +111,7 @@
           <px-view
             active="[[_simple-assetActive]]"
             element-href="/elements/views/simple-asset-view.html">
-         </px-view>
+                   </px-view> -->
 
         </main>
 
@@ -131,15 +154,25 @@
           value: function() {
             return [
               {
-                "label": "Asset Monitoring",
-                "path": "/rmd",
+                "label": "Pump Manager",
+                "path": "/pumpManager",
+                "icon": "fa-sitemap"
+              }/*,
+              {
+                "label": "System Overview",
+                "path": "/overview",
                 "icon": "fa-line-chart"
               },
               {
-                "label": "About",
-                "path": "/about",
-                "icon": "fa-info-circle"
-              }
+                "label": "Pump Performance",
+                "path": "/performance",
+                "icon": "fa-tachometer"
+              },
+              {
+                "label": "Device Status",
+                "path": "/temp",
+                "icon": "fa-battery-half"
+              }*/
               //Uncomment this block to show the Simple Asset navigation item on the menu.
               /* // asset-nav-item
               ,{
@@ -179,7 +212,7 @@
           // We're getting some global config from the server.
           // console.log('config', evt.detail.response);
           this.appHeader = evt.detail.response.appHeader;
-          this.$.rmdPxView.elementData = evt.detail.response;
+          //this.$.rmdPxView.elementData = evt.detail.response;
         }.bind(this));
       },
 
@@ -187,18 +220,14 @@
         // set default route to /rmd
         var l = window.location;
         if((l.hash === "#/" || l.hash === "") && l.pathname === "/") {
-          l.hash = "/rmd";
+          l.hash = "/pumpManager";
         }
       },
 
       _routeChanged: function(newRoute) {
         console.log('new route:', newRoute);
-        if (newRoute.path !== '/rmd') {
-          var tsChart = document.querySelector('rmd-view timeseries-chart');
-          if (tsChart) {
-            tsChart.closeWebSocket();
-          }
-        }
+        if(newRoute.path != "/overview")
+          this.$.overviewPxView._resetView();
       }
 
     });

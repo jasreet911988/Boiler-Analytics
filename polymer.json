@@ -4,7 +4,10 @@
   "fragments": [
     "public/elements/views/about-view.html",
     "public/elements/views/rmd-view.html",
-    "public/elements/timeseries-chart/timeseries-chart.html"
+    "public/elements/views/temp-view.html",
+    "public/elements/views/overview-view.html",
+    "public/elements/timeseries-chart/timeseries-chart.html",
+    "public/elements/views/pump-performance-view.html"
   ],
   "sources": [
     "public/elements/**/*",

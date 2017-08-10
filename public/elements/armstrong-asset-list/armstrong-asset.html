@@ -1,0 +1,28 @@
+<!-- import polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="armstrong-asset">
+  <template>
+    <div style="padding: 10px;font-weight:bold;">
+      <a on-tap="handleTap" style="cursor: pointer;">[[name]]</a>
+    <div>
+  </template>
+  <script>
+  Polymer({
+    is: 'armstrong-asset',
+    properties: {
+      name: {
+        type: String,
+        value: ''
+      }
+    },
+
+    ready: function(){
+    },
+    handleTap : function(){
+      this.fire('assetSelected', {name : this.name});
+    }
+
+  });
+  </script>
+</dom-module>

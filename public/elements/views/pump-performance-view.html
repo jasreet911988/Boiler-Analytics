@@ -1,0 +1,178 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/px-dropdown/px-dropdown.html">
+<link rel="import" href="../../bower_components/px-rangepicker/px-rangepicker.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
+<link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
+
+<dom-module id="pump-performance-view">
+  <template>
+    <style>
+      #dropdownDiv {
+        max-width: 200px;
+      }
+
+      #row1{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+  }
+
+  #column1{
+        display:flex;
+        flex-direction:column;
+
+  }
+
+
+  #column2{
+        display:flex;
+        flex-direction:column;
+  }
+
+
+    </style>
+    <px-card id="perfCard" header-text="Pump Performance" chevron>
+    <px-rangepicker id="perfRangeId" range="{{selectedRange}}">
+          </px-rangepicker>
+    <paper-checkbox id="check" checked on-change="_checkChanged" value="Flow">Flow</paper-checkbox>
+    <paper-checkbox id="check" checked on-change="_checkChanged" value="Head">Head</paper-checkbox>
+    <paper-checkbox id="check" on-change="_checkChanged" value="Speed">Speed</paper-checkbox>
+    <paper-checkbox id="check" on-change="_checkChanged" value="Power">Power</paper-checkbox>
+    <paper-checkbox id="check" on-change="_checkChanged" value="Vibration">Vibration</paper-checkbox>
+    <div id="perfDropdown" style="max-width: 200px;margin-top:20px;">
+          <px-dropdown 
+            id="perfGroupId"
+            display-value="week">
+            <px-dropdown-content 
+            extend-dropdown='true' 
+            extend-dropdown-by='25' 
+            max-cont-character-width='10'
+            items='[{"key":"week","val":"week"},{"key":"day","val":"day"}]'>
+            </px-dropdown-content>
+          </px-dropdow>
+    </div>   
+    <nvd3-line
+            id="linePerf"
+            data="{{newData}}"
+            height="300"
+            width="400"
+            use-interactive-guideline
+            extra-view-box-width="100"
+            x-axis-labels="{{xAxisValues}}">
+          </nvd3-line>
+    </px-card>
+      
+   <iron-ajax id="pumpPerformanceAjaxEl"></iron-ajax>
+  </template>
+  <script>
+    Polymer({
+      is: 'pump-performance-view',
+      properties: {
+        selectedRange: {
+          type: Object
+        },
+        groupType : {
+          type : String,
+          value : 'week'
+        },
+        checkedArray : {
+          type : Array,
+          value : []
+        },
+        xAxisValues: {
+          type : Object,
+          value : {}
+        }
+      },
+      _checkChanged : function(){
+        var cbs = document.querySelectorAll('#check');
+        this.checkedArray = [];
+        for(var i = 0; i < cbs.length; i++) {
+          if(cbs[i].checked){
+            console.log(cbs[i].value);
+            this.checkedArray.push(cbs[i].value);
+          }
+        }
+        var that = this;
+        that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];  
+          that.$.pumpPerformanceAjaxEl.generateRequest();
+      },
+      _getDefaultRange: function(months) {
+        var from = moment().subtract(months, 'months'),
+          to = moment();
+        return {"from":from.toISOString(),"to":to.toISOString()};
+      },
+      _setPerfTimes: function(){
+        this.perfStartTime = new Date(this.selectedRange.from).getTime();
+        this.perfEndTime = new Date(this.selectedRange.to).getTime();
+      },
+      ready: function() {
+        this.selectedRange = this._getDefaultRange(1);
+        this._setPerfTimes();
+        this.checkedArray = [];
+        this.checkedArray.push("Flow");
+        this.checkedArray.push("Head");
+        var that = this;  
+        that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];      
+        this.$.pumpPerformanceAjaxEl.addEventListener('response', function(evt) {
+          
+          var data = evt.detail.response;
+          var keyArray = [];
+          for(var property in data){
+            if(data.hasOwnProperty(property)){
+              keyArray.push(property);
+            }
+          }
+          var data1 = evt.detail.response[keyArray[0]];
+          var data2 = evt.detail.response[keyArray[1]];
+          var i;
+          that.xAxisValues = {};
+          for(i = 0; i < data1.length; i++){
+              console.log(new Date(data1[i]['x']).toString().substring(4,15));
+              that.xAxisValues[data1[i]['x']] = new Date(data1[i]['x']).toString().substring(4,15);
+              data1[i].x = new Date(data1[i]['x']);
+              data1[i].y = Math.round(data1[i].y*100)/100;
+          }
+          for(i = 0; i < data2.length; i++){
+            console.log("there");
+              data2[i].x = new Date(data2[i]['x']);
+              data2[i].y = Math.round(data2[i].y*100)/100;
+          }
+          var dataOne = {};
+          dataOne.key = keyArray[0];
+          dataOne.color = "#ff7f0e";
+          dataOne.values = data1;
+          var dataTwo = {};
+          dataTwo.key = keyArray[1];
+          dataTwo.color = "#2ca02c";
+          dataTwo.values = data2;  
+          that.perfData = [];
+          console.log(dataOne);
+          console.log(dataTwo);
+          that.perfData.push(dataOne);
+          that.perfData.push(dataTwo);
+          that.newData = that.perfData;
+          console.log(that.perfData);
+        });
+
+        this.$.perfRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
+          that._setPerfTimes();
+          that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];  
+          that.$.pumpPerformanceAjaxEl.generateRequest();
+        });
+
+        this.$.perfGroupId.addEventListener('px-dropdown-value-changed', function(evt) {
+          that.groupType = evt.detail.key;  
+          that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];  
+          that.$.pumpPerformanceAjaxEl.generateRequest();
+        });
+                
+        this.$.pumpPerformanceAjaxEl.generateRequest();
+      }
+    });
+  </script>
+</dom-module>

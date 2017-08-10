@@ -81,6 +81,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/docs', require('./routes/docs')(config));
 
 if (!config.isUaaConfigured()) { 
+  console.log("local");
   // no restrictions
   app.use(express.static(path.join(__dirname, process.env['base-dir'] ? process.env['base-dir'] : '../public')));
 
@@ -92,6 +93,7 @@ if (!config.isUaaConfigured()) {
       res.send({user_name: 'Sample User'});
   });
 } else {
+  console.log("server");
   //login route redirect to predix uaa login page
   app.get('/login',passport.authenticate('predix', {'scope': ''}), function(req, res) {
     // The request will be redirected to Predix for authentication, so this
@@ -129,9 +131,15 @@ if (!config.isUaaConfigured()) {
   // }
 
   if (config.rmdDatasourceURL && config.rmdDatasourceURL.indexOf('https') === 0) {
-    app.get('/api/datagrid/*', 
+    app.get('/api/v1/temperature', 
         proxy.addClientTokenMiddleware, 
-        proxy.customProxyMiddleware('/api/datagrid', config.rmdDatasourceURL, '/services/experience/datasource/datagrid'));
+        proxy.customProxyMiddleware('/api/v1/temperature', config.rmdDatasourceURL, '/api/v1/temperature'));
+    app.get('/api/v1/asset', 
+        proxy.addClientTokenMiddleware, 
+        proxy.customProxyMiddleware('/api/v1/asset', config.rmdDatasourceURL, '/api/v1/asset'));
+    app.get('/api/v1/*', 
+        proxy.addClientTokenMiddleware, 
+        proxy.customProxyMiddleware('/api/v1/*', config.rmdDatasourceURL));
   }
 
   //Use this route to make the entire app secure.  This forces login for any path in the entire app.
@@ -187,7 +195,7 @@ app.get('/favicon.ico', function (req, res) {
 app.get('/config', function(req, res) {
   let title = "Predix WebApp Starter";
   if (config.isAssetConfigured()) {
-    title = "RMD Reference App";
+    title = "Performance Management Center";
   }
   res.send({wsUrl: config.websocketServerURL, appHeader: title});
 });

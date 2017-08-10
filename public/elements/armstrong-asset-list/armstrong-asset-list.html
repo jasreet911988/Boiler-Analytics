@@ -1,0 +1,72 @@
+<!-- import polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="armstrong-asset.html">
+
+<dom-module id="armstrong-asset-list">
+  <template>
+     <style>
+      #dropdownDiv {
+        max-width: 200px;
+      }
+
+      #row1{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+  }
+
+  #column1{
+        display:flex;
+        flex-direction:column;
+
+  }
+
+
+  #column2{
+        display:flex;
+        flex-direction:column;
+  }
+
+
+    </style>
+    <div id="row1">
+      <div id="column1">
+      <template id="assetList" is="dom-repeat" items="{{datapoints}}">
+        <div style="padding: 10px;font-weight:bold;">
+          <a on-click="order" style="cursor: pointer;">[[item.id]]</a>
+        </div>
+      </template>
+    </div>
+    <!-- <div id="column2">
+      <div style="padding:10px;font-weight:bold;">
+          {{selected.id}}
+        </div>
+      <div style="padding:10px;font-weight:bold;">
+          {{selected.name}}
+        </div>
+      
+    </div> -->
+  </div>
+  </template>
+  <script>
+  Polymer({
+    is: 'armstrong-asset-list',
+    properties: {
+      datapoints: [],
+      selected : {
+        type : Object
+      }
+    },
+    order: function(e){
+      console.log(e);
+      var selectedItem = e.target.firstChild.data;
+      var i;
+      for(i=0; i<this.datapoints.length;i++){
+        if(selectedItem == this.datapoints[i].id){
+          this.selected = this.datapoints[i];
+        }
+      }
+    }
+  });
+  </script>
+</dom-module>

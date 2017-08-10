@@ -2,10 +2,8 @@
 <link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
 <link rel="import" href="../../bower_components/px-card/px-card.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/marked-element/marked-element.html">
-<!-- <link rel="import" href="../elements/armstrong-asset-list/armstrong-asset-list.html"> -->
 
-<dom-module id="about-view">
+<dom-module id="temp-view">
   <template>
     <style>
       .spanStyle {        
@@ -23,17 +21,23 @@
       }
     </style>
     
-    <px-card id="myCard" header-text="Device Status">
+    <px-card id="tempCardId" header-text="{{assetName}} Status">
       <template is="dom-if" if="{{temp}}">
-      Temperature : <span id="tempSpan" class$="{{getClasses()}}">[[temp]]</span>
+      Temperature : <span id="tempSpan" class$="{{getClasses()}}">{{temp}}C</span><br>
+      Battery Volatge : <span id="batterySpan" class="spanStyle greenColor">90%</span>
       </template>
     </px-card>    
     <iron-ajax id="aboutContentAjaxEl"></iron-ajax>
   </template>
   <script>
     Polymer({
-      is: 'about-view',
-      properties: {},
+      is: 'temp-view',
+      properties: {
+        assetName : {
+          type : String,
+          value : 'Condenser_Water_Pump_001'
+        }
+      },
       ready: function() {
         var that = this;
         this.$.aboutContentAjaxEl.url = "/api/v1/temperature";
@@ -46,8 +50,6 @@
       getClasses: function () {
         var spanStyle = 'spanStyle';
         var tempNum = parseInt(this.temp, 10);
-        console.log('color color');
-        console.log(tempNum);
         if(tempNum < 55){
           spanStyle += ' greenColor';
         }else if (tempNum > 65){
@@ -55,8 +57,6 @@
         }else {
           spanStyle += ' orangeColor';
         }
-        console.log("here here");
-        console.log(spanStyle);
         return spanStyle;
       }
     });
