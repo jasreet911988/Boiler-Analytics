@@ -9,8 +9,9 @@
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
 <!-- <link rel="import" href="temp-view.html"> -->
-<link rel="import" href="pump-performance-view.html">
+<!-- <link rel="import" href="pump-performance-view.html"> -->
 <dom-module id="overview-view">
 <template>
 <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
@@ -24,6 +25,61 @@ display: block;
   transform-origin: left top 0;
   position: relative;
   top: 180px;
+}
+.warning {
+  color: orange;
+  list-style-type: disc;
+  font-size: 25px;
+}
+.danger {
+  color: red;
+  list-style-type: disc;
+  font-size: 25px;
+}
+.kpi{
+  width: 20%;
+  text-transform: uppercase;
+  
+  padding : 20px;
+}
+.kpiHeader {
+  font-size: 14px;
+  font-weight: bold;
+}
+.kpiContent {
+  font-size: 18px;
+  color: #FF8000;
+}
+.kpiUnits{
+  margin-left: 5px;
+  font-size: 10px;
+  color:grey;
+  font-weight: bold;
+}
+.alertListLi {
+  list-style-type: disc;
+  font-size: 25px;
+}
+.alertSpan{
+  color : dimgrey;
+  font-weight: bold;
+  font-size: 12px;
+  position: relative;
+  top: -3px;
+}
+.kpiStatusRed {
+  height: 14px;
+    margin-right: 5px;
+    width: 3px;
+    background-color: red;
+    display: inline-block;
+}
+.kpiStatusGreen {
+  height: 14px;
+    margin-right: 5px;
+    width: 3px;
+    background-color: green;
+    display: inline-block;
 }
 #dropdownDiv {
 max-width: 200px;
@@ -81,29 +137,51 @@ color : orange;
     <span style="padding:10px;font-weight:bold;">29th Feb 2017</span>
   </div>
   <div style="width:84%;">
-    <px-card id="tempCardId">
-      <template is="dom-if" if="{{temp}}">
-      <div class="layout horizontal center-center" style="padding:10px;margin-bottom:-25px;">
-        <div style="width:49%; border-right: 1px solid black;">
+    <px-card id="tempCardId" style="padding:0px;">
+      <template is="dom-if" if="{{kpiObject}}">
+      <div class="layout horizontal" style="padding:0px;margin-bottom:0px;">
+        <div style="width:40%;">
           <div class="layout horizontal center-center">
-            <div>
-              <img src="../../images/temperature.png">
-            </div>
-            <div>
-              <span style="font-weight: bold">Temparature</span><br>
-              <span id="tempSpan" class$="{{getClasses()}}">{{temp}}C</span>
-            </div>
+            <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+            <span class="kpiHeader">Current</span><br>
+            <span style="height: 14px;margin-right: 5px;width: 3px;background-color: red;display: inline-block;" class$="{{kpiStatus.current}}"></span><span class="kpiContent">{{kpiObject.Current}}</span><span class="kpiUnits">A</span>
           </div>
-        </div>
-        <div style="width:49%;">
+          <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+            <span class="kpiHeader">Speed</span><br>
+            <span style="height: 14px;margin-right: 5px;width: 3px;background-color: green;display: inline-block;" class$="{{kpiStatus.speed}}"></span><span class="kpiContent">{{kpiObject.Speed}}</span><span class="kpiUnits">%</span>
+          </div>
+          </div>
           <div class="layout horizontal center-center">
-            <div>
-              <img src="../../images/battery.png">
-            </div>
-            <div>
-              <span style="font-weight: bold">Battery Voltage</span><br>
-              <span id="batterySpan" class="spanStyle greenColor">90%</span>
-            </div>
+            <div class="kpi" style="width:60%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+            <span class="kpiHeader">Discharge Pressure</span><br>
+            <span style="height: 14px;margin-right: 5px;width: 3px;background-color: red;display: inline-block;" class$="{{kpiStatus.pressure}}"></span><span class="kpiContent">{{kpiObject.Pressure}}</span><span class="kpiUnits">kg/cm2</span>
+          </div>
+          <div class="kpi" style="width:40%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+            <span class="kpiHeader">Flow</span><br>
+              <span style="height: 14px;margin-right: 5px;width: 3px;background-color: green;display: inline-block;" class$="{{kpiStatus.flow}}"></span>
+            <span class="kpiContent">{{kpiObject.Flow}}</span><span class="kpiUnits">usgpm</span>
+          </div>
+          </div>
+          <div class="layout horizontal center-center">
+            <div class="kpi" style="width:100%;border-right:1px solid #9bacb6;">          
+            <span class="kpiHeader">Power</span><br>
+            <span style="height: 14px;margin-right: 5px;width: 3px;background-color: red;display: inline-block;" class$="{{kpiStatus.power}}"></span><span class="kpiContent">{{kpiObject.Power}}</span><span class="kpiUnits">kW</span>
+          </div>
+          </div>         
+          
+        </div>
+        <div style="width:60%;">
+          <div>
+            <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block;">Alerts / Advisories</span>
+            <hr style="margin:0px;">
+            <ul>
+              <template is="dom-repeat" items="{{alertList}}">
+                <li class="alertListLi" class$="{{item.status}}"><span class="alertSpan">{{item.message}}</span></li>
+              </template>
+              <!-- <li class="alertListLi" style="color: orange;"><span class="alertSpan">Check Pump operation (Pump may tend to cavitate). </span></li>
+              <li class="alertListLi" style="color: red;"><span class="alertSpan" >Check the pump discharge pressure.</span></li>
+              <li class="alertListLi" style="color: orange;"><span class="alertSpan" >High motor temperature</span></li> -->
+          </ul>
           </div>
         </div>
       </div>
@@ -137,47 +215,62 @@ color : orange;
           width="400"
           use-interactive-guideline>
           </nvd3-line> -->
+
           <px-vis-timeseries 
           debounce-resize-timing="250" 
           width="700" 
           height="290.5" 
           chart-horizontal-alignment="center" 
           chart-vertical-alignment="center" 
-          margin='{"top":10,"bottom":35,"left":65,"right":65}' 
+          margin='{"top":20,"bottom":35,"left":65,"right":65}' 
           tooltip-config='{}' 
           register-config='{"type":"horizontal"}' 
           selection-type="xy" 
           chart-data='{{LoadData}}' 
           series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}' 
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' 
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'                  
+          threshold-data='[{"for":"y0","type":"max","value":850},{"for":"y0","type":"min","value":500}]'
+          display-threshold-title
+          threshold-config='{"max":{"color":"orange","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
+          "min":{"color":"yellow","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
           x-axis-config='{"title":"Date"}' 
           y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
+        <!--  event-data='[{"id":"123","time":1498938000000,"label":"Alert"}]'
+          event-config='{"Alert":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":2}}'-->
         </div>
       </px-card>
       <px-card id="overviewCard" header-text="Monthly Energy Consumption" chevron>
         <div id="column2" >
           <px-rangepicker id="energyRangeId" range="{{energySelectedRange}}">
           </px-rangepicker>
-          <div class="layout horizontal">
+          <div id="container" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
+          <!-- <div class="layout horizontal">
             <div class="vertical-text">
               Energy Consumption
             </div>
             <div>
               <nvd3-multi-bar
-          data="{{data}}"
-          height="300"
-          width="400"
-          >
-          </nvd3-multi-bar>
+                        data="{{data}}"
+                        height="300"
+                        width="400"
+                        >
+                        </nvd3-multi-bar>
+              <highcharts-chart style="width:600px;height:400px;"
+              type="spline" 
+              data='{{barData}}'
+              title='Test-Spline Chart' 
+              x-zoom 
+              x-label="Iterations" 
+              y-label="Awesomeness Index"></highcharts-chart>
             </div>
-          </div>
+          </div> -->
           
         </div>
       <!-- </div> -->    
     </px-card>
     <!-- new card starts-->
-    <px-card id="secondCard" header-text="Gravity Profile" chevron>
+    <px-card id="secondCard" header-text="Vibration Profile" chevron>
         <div id="column1" style="padding-right:10px;">
           <div class="layout horizontal">
             <div>
@@ -187,12 +280,12 @@ color : orange;
             <div id="gravityDropdownDiv" style="max-width:200px;margin-left:20px;">
             <px-dropdown
               id="gravityDropdownId"
-              display-value="GravityX">
+              display-value="X">
               <px-dropdown-content
                 extend-dropdown='true'
                 extend-dropdown-by='25'
                 max-cont-character-width='10'
-                items='[{"key":"GravityX","val":"GravityX"},{"key":"GravityY","val":"GravityY"},{"key":"GravityZ","val":"GravityZ"}]'>
+                items='[{"key":"GravityX","val":"X"},{"key":"GravityY","val":"Y"},{"key":"GravityZ","val":"Z"}]'>
               </px-dropdown-content>
             </px-dropdow>
           </div>
@@ -210,15 +303,18 @@ color : orange;
           height="290.5" 
           chart-horizontal-alignment="center" 
           chart-vertical-alignment="center" 
-          margin='{"top":10,"bottom":35,"left":65,"right":65}' 
+          margin='{"top":20,"bottom":35,"left":65,"right":65}' 
           tooltip-config='{}' 
           register-config='{"type":"horizontal"}' 
           selection-type="xy" 
           chart-data='{{gravityData}}' 
-          series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}' 
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' 
+          series-config='{"y0":{"name":"Vibration","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"1"}}}' 
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+          threshold-data='[{"for":"y0","type":"max","value":0.04}]'
+          display-threshold-title
+          threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}' 
           x-axis-config='{"title":"Date"}' 
-          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Vibration","titleTruncation":false,"unit":"mm/s2"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
         </div>
       </px-card>
@@ -227,22 +323,43 @@ color : orange;
           <h3></h3>
           <px-rangepicker id="flowspeedRangeId" range="{{flowspeedSelectedRange}}">
           </px-rangepicker>
-          <px-vis-xy-chart
-          debounce-resize-timing="250"
-          width="700"
-          height="311.5"
-          chart-horizontal-alignment="center"
-          chart-vertical-alignment="center"
-          margin='{"top":30,"bottom":60,"left":75,"right":20}'
-          tooltip-config='{"forceDateTimeDisplay":false}'
-          register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
-          selection-type="xy"
-          chart-data="{{flowspeedData}}"
-          series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
-          x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
-          y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
-        </px-vis-xy-chart>          
+          <px-vis-timeseries 
+          debounce-resize-timing="250" 
+          width="700" 
+          height="290.5" 
+          chart-horizontal-alignment="center" 
+          chart-vertical-alignment="center" 
+          margin='{"top":20,"bottom":35,"left":65,"right":65}' 
+          tooltip-config='{}' 
+          register-config='{"type":"horizontal"}' 
+          selection-type="xy" 
+          chart-data='{{flowspeedData}}' 
+          series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},
+          "y1":{"name":"Speed","x":"timeStamp","y":"y1","yAxisUnit":"%","axis":{"id":"axis2","side":"right","number":"1"}}}' 
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'                
+          threshold-data='[{"for":"y0","type":"max","value":1300},{"for":"y0","type":"min","value":350}]'
+          display-threshold-title
+          threshold-config='{"max":{"color":"orange","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
+          "min":{"color":"yellow","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
+          x-axis-config='{"title":"Date"}' 
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Speed","titleTruncation":false,"unit":"%"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+        </px-vis-timeseries>
+          <!-- <px-vis-xy-chart
+                   debounce-resize-timing="250"
+                   width="700"
+                   height="311.5"
+                   chart-horizontal-alignment="center"
+                   chart-vertical-alignment="center"
+                   margin='{"top":30,"bottom":60,"left":75,"right":20}'
+                   tooltip-config='{"forceDateTimeDisplay":false}'
+                   register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+                   selection-type="xy"
+                   chart-data="{{flowspeedData}}"
+                   series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
+                   chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
+                   x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+                   y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
+                           </px-vis-xy-chart>  -->         
         </div>
     </px-card>
    <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> --> 
@@ -262,7 +379,7 @@ color : orange;
           register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
           selection-type="xy"
           chart-data="{{effChartData}}"
-          series-config='{"firstSerie":{"type":"line","name":"HeadVsFlow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"line","name":"EfficiencyVsFlow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":2,"side":"left"}}}'
+          series-config='{"firstSerie":{"type":"scatter","name":"FlowVsHead","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"line","name":"FlowVsEfficiency","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":2,"side":"left"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
           x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
           y-axis-config='{"title":"Y","labelPosition":"center","orientation":"left"}'>
@@ -298,10 +415,29 @@ Polymer({
     }
   },
   _getDefaultRange: function(months) {
-    var from = moment().subtract(months, 'months'),
-    to = moment().subtract(months-1, 'months');
-    console.log("here in rangepicker", + to);
-    return {"from":from.toISOString(),"to":to.toISOString()};
+    var from;
+    var to;
+    if(months){
+      from = '2017-06-01T03:38:22.242Z';
+      to = '2017-06-14T03:38:22.242Z';
+    }else{
+      from = '2017-06-01T03:38:22.242Z';
+      to = '2017-07-14T03:38:22.242Z';
+    }
+    
+    return {"from":from,"to":to};
+  },
+  _getNarrowRange: function(months) {
+    var from;
+    var to;
+    if(months){
+      from = '2017-06-03T03:38:22.242Z';
+      to = '2017-06-03T03:58:22.242Z';
+    }else{
+      from = '2017-06-03T03:38:22.242Z';
+      to = '2017-06-04T03:58:22.242Z';
+    }    
+    return {"from":from,"to":to};
   },
   _setEnergyTimes: function(){
     this.energyStartTime = new Date(this.energySelectedRange.from).getTime();
@@ -325,7 +461,7 @@ Polymer({
   },
   getClasses: function () {
     var spanStyle = 'spanStyle';
-    var tempNum = parseInt(this.temp, 10);
+    var tempNum = parseInt(this.kpiObject.Speed, 10);
     if(tempNum < 55){
       spanStyle += ' greenColor';
     }else if (tempNum > 65){
@@ -339,22 +475,23 @@ Polymer({
     this.assetName = document.getElementById('contextName').value;
     this.assetId = document.getElementById('contextId').value;
     this.selectedRange = this._getDefaultRange(2);
-    this.energySelectedRange = this._getDefaultRange(2);
+    this.energySelectedRange = this._getDefaultRange();
     this.selectedGravityRange = this._getDefaultRange(2);
-    this.flowspeedSelectedRange = this._getDefaultRange(2);
-    this.peSelectedRange = this._getDefaultRange(2);
+    this.flowspeedSelectedRange = this._getNarrowRange();
+    this.peSelectedRange = this._getNarrowRange(1);
     this._setLoadTimes();
     this._setEnergyTimes();
     this._setGravityTimes();
     this._setFlowspeedTimes();
     this._setPeTimes();
+    this.barData = [[0,0],[1,7],[2,1],[3,6],[4,8],[5,6]];
     var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
     ];
     var that = this;
     that.effChartData = [];
     this.dayWeek = this.$.dayWeekId.displayValue;
-    this.gravityVal = this.$.gravityDropdownId.displayValue;
+    this.gravityVal = 'GravityX';
 
     this.$.overviewAjaxEl.url = "/api/v1/monthlyenergyconsumption?tagId="+that.assetId+"&startTime="+this.energyStartTime+"&endTime="+this.energyEndTime;
 
@@ -366,14 +503,27 @@ Polymer({
 
     that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
 
-    this.$.aboutContentAjaxEl.url = "/api/v1/temperature";
+    this.$.aboutContentAjaxEl.url = "/api/v1/latestdetails?tagId="+that.assetId;
 
     this.$.aboutContentAjaxEl.addEventListener('response', function(evt) {
-      that.temp = evt.detail.response;
+      that.kpiObject = evt.detail.response;
+      that.alertList = [];
+      that.kpiStatus = {};
+      that.alertList.push({'status':'warning','message':'Check Pump operation (Pump may tend to cavitate).'});
+      that.alertList.push({'status':'danger','message':'Check the pump discharge pressure.'});
+      that.alertList.push({'status':'warning','message':'High motor temperature'});
+      var flowVal = parseFloat(that.kpiObject.Flow);
+      if(flowVal > 1000 || flowVal<220){
+        that.alertList.push({'status':'danger','message':'Flow above threshold.'});
+        that.kpiStatus.flow = 'kpiStatusRed';
+      }else if(flowVal > 850 || flowVal < 350){
+        that.alertList.push({'status':'warning','message':'Flow requires attention'});
+        that.kpiStatus.flow = 'kpiStatusGreen';
+      }
     });
     this.$.overviewAjaxEl.addEventListener('response', function(evt) {
       var reqData = evt.detail.response;
-      var i;
+      /*var i;
       for(i = 0; i < reqData.length; i++){
         reqData[i].x = monthNames[new Date(reqData[i]['x']).getMonth()];
         reqData[i].y = reqData[i]['y'];
@@ -381,14 +531,62 @@ Polymer({
       that.data = [{
         "key" : "Energy Consumption",
         "values" : reqData
-      }];
+      }];*/
+
+      Highcharts.chart('container', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: ''
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text: 'Energy Consumption'
+        }
+
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y:.2f}'
+            }
+        }
+    },
+
+    tooltip: {
+        headerFormat: '<span style="font-size:11px"></span>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> <br/>'
+    },
+
+    series: [{
+        name: 'Months',
+        colorByPoint: true,
+        data: reqData.data
+    }],
+    drilldown: {
+        series: reqData.drilldown
+    }
+});
     });
     this.$.loadProfileAjaxEl.addEventListener('response', function(evt) {
       var reqData1 = evt.detail.response;
       var i;
       for(i = 0; i < reqData1.length; i++){
+        console.log(reqData1[i]['y']);
         reqData1[i].timeStamp = new Date(reqData1[i]['x']);
-        reqData1[i].y0 = Math.round(reqData1[i]['y']*100)/100;
+        reqData1[i].y0 = reqData1[i]['y'];
       }
       that.LoadData = reqData1;
     });
@@ -403,6 +601,12 @@ Polymer({
     });
     this.$.flowspeedAjaxEl.addEventListener('response', function(evt) {
       var reqData1 = evt.detail.response;
+      var i;
+      for(i = 0; i < reqData1.length; i++){
+        reqData1[i].timeStamp = new Date(reqData1[i]['x']);
+        reqData1[i].y0 = parseFloat(reqData1[i]['y1'].toFixed(4));
+        reqData1[i].y1 = parseFloat(reqData1[i]['y2'].toFixed(4));
+      }
       that.flowspeedData = reqData1;
       /*for(i = 0; i < reqData1.length; i++){
         that.xAxisValues[reqData1[i]['x']] = reqData1[i]['x'];
@@ -416,104 +620,6 @@ Polymer({
     this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
       console.log(evt.detail.response);
       that.effChartData = evt.detail.response;
-      /*that.effChartData = [{
-  "Date": 1468213850000,
-  "T48A": 1332,
-  "T48B": 1346,
-  "T48C": 1330,
-  "T48D": 1342,
-  "Line": 1340
-}, {
-  "Date": 1468213968000,
-  "T48A": 1336,
-  "T48B": 1343,
-  "T48C": 1336,
-  "T48D": 1340,
-  "Line": 1343
-}, {
-  "Date": 1468214133000,
-  "T48A": 1341,
-  "T48B": 1345,
-  "T48C": 1331,
-  "T48D": 1333,
-  "Line": 1345
-}, {
-  "Date": 1468214253000,
-  "T48A": 1348,
-  "T48B": 1344,
-  "T48C": 1343,
-  "T48D": 1339,
-  "Line": 1350
-}, {
-  "Date": 1468214374000,
-  "T48A": 1352,
-  "T48B": 1346,
-  "T48C": 1335,
-  "T48D": 1342,
-  "Line": 1357
-}, {
-  "Date": 1468214564000,
-  "T48A": 1341,
-  "T48B": 1342,
-  "T48C": 1344,
-  "T48D": 1346
-}, {
-  "Date": 1468214682000,
-  "T48A": 1348,
-  "T48B": 1353,
-  "T48C": 1337,
-  "T48D": 1331
-}, {
-  "Date": 1468214852000,
-  "T48A": 1346,
-  "T48B": 1348,
-  "T48C": 1339,
-  "T48D": 1335
-}, {
-  "Date": 1468231470000,
-  "T48A": 1353,
-  "T48B": 1355
-}, {
-  "Date": 1468231590000,
-  "T48A": 1359,
-  "T48B": 1359
-}, {
-  "Date": 1468232041000,
-  "T48A": 1357,
-  "T48B": 1359
-}, {
-  "Date": 1468232184000,
-  "T48A": 1357,
-  "T48B": 1359
-}, {
-  "Date": 1468232301000,
-  "T48A": 1353,
-  "T48B": 1359
-}, {
-  "Date": 1468232417000,
-  "T48A": 1353,
-  "T48B": 1357
-}, {
-  "Date": 1468232576000,
-  "T48A": 1353,
-  "T48B": 1355
-}, {
-  "Date": 1468232693000,
-  "T48A": 1355,
-  "T48B": 1360
-}, {
-  "Date": 1468232845000,
-  "T48A": 1355,
-  "T48B": 1355
-}, {
-  "Date": 1468232966000,
-  "T48A": 1353,
-  "T48B": 1359
-}, {
-  "Date": 1468233083000,
-  "T48A": 1355,
-  "T48B": 1357
-}];*/
     });
     this.$.dayWeekId.addEventListener('px-dropdown-value-changed', function(evt) {
       that.dayWeek = evt.detail.key;

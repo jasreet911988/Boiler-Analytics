@@ -20,6 +20,8 @@ module.exports = function(gulp) {
       'public/bower_components/px-typography-design',
       'public/bower_components/px-polymer-font-awesome',
       'public/bower_components/px-data-table',
+      'public/bower_components/jquery',
+      'public/bower_components/highcharts',
 
       'public/elements/dev-guide'
     ];

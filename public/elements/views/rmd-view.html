@@ -34,39 +34,135 @@
         display:flex;
         flex-direction:column;
   }
+
+  #popover.px-popover{
+    max-width: 400px;
+    --px-popover-max-width: 400px;
+    padding: 0px;
+  }
+  .popoverid{
+    max-width: 400px;
+    --px-popover-max-width: 400px;
+    height:250px;
+    padding: 0px;
+  }
   </style>
   <template>
-    
+
     <template is="dom-if" if="{{mapsOn}}">
       <px-card header-text="Locations">
       <!-- <px-modal btn-modal-positive="OK"><button id="modalId" class='btn btn--primary modal-trigger' width="0" height="0"></button><div id="column2" style="padding: 20px;">
          <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list>
       </div>
           </px-modal> -->
-    <google-map fit-to-marker api-key="AIzaSyD3E1D9b-Z7ekrT3tbhl_dy8DCXuIuDDRc" style="width:100%;height:450px;" latitude="41.4195649" longitude="-81.6221674">
-      <google-map-marker latitude="41.4195649" longitude="-81.6221674" draggable="true" click-events="true" on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-      <google-map-marker latitude="41.4495649" longitude="-81.6321674" draggable="true" click-events="true" on-google-map-marker-click="mapClicked"></google-map-marker>
-      <google-map-marker latitude="41.4295649" longitude="-81.6421674" draggable="true" click-events="true" on-google-map-marker-click="mapClicked"></google-map-marker>
-    </google-map> 
-    <div id="mapElement" style="position:absolute; top:200px; right:500px;"></div> 
-    <px-popover id="popoverid" for="mapElement" orientation="right" enhanced>
-          <div id="column2" style="padding: 20px;">
-            <template id="assetList" is="dom-repeat" items="{{assetList}}">
-              <div style="padding: 10px;font-weight:bold;">
-              <a on-click="order" style="cursor: pointer;">[[item.name]]</a>
-              </div>
-            </template>
+    <google-map fit-to-marker api-key="AIzaSyD3E1D9b-Z7ekrT3tbhl_dy8DCXuIuDDRc" style="width:100%;height:450px;" latitude="40.7555" longitude="-73.985">
+
+     <google-map-marker latitude="40.750454" longitude="-73.993519" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+     <google-map-marker latitude="40.761449" longitude="-73.977622" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+    <google-map-marker latitude="40.74829" longitude="-73.985599" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+    <google-map-marker latitude="40.791449" longitude="-73.987622" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+   <google-map-marker  latitude="40.81829" longitude="-73.986599" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+   <google-map-marker  latitude="40.780454" longitude="-73.994619" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+   <google-map-marker  latitude="40.821449" longitude="-73.997622" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+  <google-map-marker  latitude="40.83829" longitude="-73.996599" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+  <google-map-marker  latitude="40.850454" longitude="-73.964619" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+    </google-map>
+    <div id="mapElement" style="position:absolute; top:200px; right:500px; width:400px; height: 250px; "></div>
+    <px-popover class="popoverid" id = "pop1" for="mapElement" orientation="right" enhanced>
+          <div id="column2" style="padding: 0px; cursor: pointer;" on-click="order">
+          <p style="color:blue; font-size: 1.5em; margin-bottom:20px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">Design Envelope 4300 Pumps</p>
+          <p>953 Shyanne Camp Suite</p>
+          <div style="display:flex;">
+            <span><img src="../../images/pump.png" style="width:50px; height:50px;"/></span>
+            <span style="align-self:center; margin-left:10px;">Installbase 123k</span>
+          </div>
+
+          <p style="color:blue; font-size: 1.5em; margin-bottom:40px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">KPI</p>
+          <div style="display: flex; margin: 2px;">
+            <div style="flex-direction:column">
+              <div style="font-size:1em;">Pressure</div>
+              <div style="text-align: center">{{pressure}}</div>
+            </div>
+            <hr width="1" size="50">
+            <div style="flex-direction:column; margin: 2px;">
+              <div style="font-size:1em;">Speed</div>
+              <div style="text-align: center">{{speed}}</div>
+            </div>
+            <hr width="1" size="50">
+            <div style="flex-direction:column; margin-right: 30px;">
+              <div style="font-size:1em;">Flow</div>
+              <div style="text-align: center">{{flow}}</div>
+            </div>
+          </div>
+          </div>
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
-      </div>
-    </px-popover> 
-    </px-card> 
+    </px-popover>
+    <div id="mapElement1" style="position:absolute; top:200px; right:500px; width:400px; "></div>
+    <px-popover class="popoverid" id = "pop1" for="mapElement1" orientation="right" enhanced>
+          <div id="column2" style="padding: 0px; cursor: pointer;" on-click="order1">
+          <p style="color:blue; font-size: 1.5em; margin-bottom:20px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">Design Envelope 4322 Tango Pumps</p>
+          <p>953 Shyanne Camp Suite</p>
+          <div style="display:flex;">
+            <span><img src="../../images/pump.png" style="width:50px; height:50px;"/></span>
+            <span style="align-self:center; margin-left:10px;">Installbase 123k</span>
+          </div>
+          <p style="color:blue; font-size: 1.5em; margin-bottom:40px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">KPI</p>
+          <div style="display: flex; margin: 2px;">
+            <div style="flex-direction:column">
+              <div style="font-size:1em;">Pressure</div>
+              <div style="text-align: center">{{pressure}}</div>
+            </div>
+            <hr width="1" size="50">
+            <div style="flex-direction:column; margin: 2px;">
+              <div style="font-size:1em;">Speed</div>
+              <div style="text-align: center">{{speed}}</div>
+            </div>
+            <hr width="1" size="50">
+            <div style="flex-direction:column; margin-right: 30px;">
+              <div style="font-size:1em;">Flow</div>
+              <div style="text-align: center">{{flow}}</div>
+            </div>
+          </div>
+          </div>
+         <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
+    </px-popover>
+    <div id="mapElement2" id = "pop1" style="position:absolute; top:200px; right:500px; width:400px; "></div>
+    <px-popover class="popoverid" for="mapElement2" orientation="right" enhanced style="width:400px;">
+          <div id="column2" style="padding: 0px; cursor: pointer;" on-click="order2">
+          <p style="color:blue; font-size: 1.5em; margin-bottom:20px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">Design Envelope 4372 Tango Pumps</p>
+          <p>953 Shyanne Camp Suite</p>
+          <div style="display:flex;">
+            <span><img src="../../images/pump.png" style="width:50px; height:50px;"/></span>
+            <span style="align-self:center; margin-left:10px; font-size: 1em;">Installbase 123k</span>
+          </div>
+          <p style="color:blue; font-size: 1.5em; margin-bottom:40px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">KPI</p>
+          <div style="display: flex; margin: 2px;">
+            <div style="flex-direction:column">
+              <div style="font-size:1em;">Pressure</div>
+              <div style="text-align: center">{{pressure}}</div>
+            </div>
+            <hr width="1" size="50">
+            <div style="flex-direction:column; margin: 2px;">
+              <div style="font-size:1em;">Speed</div>
+              <div style="text-align: center">{{speed}}</div>
+            </div>
+            <hr width="1" size="50">
+            <div style="flex-direction:column; margin-right: 30px;">
+              <div style="font-size:1em;">Flow</div>
+              <div style="text-align: center">{{flow}}</div>
+            </div>
+          </div>
+          </div>
+         <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
+    </px-popover>
+    </px-card>
   </template>
   <template is="dom-if" if="{{!mapsOn}}">
     <overview-view asset-name="{{selected.id}}"></overview-view>
-  </template>     
+  </template>
     <iron-ajax id="armstrongAssetAjaxEl" url="/api/v1/asset"></iron-ajax>
-  
-  
+    <iron-ajax id="armstrongKPIAjaxEl" on-response="handleResponse"></iron-ajax>
+
   </template>
   <script>
     Polymer({
@@ -78,13 +174,57 @@
         },
         selected: {
           type : Object
-        }
+        },
+        icon1: {
+          type: Object,
+          value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0'
+        },
+        icon2: {
+          type: Object,
+          value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752063_en_v0'
+        },
+        icon3: {
+          type: Object,
+          value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0'
+        },
+           pressure: {
+             type: String
+           },
+           spped: {
+             type: String
+           },
+           flow: {
+             type: String
+           }
       },
       mapClicked: function(){
         console.log("clciked");
          // this.mapsOn = null;
-        this.$.armstrongAssetAjaxEl.generateRequest(); 
+        this.$.armstrongAssetAjaxEl.generateRequest();
+        this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
+       this.$.armstrongKPIAjaxEl.generateRequest();
         document.getElementById('mapElement').click();
+
+        //this.$.modalId.click();
+      },
+      mapClicked1: function(){
+        console.log("clciked");
+         // this.mapsOn = null;
+        this.$.armstrongAssetAjaxEl.generateRequest();
+        this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002";
+       this.$.armstrongKPIAjaxEl.generateRequest();
+        document.getElementById('mapElement1').click();
+
+        //this.$.modalId.click();
+      },
+      mapClicked2: function(){
+        console.log("clciked");
+         // this.mapsOn = null;
+        this.$.armstrongAssetAjaxEl.generateRequest();
+        this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003";
+       this.$.armstrongKPIAjaxEl.generateRequest();
+        document.getElementById('mapElement2').click();
+
         //this.$.modalId.click();
       },
       _imageClicked: function(){
@@ -93,11 +233,13 @@
       },
       ready: function(){
         // set copy of 'this' for callback function use below
+
         var that = this;
         this.$.armstrongAssetAjaxEl.addEventListener('response', function(evt) {
           console.log(evt.detail.response);
           this.assetList = evt.detail.response;
-        }.bind(this));        
+        }.bind(this));
+      //  this.$.armstrongKPIAjaxEl.generateRequest();
         },
       order: function(e){
         console.log(e);
@@ -108,12 +250,52 @@
             this.selected = this.assetList[i];
           }
         }
-        document.getElementById('popoverid').hide();
+        document.getElementById('pop1').hide();
         console.log("hi");
-        document.getElementById('contextId').value = this.selected.id;
-        document.getElementById('contextName').value = this.selected.name;
+        document.getElementById('contextId').value = "Condenser_Water_Pump_001";
+        document.getElementById('contextName').value = "Design Envelope 4300 Pumps";
         console.log(document.getElementById('contextId').value);
         window.location.hash="#/overview";
+      },
+      order1: function(e){
+        console.log(e);
+         var selectedItem = e.target.firstChild.data;
+        var i;
+        for(i=0; i<this.assetList.length;i++){
+          if(selectedItem == this.assetList[i].name){
+            this.selected = this.assetList[i];
+          }
+        }
+        document.getElementById('pop1').hide();
+        console.log("hi");
+        document.getElementById('contextId').value = "Condenser_Water_Pump_002";
+        document.getElementById('contextName').value = "Design Envelope 4322 Tango Pumps";
+        console.log(document.getElementById('contextId').value);
+        window.location.hash="#/overview";
+      },
+      order2: function(e){
+        console.log(e);
+         var selectedItem = e.target.firstChild.data;
+        var i;
+        for(i=0; i<this.assetList.length;i++){
+          if(selectedItem == this.assetList[i].name){
+            this.selected = this.assetList[i];
+          }
+        }
+        document.getElementById('pop1').hide();
+        console.log("hi");
+        document.getElementById('contextId').value = "Condenser_Water_Pump_003";
+        document.getElementById('contextName').value = "Design Envelope 4372 Tango Pumps";
+        console.log(document.getElementById('contextId').value);
+        window.location.hash="#/overview";
+      },
+      handleResponse : function(e){
+        var respTxt = e.detail.response;
+        this.pressure = respTxt.Pressure;
+        this.speed = respTxt.Speed;
+        this.flow = respTxt.Flow;
+        console.log('Pressure is'+this.pressure);
+        console.log('Speed is'+this.speed);
       }
     });
   </script>

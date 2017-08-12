@@ -42,7 +42,8 @@
     "nvd3-elements": "^0.21.0",
     "paper-checkbox": "^2.0.1",
     "px-modal": "^2.0.2",
-    "google-map": "^2.0.1"
+    "google-map": "^2.0.1",
+    "highcharts-chart": "^2.0.1"
   },
   "resolutions": {
     "px-datetime-common": "^0.7.0",
