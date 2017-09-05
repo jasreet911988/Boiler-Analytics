@@ -35,17 +35,120 @@
         flex-direction:column;
   }
 
-  #popover.px-popover{
-    max-width: 400px;
-    --px-popover-max-width: 400px;
-    padding: 0px;
-  }
   .popoverid{
     max-width: 400px;
     --px-popover-max-width: 400px;
     height:250px;
     padding: 0px;
   }
+  .pump-symbol {
+    height: 14px;margin-right: 1px;width: 3px;display: inline-block;
+  }
+  .kpiStatusRed {
+    background-color: #f44336;
+  }
+  .kpiStatusGreen {
+    background-color: #4CAF50;
+  }
+  .kpiStatusYellow {
+    background-color: #ff9800;
+  }
+  .main-content {
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+  }
+  .pump-name {
+    height:25px;
+    color:white;
+    font-size: 1.5em;
+    margin: 0px;
+    padding:0px;
+    width: 350px;
+  }
+  .inner-content {
+    display: flex;
+    margin-top: 20px;
+    width: 350px;
+  }
+  .pump-image {
+    margin-right: 20px;
+  }
+  .inner-image {
+    width:50px; height:50px;
+  }
+  .pump-main-first {
+    flex-direction: column;
+    margin-right: 10px;
+  }
+  .pump-main-headline {
+    font-size:1em; font-weight: bold;
+  }
+  .pump-main-value {
+    text-align: center;
+    font-size: 13px;
+  }
+  .pump-main-second {
+    flex-direction: column;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .pump-main-third {
+  flex-direction:column; margin-left: 10px; margin-right: 10px;
+ }
+ .pump-address {
+   margin: 0px;
+ }
+ #close {
+    cursor: pointer;
+    float:right;
+    display:inline-block;
+    padding:3px 5px;
+    background:#ccc;
+    margin-left: 20px;
+}
+.close-button {
+  position: relative;
+    right: -15px;
+    top: -15px;
+}
+
+.gridItem {
+  display:inline-block;
+  width:28%;
+  height:200px;
+  padding:5px;
+  border:1px solid grey;
+  margin:5px;
+  box-shadow: 10px 10px 5px #888888;
+  cursor: pointer;
+  background-color: whitesmoke;
+}
+.gridHeader {
+  display: block;
+  background-color: #4caf50;
+  text-align: center;
+  color: white;
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+.gridKpi {
+  display: block;
+  height : 20px;
+  padding: 5px;
+  padding-left: 30px;
+}
+.gridKpiLabel{
+  display: inline-block;
+  width: 36%;
+  border-right: 1px solid grey;
+}
+.gridKpiValue {
+  display: inline-block;
+  padding-left : 20px;
+}
+}
   </style>
   <template>
 
@@ -55,113 +158,216 @@
          <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list>
       </div>
           </px-modal> -->
-    <google-map fit-to-marker api-key="AIzaSyD3E1D9b-Z7ekrT3tbhl_dy8DCXuIuDDRc" style="width:100%;height:450px;" latitude="40.7555" longitude="-73.985">
+          <div style="height:20px;">
+            <template is="dom-if" if="{{mapView}}">
+                <span style="display:block;float:right;" on-click="_viewChange"><i class="fa fa-th-large" aria-hidden="true" style="cursor:pointer;"></i></span>
+              </template>
+              <template is="dom-if" if="{{!mapView}}">
+                <span style="display:block;float:right;" on-click="_viewChange"><i class="fa fa-map" aria-hidden="true" style="cursor:pointer;"></i></span>
+              </template>
+            
+          </div>
+    <template is="dom-if" if="{{mapView}}">     
+    <google-map fit-to-marker api-key="AIzaSyD3E1D9b-Z7ekrT3tbhl_dy8DCXuIuDDRc" style="width:100%;height:370px;" latitude="40.7555" longitude="-73.985">
 
-     <google-map-marker latitude="40.750454" longitude="-73.993519" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+     <google-map-marker latitude="40.790454" longitude="-73.953519" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
      <google-map-marker latitude="40.761449" longitude="-73.977622" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-    <google-map-marker latitude="40.74829" longitude="-73.985599" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-    <google-map-marker latitude="40.791449" longitude="-73.987622" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-   <google-map-marker  latitude="40.81829" longitude="-73.986599" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-   <google-map-marker  latitude="40.780454" longitude="-73.994619" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-   <google-map-marker  latitude="40.821449" longitude="-73.997622" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-  <google-map-marker  latitude="40.83829" longitude="-73.996599" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-  <google-map-marker  latitude="40.850454" longitude="-73.964619" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+    <google-map-marker latitude="40.74829" longitude="-73.955799" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+
     </google-map>
-    <div id="mapElement" style="position:absolute; top:200px; right:500px; width:400px; height: 250px; "></div>
-    <px-popover class="popoverid" id = "pop1" for="mapElement" orientation="right" enhanced>
-          <div id="column2" style="padding: 0px; cursor: pointer;" on-click="order">
-          <p style="color:blue; font-size: 1.5em; margin-bottom:20px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">Design Envelope 4300 Pumps</p>
-          <p>953 Shyanne Camp Suite</p>
-          <div style="display:flex;">
-            <span><img src="../../images/pump.png" style="width:50px; height:50px;"/></span>
-            <span style="align-self:center; margin-left:10px;">Installbase 123k</span>
+    <div id="mapElement" style="position:absolute; top:200px; right:500px; width:500px; "></div>
+    <px-popover class="popoverid" id = "pop" for="mapElement" orientation="right" enhanced>
+      <span id="close" class="close-button" on-click="close">x</span>
+          <div id="column2" class = "main-content" on-click="order">
+          <p id="para" class="pump-name">Design Envelope 4300 Pumps</p>
+          <p class="pump-address">953 Shyanne Camp Suite</p>
+          <div class="inner-content">
+            <div class="pump-image"><img class="inner-image" src="../../images/pump.png"/></div>
+            <div class="pump-main-first">
+              <div class="pump-main-headline">Pressure</div>
+              <span id = "symbol" class="pump-symbol"></span>
+              <span class="pump-main-value">{{pressure}} kg/cm2</span>
+            </div>
+            <hr width="1" size="50">
+            <div class="pump-main-second">
+              <div class="pump-main-headline">Speed</div>
+              <span id = "symbol1" class="pump-symbol"></span>
+              <span class="pump-main-value">{{speed}} %</span>
+            </div>
+            <hr width="1" size="50">
+            <div class="pump-main-third" style="">
+              <div class="pump-main-headline">Flow</div>
+              <span id = "symbol2" class="pump-symbol"></span>
+              <span class="pump-main-value">{{flow}} usgpm</span>
+            </div>
+          </div>
           </div>
 
-          <p style="color:blue; font-size: 1.5em; margin-bottom:40px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">KPI</p>
-          <div style="display: flex; margin: 2px;">
-            <div style="flex-direction:column">
-              <div style="font-size:1em;">Pressure</div>
-              <div style="text-align: center">{{pressure}}</div>
-            </div>
-            <hr width="1" size="50">
-            <div style="flex-direction:column; margin: 2px;">
-              <div style="font-size:1em;">Speed</div>
-              <div style="text-align: center">{{speed}}</div>
-            </div>
-            <hr width="1" size="50">
-            <div style="flex-direction:column; margin-right: 30px;">
-              <div style="font-size:1em;">Flow</div>
-              <div style="text-align: center">{{flow}}</div>
-            </div>
-          </div>
-          </div>
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
-    <div id="mapElement1" style="position:absolute; top:200px; right:500px; width:400px; "></div>
+    <div id="mapElement1" style="position:absolute; top:200px; right:500px; width:500px; "></div>
     <px-popover class="popoverid" id = "pop1" for="mapElement1" orientation="right" enhanced>
-          <div id="column2" style="padding: 0px; cursor: pointer;" on-click="order1">
-          <p style="color:blue; font-size: 1.5em; margin-bottom:20px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">Design Envelope 4322 Tango Pumps</p>
-          <p>953 Shyanne Camp Suite</p>
-          <div style="display:flex;">
-            <span><img src="../../images/pump.png" style="width:50px; height:50px;"/></span>
-            <span style="align-self:center; margin-left:10px;">Installbase 123k</span>
-          </div>
-          <p style="color:blue; font-size: 1.5em; margin-bottom:40px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">KPI</p>
-          <div style="display: flex; margin: 2px;">
-            <div style="flex-direction:column">
-              <div style="font-size:1em;">Pressure</div>
-              <div style="text-align: center">{{pressure}}</div>
+      <span id="close" class="close-button" on-click="close1">x</span>
+          <div id="column2" class = "main-content" on-click="order1">
+          <p id = "para1" class="pump-name">Design Envelope 4322 Tango Pumps</p>
+          <p class="pump-address">953 Shyanne Camp Suite</p>
+          <div class="inner-content">
+            <div class="pump-image"><img src="../../images/pump.png" class="inner-image"/></div>
+            <div class="pump-main-first">
+              <div class="pump-main-headline">Pressure</div>
+              <span id = "symbol3" class="pump-symbol"></span>
+              <span class="pump-main-value">{{pressure1}} kg/cm2</span>
             </div>
             <hr width="1" size="50">
-            <div style="flex-direction:column; margin: 2px;">
-              <div style="font-size:1em;">Speed</div>
-              <div style="text-align: center">{{speed}}</div>
+            <div class="pump-main-second">
+              <div class="pump-main-headline">Speed</div>
+              <span id = "symbol4" class="pump-symbol"></span>
+              <span class="pump-main-value">{{speed1}} %</span>
             </div>
             <hr width="1" size="50">
-            <div style="flex-direction:column; margin-right: 30px;">
-              <div style="font-size:1em;">Flow</div>
-              <div style="text-align: center">{{flow}}</div>
+            <div class="pump-main-third">
+              <div class="pump-main-headline">Flow</div>
+              <span id = "symbol5" class="pump-symbol"></span>
+              <span class="pump-main-value">{{flow1}} usgpm</span>
             </div>
           </div>
           </div>
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
-    <div id="mapElement2" id = "pop1" style="position:absolute; top:200px; right:500px; width:400px; "></div>
-    <px-popover class="popoverid" for="mapElement2" orientation="right" enhanced style="width:400px;">
-          <div id="column2" style="padding: 0px; cursor: pointer;" on-click="order2">
-          <p style="color:blue; font-size: 1.5em; margin-bottom:20px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">Design Envelope 4372 Tango Pumps</p>
-          <p>953 Shyanne Camp Suite</p>
-          <div style="display:flex;">
-            <span><img src="../../images/pump.png" style="width:50px; height:50px;"/></span>
-            <span style="align-self:center; margin-left:10px; font-size: 1em;">Installbase 123k</span>
-          </div>
-          <p style="color:blue; font-size: 1.5em; margin-bottom:40px; margin-left:0px; margin-right: 0px; margin-top:10px; padding:0px; width: 400px; height: 0px;">KPI</p>
-          <div style="display: flex; margin: 2px;">
-            <div style="flex-direction:column">
-              <div style="font-size:1em;">Pressure</div>
-              <div style="text-align: center">{{pressure}}</div>
+    <div id="mapElement2" style="position:absolute; top:200px; right:500px; width:500px;"></div>
+    <px-popover class="popoverid" id = "pop2" for="mapElement2" orientation="right" enhanced>
+      <span id="close" class="close-button" on-click="close2">x</span>
+          <div id="column2" class = "main-content" on-click="order2">
+          <p id = "para2" class="pump-name">Design Envelope 4372 Tango Pumps</p>
+          <p class="pump-address">953 Shyanne Camp Suite</p>
+          <div class="inner-content">
+            <div class="pump-image"><img src="../../images/pump.png" class="inner-image"/></div>
+            <div class="pump-main-first">
+              <div class="pump-main-headline">Pressure</div>
+              <span id = "symbol6" class="pump-symbol"></span>
+              <span class="pump-main-value">{{pressure2}} kg/cm2</span>
             </div>
             <hr width="1" size="50">
-            <div style="flex-direction:column; margin: 2px;">
-              <div style="font-size:1em;">Speed</div>
-              <div style="text-align: center">{{speed}}</div>
+            <div class="pump-main-second">
+              <div class="pump-main-headline">Speed</div>
+              <span id = "symbol7" class="pump-symbol"></span>
+              <span class="pump-main-value">{{speed2}} %</span>
             </div>
             <hr width="1" size="50">
-            <div style="flex-direction:column; margin-right: 30px;">
-              <div style="font-size:1em;">Flow</div>
-              <div style="text-align: center">{{flow}}</div>
+            <div class="pump-main-third">
+              <div class="pump-main-headline">Flow</div>
+              <span id = "symbol8" class="pump-symbol"></span>
+              <span class="pump-main-value">{{flow2}} usgpm</span>
             </div>
           </div>
           </div>
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
-    </px-card>
   </template>
-  <template is="dom-if" if="{{!mapsOn}}">
-    <overview-view asset-name="{{selected.id}}"></overview-view>
+  <template is="dom-if" if="{{!mapView}}"> 
+    <div style="height:360px;">      
+      <div class="gridItem" on-click="order">
+        <template is="dom-if" if="{{firstCardColor}}">
+          <span id="firstCardId" class="gridHeader" style="background-color:#4caf50;">{{firstCard.name}}</span>
+        </template>
+        <template is="dom-if" if="{{!firstCardColor}}">
+          <span id="firstCardId" class="gridHeader" style="background-color:#f44336;">{{firstCard.name}}</span>
+        </template>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Current</span>
+          <span class="gridKpiValue">{{firstCard.Current}} A</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Flow</span>
+          <span class="gridKpiValue">{{firstCard.Flow}} usgpm</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Power</span>
+          <span class="gridKpiValue">{{firstCard.Power}} kW</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Pressure</span>
+          <span class="gridKpiValue">{{firstCard.Pressure}} kg/cm2</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Speed</span>
+          <span class="gridKpiValue">{{firstCard.Speed}} %</span>
+        </span>
+        
+        
+        
+        
+      </div>
+      <div class="gridItem" on-click="order1">
+        <template is="dom-if" if="{{secondCardColor}}">
+          <span id="secondCardId" class="gridHeader" style="background-color:#4caf50;">{{secondCard.name}}</span>
+        </template>
+        <template is="dom-if" if="{{!secondCardColor}}">
+          <span id="secondCardId" class="gridHeader" style="background-color:#f44336;">{{secondCard.name}}</span>
+        </template>
+       
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Current</span>
+          <span class="gridKpiValue">{{secondCard.Current}} A</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Flow</span>
+          <span class="gridKpiValue">{{secondCard.Flow}} usgpm</span>
+        </span>
+       
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Power</span>
+          <span class="gridKpiValue">{{secondCard.Power}} kW</span>
+        </span>
+         <span class="gridKpi">
+          <span class="gridKpiLabel">Pressure</span>
+          <span class="gridKpiValue">{{secondCard.Pressure}} kg/cm2</span>
+        </span>
+         <span class="gridKpi">
+          <span class="gridKpiLabel">Speed</span>
+          <span class="gridKpiValue">{{secondCard.Speed}} %</span>
+        </span>
+      </div>
+      <div class="gridItem" on-click="order2">
+       <template is="dom-if" if="{{thirdCardColor}}">
+          <span id="thirdCardId" class="gridHeader" style="background-color:#4caf50;">{{thirdCard.name}}</span>
+        </template>
+        <template is="dom-if" if="{{!thirdCardColor}}">
+          <span id="thirdCardId" class="gridHeader" style="background-color:#f44336;">{{thirdCard.name}}</span>
+        </template>
+        
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Current</span>
+          <span class="gridKpiValue">{{thirdCard.Current}} A</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Flow</span>
+          <span class="gridKpiValue">{{thirdCard.Flow}} usgpm</span>
+        </span>
+       
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Power</span>
+          <span class="gridKpiValue">{{thirdCard.Power}} kW</span>
+        </span>
+         <span class="gridKpi">
+          <span class="gridKpiLabel">Pressure</span>
+          <span class="gridKpiValue">{{thirdCard.Pressure}} kg/cm2</span>
+        </span>
+        <span class="gridKpi">
+          <span class="gridKpiLabel">Speed</span>
+          <span class="gridKpiValue">{{thirdCard.Speed}} %</span>
+        </span>
+      </div>
+    </div>
+  </template>
+    </px-card>
   </template>
     <iron-ajax id="armstrongAssetAjaxEl" url="/api/v1/asset"></iron-ajax>
     <iron-ajax id="armstrongKPIAjaxEl" on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxFirstEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxSecondEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxThirdEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003"></iron-ajax>
+    <iron-ajax id="gridViewId" url="/api/v1/gridviewdata"></iron-ajax>
 
   </template>
   <script>
@@ -175,35 +381,71 @@
         selected: {
           type : Object
         },
+        firstCard : {
+          type : Object
+        },
+        secondCard : {
+          type : Object
+        },
+        thirdCard : {
+          type : Object
+        },
+        icon: {
+          type: String
+        },
         icon1: {
-          type: Object,
-          value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0'
+          type: Object
+        //  value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0' // Red
         },
         icon2: {
-          type: Object,
-          value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752063_en_v0'
+          type: Object
+          //value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752063_en_v0'  // yellow
         },
         icon3: {
-          type: Object,
-          value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0'
+          type: Object
+        //  value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0'  // green
         },
            pressure: {
              type: String
            },
-           spped: {
+           speed: {
              type: String
            },
            flow: {
              type: String
-           }
+           },
+              pressure1: {
+                type: String
+              },
+              speed1: {
+                type: String
+              },
+              flow1: {
+                type: String
+              },
+                 pressure2: {
+                   type: String
+                 },
+                 speed2: {
+                   type: String
+                 },
+                 flow2: {
+                   type: String
+                 }
+      },
+      _viewChange: function(){
+        this.mapView = !this.mapView;        
       },
       mapClicked: function(){
         console.log("clciked");
          // this.mapsOn = null;
         this.$.armstrongAssetAjaxEl.generateRequest();
-        this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
-       this.$.armstrongKPIAjaxEl.generateRequest();
+        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
+       //this.$.armstrongKPIAjaxEl.generateRequest();
         document.getElementById('mapElement').click();
+      //  document.getElementById('pop').show();
+        document.getElementById('pop1').hide();
+        document.getElementById('pop2').hide();
 
         //this.$.modalId.click();
       },
@@ -211,9 +453,11 @@
         console.log("clciked");
          // this.mapsOn = null;
         this.$.armstrongAssetAjaxEl.generateRequest();
-        this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002";
-       this.$.armstrongKPIAjaxEl.generateRequest();
+        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002";
+       //this.$.armstrongKPIAjaxEl.generateRequest();
         document.getElementById('mapElement1').click();
+        document.getElementById('pop').hide();
+        document.getElementById('pop2').hide();
 
         //this.$.modalId.click();
       },
@@ -221,11 +465,25 @@
         console.log("clciked");
          // this.mapsOn = null;
         this.$.armstrongAssetAjaxEl.generateRequest();
-        this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003";
-       this.$.armstrongKPIAjaxEl.generateRequest();
+        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003";
+       //this.$.armstrongKPIAjaxEl.generateRequest();
         document.getElementById('mapElement2').click();
+        document.getElementById('pop').hide();
+        document.getElementById('pop1').hide();
 
         //this.$.modalId.click();
+      },
+      close: function(){
+        console.log('it comes here');
+        document.getElementById('pop').hide();
+      },
+      close1: function(){
+        console.log('it comes here');
+        document.getElementById('pop1').hide();
+      },
+      close2: function(){
+        console.log('it comes here');
+        document.getElementById('pop2').hide();
       },
       _imageClicked: function(){
         console.log('clicking on factory image');
@@ -234,23 +492,204 @@
       ready: function(){
         // set copy of 'this' for callback function use below
 
-        var that = this;
+      var that = this;
+      this.mapView = true;
+      that.kpiStatus = {};
+      that.kpiStatus1 = {};
+      that.kpiStatus2 = {};
         this.$.armstrongAssetAjaxEl.addEventListener('response', function(evt) {
           console.log(evt.detail.response);
           this.assetList = evt.detail.response;
         }.bind(this));
-      //  this.$.armstrongKPIAjaxEl.generateRequest();
+        this.$.armstrongKPIAjaxFirstEl.generateRequest();
+        this.$.gridViewId.addEventListener('response', function(evt) {
+          var gridResponse = evt.detail.response;
+          that.firstCard = gridResponse.Condenser_Water_Pump_001;
+          that.secondCard = gridResponse.Condenser_Water_Pump_002;
+          that.thirdCard = gridResponse.Condenser_Water_Pump_003;
+          that.firstCard.Flow = parseFloat(that.firstCard.Flow).toFixed(2);
+          var firstCardFlow = that.firstCard.Flow;
+          var firstCardSpeed = parseFloat(that.firstCard.Speed);
+          var firstCardPressure = parseFloat(that.firstCard.Pressure);
+          that.secondCard.Flow = parseFloat(that.secondCard.Flow).toFixed(2);
+          var secondCardFlow = that.secondCard.Flow;
+          var secondCardSpeed = parseFloat(that.secondCard.Speed);
+          var secondCardPressure = parseFloat(that.secondCard.Pressure);
+          that.thirdCard.Flow = parseFloat(that.thirdCard.Flow).toFixed(2);
+          var thirdCardFlow = that.thirdCard.Flow;
+          var thirdCardSpeed = parseFloat(that.thirdCard.Speed);
+          var thirdCardPressure = parseFloat(that.thirdCard.Pressure);
+          if(firstCardFlow > 1000 || firstCardFlow<220 || firstCardPressure >=22 || firstCardPressure <= 5 || firstCardSpeed>=98){
+            this.firstCardColor = false;
+          }else {
+            this.firstCardColor = true;
+            }
+          if(secondCardFlow > 1000 || secondCardFlow<220 || secondCardPressure >=22 || secondCardPressure <= 5 || secondCardSpeed>=98){
+            this.secondCardColor = false;
+          }else {
+            this.secondCardColor = true;
+            }
+          if(thirdCardFlow > 1000 || thirdCardFlow<220 || thirdCardPressure >=22 || thirdCardPressure <= 5 || thirdCardSpeed>=98){
+            this.thirdCardColor = false;
+          }else {
+            this.thirdCardColor = true;
+            }
+        }.bind(this));
+        this.$.gridViewId.generateRequest();
+        this.$.armstrongKPIAjaxFirstEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          var responseflow = evt.detail.response;
+          var flowVal = parseFloat(responseflow.Flow).toFixed(2);
+          var speedVal = parseFloat(responseflow.Speed);
+          var pressureVal = parseFloat(responseflow.Pressure);
+          this.flow = flowVal;
+          this.speed = speedVal;
+          this.pressure= pressureVal;
+        //  that.kpiObject.flow = flowVal;
+          //console.log('ready function flow'+that.kpiObject.flow);
+          console.log('Flow Value for first element'+flowVal);
+        //  this.flow = responseflow.Flow;
+          if(flowVal > 1000 || flowVal<220){
+
+            document.getElementById('symbol2').classList.add('kpiStatusRed');
+            that.kpiStatus.flow = false;
+          }else {
+
+            document.getElementById('symbol2').classList.add('kpiStatusGreen');
+            that.kpiStatus.flow = true;
+            }
+          if(pressureVal >= 22 || pressureVal <= 5){
+            document.getElementById('symbol').classList.add('kpiStatusRed');
+            that.kpiStatus.pressure = false;
+          }else{
+            document.getElementById('symbol').classList.add('kpiStatusGreen');
+            that.kpiStatus.pressure = true;
+            }
+
+            if(speedVal >= 98){
+              document.getElementById('symbol1').classList.add('kpiStatusRed');
+              that.kpiStatus.speed = false;
+            }else{
+              document.getElementById('symbol1').classList.add('kpiStatusGreen');
+              that.kpiStatus.speed = true;
+            }
+
+            if(!that.kpiStatus.pressure || !that.kpiStatus.flow || !that.kpiStatus.speed){
+              this.icon1 = 'http://maps.gstatic.com/mapfiles/markers2/marker_sprite.png'; //red
+              document.getElementById('para').classList.add('kpiStatusRed');
+            }
+            else{
+              this.icon1 = 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png'; //green
+              document.getElementById('para').classList.add('kpiStatusGreen');
+            }
+        }.bind(this));
+        this.$.armstrongKPIAjaxSecondEl.generateRequest();
+        this.$.armstrongKPIAjaxSecondEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          var responseflow = evt.detail.response;
+          var flowVal = parseFloat(responseflow.Flow).toFixed(2);
+          var speedVal = parseFloat(responseflow.Speed);
+          var pressureVal = parseFloat(responseflow.Pressure);
+          this.flow1 = flowVal;
+          this.speed1 = speedVal;
+          this.pressure1= pressureVal;
+        //  that.kpiObject.flow = flowVal;
+          //console.log('ready function flow'+that.kpiObject.flow);
+          console.log('Flow Value for first element'+flowVal);
+        //  this.flow = responseflow.Flow;
+          if(flowVal > 1000 || flowVal<220){
+            //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0';
+            document.getElementById('symbol5').classList.add('kpiStatusRed');
+            that.kpiStatus1.flow = false;
+          }else {
+          //  this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0';
+            document.getElementById('symbol5').classList.add('kpiStatusGreen');
+            that.kpiStatus1.flow = true;
+            }
+          if(pressureVal >= 22 || pressureVal <= 5){
+            document.getElementById('symbol3').classList.add('kpiStatusRed');
+            that.kpiStatus1.pressure = false;
+          }else{
+            document.getElementById('symbol3').classList.add('kpiStatusGreen');
+            that.kpiStatus1.pressure = true;
+            }
+
+            if(speedVal >= 98){
+              document.getElementById('symbol4').classList.add('kpiStatusRed');
+              that.kpiStatus1.speed = false;
+            }else{
+              document.getElementById('symbol4').classList.add('kpiStatusGreen');
+              that.kpiStatus1.speed = true;
+            }
+
+            if(!that.kpiStatus1.pressure || !that.kpiStatus1.flow || !that.kpiStatus1.speed){
+              this.icon2 = 'http://maps.gstatic.com/mapfiles/markers2/marker_sprite.png'; //red
+              document.getElementById('para1').classList.add('kpiStatusRed');
+            }
+            else{
+              this.icon2 = 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png'; //green
+              document.getElementById('para1').classList.add('kpiStatusGreen');
+            }
+        }.bind(this));
+        this.$.armstrongKPIAjaxThirdEl.generateRequest();
+        this.$.armstrongKPIAjaxThirdEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          var responseflow = evt.detail.response;
+          var flowVal = parseFloat(responseflow.Flow).toFixed(2);
+          var speedVal = parseFloat(responseflow.Speed);
+          var pressureVal = parseFloat(responseflow.Pressure);
+          this.flow2 = flowVal;
+          this.speed2 = speedVal;
+          this.pressure2= pressureVal;
+        //  that.kpiObject.flow = flowVal;
+          //console.log('ready function flow'+that.kpiObject.flow);
+          console.log('Flow Value for first element'+flowVal);
+        //  this.flow = responseflow.Flow;
+          if(flowVal > 1000 || flowVal<220){
+            //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0';
+            document.getElementById('symbol8').classList.add('kpiStatusRed');
+            that.kpiStatus2.flow = false;
+          }else {
+            //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0';
+            document.getElementById('symbol8').classList.add('kpiStatusGreen');
+            that.kpiStatus2.flow = true;
+            }
+          if(pressureVal >= 22 || pressureVal <= 5){
+            document.getElementById('symbol6').classList.add('kpiStatusRed');
+            that.kpiStatus2.pressure = false;
+          }else{
+            document.getElementById('symbol6').classList.add('kpiStatusGreen');
+            that.kpiStatus2.pressure = true;
+            }
+
+            if(speedVal >= 98){
+              document.getElementById('symbol7').classList.add('kpiStatusRed');
+              that.kpiStatus2.speed = false;
+            }else{
+              document.getElementById('symbol7').classList.add('kpiStatusGreen');
+              that.kpiStatus2.speed = true;
+            }
+
+            if(!that.kpiStatus2.pressure || !that.kpiStatus2.flow || !that.kpiStatus2.speed){
+              this.icon3 = 'http://maps.gstatic.com/mapfiles/markers2/marker_sprite.png'; //red
+              document.getElementById('para2').classList.add('kpiStatusRed');
+            }
+            else{
+              this.icon3 = 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png'; //green
+              document.getElementById('para2').classList.add('kpiStatusGreen');
+            }
+        }.bind(this));
         },
       order: function(e){
         console.log(e);
-         var selectedItem = e.target.firstChild.data;
+         /*var selectedItem = e.target.firstChild.data;
         var i;
         for(i=0; i<this.assetList.length;i++){
           if(selectedItem == this.assetList[i].name){
             this.selected = this.assetList[i];
           }
-        }
-        document.getElementById('pop1').hide();
+        }*/
+        document.getElementById('pop').hide();
         console.log("hi");
         document.getElementById('contextId').value = "Condenser_Water_Pump_001";
         document.getElementById('contextName').value = "Design Envelope 4300 Pumps";
@@ -259,13 +698,13 @@
       },
       order1: function(e){
         console.log(e);
-         var selectedItem = e.target.firstChild.data;
+      /*   var selectedItem = e.target.firstChild.data;
         var i;
         for(i=0; i<this.assetList.length;i++){
           if(selectedItem == this.assetList[i].name){
             this.selected = this.assetList[i];
           }
-        }
+        }*/
         document.getElementById('pop1').hide();
         console.log("hi");
         document.getElementById('contextId').value = "Condenser_Water_Pump_002";
@@ -275,14 +714,14 @@
       },
       order2: function(e){
         console.log(e);
-         var selectedItem = e.target.firstChild.data;
+      /*   var selectedItem = e.target.firstChild.data;
         var i;
         for(i=0; i<this.assetList.length;i++){
           if(selectedItem == this.assetList[i].name){
             this.selected = this.assetList[i];
           }
-        }
-        document.getElementById('pop1').hide();
+        }*/
+      document.getElementById('pop2').hide();
         console.log("hi");
         document.getElementById('contextId').value = "Condenser_Water_Pump_003";
         document.getElementById('contextName').value = "Design Envelope 4372 Tango Pumps";

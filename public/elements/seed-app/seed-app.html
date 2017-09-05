@@ -228,6 +228,8 @@
         console.log('new route:', newRoute);
         if(newRoute.path != "/overview")
           this.$.overviewPxView._resetView();
+        if(newRoute.path != "/pumpManager")
+          this.$.pumpManagerPxView._resetView();
       }
 
     });
