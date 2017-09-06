@@ -39,21 +39,23 @@ display: block;
 .kpi{
   width: 20%;
   text-transform: uppercase;
-  
+
   padding : 20px;
 }
 .kpiHeader {
+  color: white;
   font-size: 14px;
   font-weight: bold;
 }
 .kpiContent {
+  color: white;
   font-size: 18px;
   /* color: #FF8000; */
 }
 .kpiUnits{
   margin-left: 5px;
   font-size: 10px;
-  color:grey;
+  color:white;
   font-weight: bold;
 }
 .alertListLi {
@@ -61,7 +63,7 @@ display: block;
   font-size: 25px;
 }
 .alertSpan{
-  color : dimgrey;
+  color : white;
   font-weight: bold;
   font-size: 12px;
   position: relative;
@@ -124,64 +126,72 @@ color : orange;
 }
 </style>
 <div class="layout horizontal">
-  <div style="width:16%;background-color:#3b3b3f;color:white;">
-    <div style="overflow-wrap: break-word; padding:20px;">
-      <span style="font-weight:bold;text-align:center;text-transform:uppercase;">{{assetName}}</span>
-    </div>
-    <img src="../../images/pump.png">
-    <hr>
-    <span style="padding:10px;font-size:12px;color:darkgrey;">UPCOMING SERVICE</span><br>
-    <span style="padding:10px;font-weight:bold;">31st Aug 2017</span>
-    <hr>
-    <span style="padding:10px;font-size:12px;color:darkgrey;">INSTALLATION DATE</span><br>
-    <span style="padding:10px;font-weight:bold;">29th Feb 2017</span>
-  </div>
-  <div style="width:84%;">
+
+  <div style="width:100%;">
     <px-card id="tempCardId" style="padding:0px;">
       <template is="dom-if" if="{{kpiObject}}">
-      <div class="layout horizontal" style="padding:0px;margin-bottom:0px;">
-        <div style="width:40%;">
+        <div style="display:flex; flex-direction: row; width: 100%; background-color: #1b2a33;">
+        <div style="width:30%;color:white; border-right: 1px solid white;">
+          <div style="overflow-wrap: break-word; padding:20px;">
+            <span style="font-weight:bold;text-align:center;text-transform:uppercase;">{{assetName}}</span>
+          </div>
+          <div>
+          <img src="../../images/pump.png" style="width:80px; height:100px; padding-left: 20px;">
+        </div>
+          <hr>
+          <div style=" display: flex; flex-direction: row;">
+        <div>
+          <span style="padding:10px;font-size:12px;color:darkgrey;">UPCOMING SERVICE</span><br>
+          <span style="padding:10px;font-weight:bold;">31st Aug 2017</span>
+        </div>
+        <div>
+          <span style="padding:10px;font-size:12px;color:darkgrey;">INSTALLATION DATE</span><br>
+          <span style="padding:10px;font-weight:bold;">29th Feb 2017</span>
+        </div>
+        </div>
+        </div>
+        <div style="width:30%;">
           <div class="layout horizontal center-center">
-            <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+            <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Current</span><br>
             <template is="dom-if" if="{{kpiStatus.current}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.current}}">
                 <span class="kpiStatusRed"></span>
-              </template> 
+              </template>
             <span class="kpiContent">{{kpiObject.Current}}</span><span class="kpiUnits">A</span>
           </div>
-          <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+          <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Speed</span><br>
             <template is="dom-if" if="{{kpiStatus.speed}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.speed}}">
                 <span class="kpiStatusRed"></span>
-              </template> 
+              </template>
             <span class="kpiContent">{{kpiObject.Speed}}</span><span class="kpiUnits">%</span>
           </div>
           </div>
           <div class="layout horizontal center-center">
-            <div class="kpi" style="width:65%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+            <div class="kpi" style="width:65%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Flow</span><br>
               <template is="dom-if" if="{{kpiStatus.flow}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.flow}}">
                 <span class="kpiStatusRed"></span>
-              </template>              
+              </template>
             <span class="kpiContent">{{kpiObject.Flow}}</span><span class="kpiUnits">usgpm</span>
             </div>
-          <div class="kpi" style="width:35%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">          
+          <div class="kpi" style="width:35%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Power</span><br>
            <template is="dom-if" if="{{kpiStatus.power}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.power}}">
                 <span class="kpiStatusRed"></span>
-              </template> 
+              </template>
           <span class="kpiContent">{{kpiObject.Power}}</span><span class="kpiUnits">kW</span>
           </div>
           </div>
@@ -193,16 +203,16 @@ color : orange;
               </template>
               <template is="dom-if" if="{{!kpiStatus.pressure}}">
                 <span class="kpiStatusRed"></span>
-              </template> 
-            <span class="kpiContent">{{kpiObject.Pressure}}</span><span class="kpiUnits">kg/cm2</span>          
-            
+              </template>
+            <span class="kpiContent">{{kpiObject.Pressure}}</span><span class="kpiUnits">kg/cm2</span>
+
           </div>
-          </div>         
-          
+          </div>
+
         </div>
-        <div style="width:60%;">
+        <div style="width:40%;">
           <div>
-            <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block;">Alerts / Advisories</span>
+            <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block; color:white;">Advisories</span>
             <hr style="margin:0px;">
             <ul>
               <template is="dom-repeat" items="{{alertList}}">
@@ -214,7 +224,8 @@ color : orange;
           </ul>
           </div>
         </div>
-      </div>
+
+    </div>
       </template>
     </px-card>
     <px-card id="overviewCard" header-text="Load Profile" chevron>
@@ -224,7 +235,7 @@ color : orange;
           <div>
             <px-rangepicker id="loadProfileRangeId" range="{{selectedRange}}">
           </px-rangepicker>
-          </div>          
+          </div>
           <div id="dropdownDiv" style="margin-left:20px;">
             <px-dropdown
               id="dayWeekId"
@@ -245,27 +256,27 @@ color : orange;
           width="400"
           use-interactive-guideline>
           </nvd3-line> -->
-          <px-vis-timeseries 
-          debounce-resize-timing="250" 
-          width="700" 
-          height="290.5" 
-          chart-horizontal-alignment="center" 
-          chart-vertical-alignment="center" 
-          margin='{"top":20,"bottom":35,"left":65,"right":90}' 
-          tooltip-config='{}' 
-          register-config='{"type":"horizontal"}' 
-          selection-type="xy" 
-          chart-data='{{LoadData}}' 
-          series-config='{"y0":{"name":"Flow","x":"x","y":"y","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}' 
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'                  
+          <px-vis-timeseries
+          debounce-resize-timing="250"
+          width="700"
+          height="290.5"
+          chart-horizontal-alignment="center"
+          chart-vertical-alignment="center"
+          margin='{"top":20,"bottom":35,"left":65,"right":90}'
+          tooltip-config='{}'
+          register-config='{"type":"horizontal"}'
+          selection-type="xy"
+          chart-data='{{LoadData}}'
+          series-config='{"y0":{"name":"Flow","x":"x","y":"y","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}'
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y","type":"max","value":850},{"for":"y","type":"min","value":500}]'
           display-threshold-title
           threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
           "min":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
-          x-axis-config='{"title":"Date"}' 
+          x-axis-config='{"title":"Date"}'
           y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
-      
+
         <!--  event-data='[{"id":"123","time":1498938000000,"label":"Alert"}]'
           event-config='{"Alert":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":2}}'-->
         </div>
@@ -274,7 +285,7 @@ color : orange;
         <div id="column2" >
           <px-rangepicker id="energyRangeId" range="{{energySelectedRange}}">
           </px-rangepicker>
-          <div id="container" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
+          <div id="container1" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
           <!-- <div class="layout horizontal">
             <div class="vertical-text">
               Energy Consumption
@@ -287,17 +298,17 @@ color : orange;
                         >
                         </nvd3-multi-bar>
               <highcharts-chart style="width:600px;height:400px;"
-              type="spline" 
+              type="spline"
               data='{{barData}}'
-              title='Test-Spline Chart' 
-              x-zoom 
-              x-label="Iterations" 
+              title='Test-Spline Chart'
+              x-zoom
+              x-label="Iterations"
               y-label="Awesomeness Index"></highcharts-chart>
             </div>
           </div> -->
-          
+
         </div>
-      <!-- </div> -->    
+      <!-- </div> -->
     </px-card>
     <!-- new card starts-->
     <px-card id="secondCard" header-text="Vibration Profile" chevron>
@@ -319,7 +330,7 @@ color : orange;
               </px-dropdown-content>
             </px-dropdow>
           </div>
-          </div>            
+          </div>
           <!-- <nvd3-line
           id="gravityGraphId"
           data="{{gravityData}}"
@@ -327,23 +338,23 @@ color : orange;
           width="400"
           use-interactive-guideline>
           </nvd3-line> -->
-          <px-vis-timeseries 
-          debounce-resize-timing="250" 
-          width="700" 
-          height="290.5" 
-          chart-horizontal-alignment="center" 
-          chart-vertical-alignment="center" 
-          margin='{"top":20,"bottom":35,"left":65,"right":65}' 
-          tooltip-config='{}' 
-          register-config='{"type":"horizontal"}' 
-          selection-type="xy" 
-          chart-data='{{gravityData}}' 
-          series-config='{"y0":{"name":"Vibration","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"1"}}}' 
+          <px-vis-timeseries
+          debounce-resize-timing="250"
+          width="700"
+          height="290.5"
+          chart-horizontal-alignment="center"
+          chart-vertical-alignment="center"
+          margin='{"top":20,"bottom":35,"left":65,"right":65}'
+          tooltip-config='{}'
+          register-config='{"type":"horizontal"}'
+          selection-type="xy"
+          chart-data='{{gravityData}}'
+          series-config='{"y0":{"name":"Vibration","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"1"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y0","type":"max","value":0.1}]'
           display-threshold-title
-          threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}' 
-          x-axis-config='{"title":"Date"}' 
+          threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
+          x-axis-config='{"title":"Date"}'
           y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Vibration","titleTruncation":false,"unit":"mm/s2"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
         </div>
@@ -353,25 +364,25 @@ color : orange;
           <h3></h3>
           <px-rangepicker id="flowspeedRangeId" range="{{flowspeedSelectedRange}}">
           </px-rangepicker>
-          <px-vis-timeseries 
-          debounce-resize-timing="250" 
-          width="700" 
-          height="290.5" 
-          chart-horizontal-alignment="center" 
-          chart-vertical-alignment="center" 
-          margin='{"top":20,"bottom":35,"left":65,"right":65}' 
-          tooltip-config='{}' 
-          register-config='{"type":"horizontal"}' 
-          selection-type="xy" 
-          chart-data='{{flowspeedData}}' 
+          <px-vis-timeseries
+          debounce-resize-timing="250"
+          width="700"
+          height="290.5"
+          chart-horizontal-alignment="center"
+          chart-vertical-alignment="center"
+          margin='{"top":20,"bottom":35,"left":65,"right":65}'
+          tooltip-config='{}'
+          register-config='{"type":"horizontal"}'
+          selection-type="xy"
+          chart-data='{{flowspeedData}}'
           series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},
-          "y1":{"name":"Speed","x":"timeStamp","y":"y1","yAxisUnit":"%","axis":{"id":"axis2","side":"right","number":"1"}}}' 
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'                
+          "y1":{"name":"Speed","x":"timeStamp","y":"y1","yAxisUnit":"%","axis":{"id":"axis2","side":"right","number":"1"}}}'
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y0","type":"max","value":1400},{"for":"y0","type":"min","value":250},{"for":"y1","type":"max","value":98}]'
           display-threshold-title
           threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
           "min":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
-          x-axis-config='{"title":"Date"}' 
+          x-axis-config='{"title":"Date"}'
           y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Speed","titleTruncation":false,"unit":"%"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
           <!-- <px-vis-xy-chart
@@ -386,17 +397,17 @@ color : orange;
                    selection-type="xy"
                    chart-data="{{flowspeedData}}"
                    series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
-                   chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
+                   chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
                    x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
                    y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
-                           </px-vis-xy-chart>  -->         
+                           </px-vis-xy-chart>  -->
         </div>
     </px-card>
-   <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> --> 
+   <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> -->
     <px-card id="CanvasCard" header-text="Pump Efficiency" chevron>
         <div id="column2" >
           <px-rangepicker id="peRangeId" range="{{peSelectedRange}}">
-          </px-rangepicker>                  
+          </px-rangepicker>
         </div>
         <px-vis-xy-chart
           debounce-resize-timing="250"
@@ -410,7 +421,7 @@ color : orange;
           selection-type="xy"
           chart-data="{{effChartData}}"
           series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'          
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
           y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncation":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
         </px-vis-xy-chart>
@@ -460,7 +471,7 @@ Polymer({
     }*/
     from = moment().subtract(months, 'weeks');
     to = moment();
-    
+
     return {"from":from.toISOString(),"to":to.toISOString()};
   },
   _getNarrowRange: function(months) {
@@ -614,7 +625,7 @@ Polymer({
         "values" : reqData
       }];*/
 
-      Highcharts.chart('container', {
+      Highcharts.chart('container1', {
     chart: {
         type: 'column'
     },
@@ -666,7 +677,7 @@ Polymer({
     });
     this.$.loadProfileAjaxEl.addEventListener('response', function(evt) {
       var reqData1 = evt.detail.response;
-      
+
       /*var i;
       for(i = 0; i < reqData1.length; i++){
         console.log(reqData1[i]['y']);
@@ -725,8 +736,8 @@ Polymer({
     this.$.dayWeekId.addEventListener('px-dropdown-value-changed', function(evt) {
       that.dayWeek = evt.detail.key;
       var myVar;
-      if(that.dayWeek != 'live'){ 
-        clearInterval(myVar);       
+      if(that.dayWeek != 'live'){
+        clearInterval(myVar);
         that.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+that.loadStartTime+"&endTime="+that.loadEndTime+"&groupType="+that.dayWeek;
         that.$.loadProfileAjaxEl.generateRequest();
       }else {
@@ -735,7 +746,7 @@ Polymer({
         that.$.loadProfileLiveAjaxEl.url = "/api/v1/liveflowdata?tagId="+that.assetId;
         myVar = setInterval(function(){ that.$.loadProfileLiveAjaxEl.generateRequest();}, 30000);
       }
-      
+
     });
     this.$.gravityDropdownId.addEventListener('px-dropdown-value-changed', function(evt) {
       that.gravityVal = evt.detail.key;

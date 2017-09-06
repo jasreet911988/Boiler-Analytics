@@ -165,9 +165,9 @@
               <template is="dom-if" if="{{!mapView}}">
                 <span style="display:block;float:right;" on-click="_viewChange"><i class="fa fa-map" aria-hidden="true" style="cursor:pointer;"></i></span>
               </template>
-            
+
           </div>
-    <template is="dom-if" if="{{mapView}}">     
+    <template is="dom-if" if="{{mapView}}">
     <google-map fit-to-marker api-key="AIzaSyD3E1D9b-Z7ekrT3tbhl_dy8DCXuIuDDRc" style="width:100%;height:370px;" latitude="40.7555" longitude="-73.985">
 
      <google-map-marker latitude="40.790454" longitude="-73.953519" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
@@ -239,7 +239,7 @@
       <span id="close" class="close-button" on-click="close2">x</span>
           <div id="column2" class = "main-content" on-click="order2">
           <p id = "para2" class="pump-name">Design Envelope 4372 Tango Pumps</p>
-          <p class="pump-address">953 Shyanne Camp Suite</p>
+          <p class="pump-address">95 Shyanne Camp Suite</p>
           <div class="inner-content">
             <div class="pump-image"><img src="../../images/pump.png" class="inner-image"/></div>
             <div class="pump-main-first">
@@ -264,8 +264,8 @@
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
   </template>
-  <template is="dom-if" if="{{!mapView}}"> 
-    <div style="height:360px;">      
+  <template is="dom-if" if="{{!mapView}}">
+    <div style="height:360px;">
       <div class="gridItem" on-click="order">
         <template is="dom-if" if="{{firstCardColor}}">
           <span id="firstCardId" class="gridHeader" style="background-color:#4caf50;">{{firstCard.name}}</span>
@@ -293,10 +293,10 @@
           <span class="gridKpiLabel">Speed</span>
           <span class="gridKpiValue">{{firstCard.Speed}} %</span>
         </span>
-        
-        
-        
-        
+
+
+
+
       </div>
       <div class="gridItem" on-click="order1">
         <template is="dom-if" if="{{secondCardColor}}">
@@ -305,7 +305,7 @@
         <template is="dom-if" if="{{!secondCardColor}}">
           <span id="secondCardId" class="gridHeader" style="background-color:#f44336;">{{secondCard.name}}</span>
         </template>
-       
+
         <span class="gridKpi">
           <span class="gridKpiLabel">Current</span>
           <span class="gridKpiValue">{{secondCard.Current}} A</span>
@@ -314,7 +314,7 @@
           <span class="gridKpiLabel">Flow</span>
           <span class="gridKpiValue">{{secondCard.Flow}} usgpm</span>
         </span>
-       
+
         <span class="gridKpi">
           <span class="gridKpiLabel">Power</span>
           <span class="gridKpiValue">{{secondCard.Power}} kW</span>
@@ -335,7 +335,7 @@
         <template is="dom-if" if="{{!thirdCardColor}}">
           <span id="thirdCardId" class="gridHeader" style="background-color:#f44336;">{{thirdCard.name}}</span>
         </template>
-        
+
         <span class="gridKpi">
           <span class="gridKpiLabel">Current</span>
           <span class="gridKpiValue">{{thirdCard.Current}} A</span>
@@ -344,7 +344,7 @@
           <span class="gridKpiLabel">Flow</span>
           <span class="gridKpiValue">{{thirdCard.Flow}} usgpm</span>
         </span>
-       
+
         <span class="gridKpi">
           <span class="gridKpiLabel">Power</span>
           <span class="gridKpiValue">{{thirdCard.Power}} kW</span>
@@ -434,7 +434,7 @@
                  }
       },
       _viewChange: function(){
-        this.mapView = !this.mapView;        
+        this.mapView = !this.mapView;
       },
       mapClicked: function(){
         console.log("clciked");

@@ -25,7 +25,12 @@
   <template>
 
     <!-- apply imported seed app style module -->
-    <style include="seed-app-styles"></style>
+    <style include="seed-app-styles">
+    #pxnav {
+      --px-app-nav-background-color: #e2e8ed;
+    }
+
+    </style>
 
     <header role="banner">
       <div class="viewport flex flex--justify flex--middle">
@@ -41,10 +46,10 @@
 
     <div class="viewport">
 
-      <div class="content-wrapper">
-        <px-app-nav
+      <div class="content-wrapper" style="flex-direction: column;">
+        <px-app-nav id="pxnav"
           class="navbar"
-          nav-items="[[navItems]]"
+          items="[[navItems]]"
           path-prefix="[[pathPrefix]]">
         </px-app-nav>
 
@@ -154,9 +159,10 @@
           value: function() {
             return [
               {
-                "label": "Pump Manager",
+                "label": "Dashboard",
+                "id": "dashboard",
                 "path": "/pumpManager",
-                "icon": "fa-sitemap"
+                "icon": "px-fea:dashboard"
               }/*,
               {
                 "label": "System Overview",
