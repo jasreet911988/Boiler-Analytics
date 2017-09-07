@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: armstrong-pump-manager1
+  - name: armstrong-pump-manager2
     memory: 128M
     timeout: 180
     buildpack: nodejs_buildpack

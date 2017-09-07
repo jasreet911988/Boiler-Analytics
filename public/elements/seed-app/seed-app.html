@@ -29,7 +29,8 @@
     #pxnav {
       --px-app-nav-background-color: #e2e8ed;
     }
-
+	
+	
     </style>
 
     <header role="banner">
@@ -47,11 +48,12 @@
     <div class="viewport">
 
       <div class="content-wrapper" style="flex-direction: column;">
-        <px-app-nav id="pxnav"
+        <!--<px-app-nav id="pxnav"
           class="navbar"
-          items="[[navItems]]"
-          path-prefix="[[pathPrefix]]">
-        </px-app-nav>
+          items='[{"label":"Dashboard","path":"dashboards","icon":"px-fea:dashboard"},{"label":"Performance","path":"dashboards","icon":"px-fea:analytics"},{"label":"Alerts","id":"alerts","icon":"px-fea:alerts"}]' collapse-at="6" selected-route='["home"]' selected-meta='{"item":{"label":"Home","id":"home","icon":"px-nav:home"},"path":[{"label":"Home","id":"home","icon":"px-nav:home"}],"route":["home"],"parent":null,"children":[]},{"label":"Dashboards","path":"dashboards","icon":"px-fea:dashboard"}]}'
+		  path-prefix="[[pathPrefix]]">
+        </px-app-nav>-->
+		
 
         <main class="u-pt-- u-pr-- u-pl--" role="main">
           <input type="hidden" id="contextId" value="">

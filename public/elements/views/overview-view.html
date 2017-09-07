@@ -19,6 +19,7 @@
 :host {
 display: block;
 }
+
 .vertical-text{
   max-width: 8px;
   transform: rotate(270deg);
@@ -124,10 +125,79 @@ color : green;
 .orangeColor {
 color : orange;
 }
+.overview-header{
+float:left;
+width:200px;
+}
+.nav {
+		background-color: #e2e8ed;
+		padding:10px;
+		height:30px;
+	}
+	.nav .right{
+		width:93%;
+		float:left;
+	}
+	.nav .left{
+		width:7%;
+		float:left;
+	}
+	.search{
+		width:40px;
+		float:left;
+	}
+	.user{
+		width:40px;
+		float:left;
+	}
+.home{
+		width:100px;
+		float:left;
+		vertical-align:middle;
+	}
+	.alert{
+		width:100px;
+		float:left;
+		vertical-align:middle;
+	}
+	.performance{
+		width:150px;
+		float:left;
+		vertical-align:middle;
+	}
+	img {
+	vertical-align:middle;
+	}
+	.home-link {
+		text-decoration:none;
+	}
+	a:visited { 
+		color: #000;
+	}
+	.custom-size {
+          --iron-icon-width: 25px;
+          --iron-icon-height: 25px;
+		  color:#000;
+        }
+		.menutext{
+			margin-left:5px;
+			position:absolute;
+			top:20px;
+		}
 </style>
 <div class="layout horizontal">
 
   <div style="width:100%;">
+	<div class="nav">
+			<div class='right'>
+				<div class='home'><a href='/#/pumpManager' class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+				<div class='alert'><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
+			</div>
+			<!--<div class='left'>
+				<div class='search'><img src='/images/main-search.png'></div>
+				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
+			</div>-->
+		</div>
     <px-card id="tempCardId" style="padding:0px;">
       <template is="dom-if" if="{{kpiObject}}">
         <div style="display:flex; flex-direction: row; width: 100%; background-color: #1b2a33;">
