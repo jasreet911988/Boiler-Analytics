@@ -9,6 +9,7 @@
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/px-tree/px-tree.html">
 <!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
 <!-- <link rel="import" href="temp-view.html"> -->
 <!-- <link rel="import" href="pump-performance-view.html"> -->
@@ -171,7 +172,7 @@ width:200px;
 	.home-link {
 		text-decoration:none;
 	}
-	a:visited { 
+	a:visited {
 		color: #000;
 	}
 	.custom-size {
@@ -284,14 +285,15 @@ width:200px;
           <div>
             <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block; color:white;">Advisories</span>
             <hr style="margin:0px;">
-            <ul>
+            <px-tree style="color: white;" keys='{"id":"label","label":"label","children":"items","icon":"icon"}' items='[{"label":"Check for damage to impeller","items":[{"label":"There is possibility of cavitation","items":[{"label":"Check if NPSHA>NPSHR"},{"label":"Check for rise in temperature of liquid"}]}]}, {"label":"Possibility of voltage unbalance/ voltage surge","items":[{"label":"Possibility of current unbalance","items":[{"label":"Check for looseness of phase windings"}]}, {"label":"Check for inductance for all 3 phases"},{"label":"Check insulation quality. There may be possibility of damage to insulation quality"}]}, {"label":"Check for Speed","items":[{"label":"Check the governor system (if available)"}, {"label":"Sudden Speed decreased"}]}]'></px-tree>
+            <!--ul>
               <template is="dom-repeat" items="{{alertList}}">
                 <li class="alertListLi" class$="{{item.status}}"><span class="alertSpan">{{item.message}}</span></li>
               </template>
-              <!-- <li class="alertListLi" style="color: orange;"><span class="alertSpan">Check Pump operation (Pump may tend to cavitate). </span></li>
+              < <li class="alertListLi" style="color: orange;"><span class="alertSpan">Check Pump operation (Pump may tend to cavitate). </span></li>
               <li class="alertListLi" style="color: red;"><span class="alertSpan" >Check the pump discharge pressure.</span></li>
               <li class="alertListLi" style="color: orange;"><span class="alertSpan" >High motor temperature</span></li> -->
-          </ul>
+          <!--/ul-->
           </div>
         </div>
 

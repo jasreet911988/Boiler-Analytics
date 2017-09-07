@@ -44,7 +44,8 @@
     "google-map": "^2.0.1",
     "highcharts-chart": "^2.0.1",
     "px-app-nav": "^2.0.6",
-    "px-actionable-design": "px-actionable-text-icons-design#^2.0.4"
+    "px-actionable-design": "px-actionable-text-icons-design#^2.0.4",
+    "px-tree": "^2.0.1"
   },
   "resolutions": {
     "px-datetime-common": "^0.7.0",
