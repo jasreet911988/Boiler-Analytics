@@ -87,6 +87,16 @@
             active="[[_tempActive]]"
             element-href="/elements/views/temp-view.html">
           </px-view>
+		  
+		  <app-route
+            route="[[_route]]"
+            pattern="/advisory"
+            active="{{_advisoryActive}}">
+          </app-route>
+          <px-view id="advisoryPxView"
+            active="[[_advisoryActive]]"
+            element-href="/elements/views/advisory-view.html">
+          </px-view>
 
           <!-- about route and view -->
           <app-route

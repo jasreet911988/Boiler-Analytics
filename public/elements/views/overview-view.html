@@ -10,6 +10,7 @@
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/px-tree/px-tree.html">
+<link rel="import" href="advisory-view.html">
 <!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
 <!-- <link rel="import" href="temp-view.html"> -->
 <!-- <link rel="import" href="pump-performance-view.html"> -->
@@ -199,6 +200,7 @@ width:200px;
 				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
 			</div>-->
 		</div>
+		
     <px-card id="tempCardId" style="padding:0px;">
       <template is="dom-if" if="{{kpiObject}}">
         <div style="display:flex; flex-direction: row; width: 100%; background-color: #1b2a33;">
@@ -285,7 +287,8 @@ width:200px;
           <div>
             <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block; color:white;">Advisories</span>
             <hr style="margin:0px;">
-            <px-tree style="color: white;" keys='{"id":"label","label":"label","children":"items","icon":"icon"}' items='[{"label":"Check for damage to impeller","items":[{"label":"There is possibility of cavitation","items":[{"label":"Check if NPSHA>NPSHR"},{"label":"Check for rise in temperature of liquid"}]}]}, {"label":"Possibility of voltage unbalance/ voltage surge","items":[{"label":"Possibility of current unbalance","items":[{"label":"Check for looseness of phase windings"}]}, {"label":"Check for inductance for all 3 phases"},{"label":"Check insulation quality. There may be possibility of damage to insulation quality"}]}, {"label":"Check for Speed","items":[{"label":"Check the governor system (if available)"}, {"label":"Sudden Speed decreased"}]}]'></px-tree>
+			 <px-tree id="advisioryId" style="color: white;" keys='{"id":"label","label":"label","children":"items","icon":"icon"}' items='[{"label":"Check for damage to impeller","items":[{"label":"There is possibility of cavitation","items":[{"label":"Check if NPSHA>NPSHR"},{"label":"Check for rise in temperature of liquid"}]}]}, {"label":"Possibility of voltage unbalance/ voltage surge","items":[{"label":"Possibility of current unbalance","items":[{"label":"Check for looseness of phase windings"}]}, {"label":"Check for inductance for all 3 phases"},{"label":"Check insulation quality. There may be possibility of damage to insulation quality"}]}, {"label":"Check for Speed","items":[{"label":"Check the governor system (if available)"}, {"label":"Sudden Speed decreased"}]}]'></px-tree>
+       
             <!--ul>
               <template is="dom-repeat" items="{{alertList}}">
                 <li class="alertListLi" class$="{{item.status}}"><span class="alertSpan">{{item.message}}</span></li>
@@ -641,8 +644,9 @@ Polymer({
     that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
 
     this.$.aboutContentAjaxEl.url = "/api/v1/latestdetails?tagId="+that.assetId;
-
+	
     this.$.aboutContentAjaxEl.addEventListener('response', function(evt) {
+	
       that.kpiObject = evt.detail.response;
       that.alertList = [];
       that.kpiStatus = {};
@@ -747,6 +751,7 @@ Polymer({
     }
 });
     });
+
     this.$.loadProfileAjaxEl.addEventListener('response', function(evt) {
       var reqData1 = evt.detail.response;
 
@@ -820,6 +825,16 @@ Polymer({
       }
 
     });
+	//this.async(function() {
+		if(typeof this.$.advisioryId!='undefined') {
+			this.$.advisioryId.addEventListener('px-tree-node-tapped', function(evt) {
+				console.log(evt);
+				if(!evt.detail.isBranch) {
+					window.location.href="#/advisory";
+				}
+			});
+		}
+	//});
     this.$.gravityDropdownId.addEventListener('px-dropdown-value-changed', function(evt) {
       that.gravityVal = evt.detail.key;
       that.$.gravityAjaxEl.url = "/api/v1/gravitygraph?tagId="+that.assetId+"&startTime="+that.gravityStartTime+"&endTime="+that.gravityEndTime+"&vibration="+that.gravityVal;
@@ -858,5 +873,6 @@ Polymer({
     this.$.pumpEfficiencyAjaxEl.generateRequest();
   }
 });
+
 </script>
 </dom-module>

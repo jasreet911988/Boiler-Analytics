@@ -1,0 +1,347 @@
+
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+
+<link rel="import" href="../../bower_components/px-vis-xy-chart/px-vis-xy-chart.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
+<link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
+<!-- <link rel="import" href="temp-view.html"> -->
+<!-- <link rel="import" href="pump-performance-view.html"> -->
+<dom-module id="advisory-view">
+<template>
+<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+<style>
+:host {
+display: block;
+}
+.vertical-text{
+  max-width: 8px;
+  transform: rotate(270deg);
+  transform-origin: left top 0;
+  position: relative;
+  top: 180px;
+}
+.warning {
+  color: orange;
+  list-style-type: disc;
+  font-size: 25px;
+}
+.danger {
+  color: red;
+  list-style-type: disc;
+  font-size: 25px;
+}
+.kpi{
+  width: 20%;
+  text-transform: uppercase;
+
+  padding : 20px;
+}
+.kpiHeader {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+.kpiContent {
+  color: white;
+  font-size: 18px;
+  /* color: #FF8000; */
+}
+.kpiUnits{
+  margin-left: 5px;
+  font-size: 10px;
+  color:white;
+  font-weight: bold;
+}
+.alertListLi {
+  list-style-type: disc;
+  font-size: 25px;
+}
+.alertSpan{
+  color : white;
+  font-weight: bold;
+  font-size: 12px;
+  position: relative;
+  top: -3px;
+}
+.kpiStatusRed {
+  height: 14px;
+    margin-right: 5px;
+    width: 3px;
+    background-color: red;
+    display: inline-block;
+}
+.kpiStatusGreen {
+  height: 14px;
+    margin-right: 5px;
+    width: 3px;
+    background-color: green;
+    display: inline-block;
+}
+#dropdownDiv {
+max-width: 200px;
+}
+#row1{
+display:flex;
+flex-direction:row;
+justify-content: space-around;
+}
+#column1{
+display:flex;
+flex-direction:column;
+}
+#column2{
+display:flex;
+flex-direction:column;
+}
+.flex-row {
+display:flex;
+flex-direction:row;
+justify-content: space-around;
+width : 50%;
+}
+.flex-col {
+display:flex;
+flex-direction:column;
+min-width: 45%;
+margin : 10px;
+}
+.spanStyle {
+font-weight: bolder;
+font-size: 20px;
+}
+.redColor {
+color : red;
+}
+.greenColor {
+color : green;
+}
+.orangeColor {
+color : orange;
+}
+</style>
+<div class="layout horizontal">
+
+  <div style="width:100%;">
+   <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> -->
+    <px-card id="CanvasCard" header-text="Pump Efficiency" chevron>
+        <px-vis-xy-chart
+          debounce-resize-timing="250"
+          width="700"
+          height="311.5"
+          chart-horizontal-alignment="center"
+          chart-vertical-alignment="center"
+          margin='{"top":30,"bottom":60,"left":75,"right":75}'
+          tooltip-config='{"forceDateTimeDisplay":false}'
+          register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+          selection-type="xy"
+          chart-data="{{effChartData}}"
+          series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
+          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+          x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+          y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncation":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
+        </px-vis-xy-chart>
+    </px-card>
+
+<iron-ajax id="aboutContentAjaxEl"></iron-ajax>
+    <iron-ajax id="pumpEfficiencyAjaxEl"></iron-ajax>
+  </div>
+</div>
+</template>
+<script>
+Polymer({
+  is: 'advisory-view',
+  properties: {
+    selectedRange: {
+      type: Object
+    },
+    energySelectedRange: {
+      type: Object
+    },
+    assetName : {
+      type : String,
+      value : ''
+    },
+    assetId : {
+      type : String,
+      value : ''
+    },
+    LoadData : {
+      type : Array
+    }
+  },
+  _getDefaultRange: function(months) {
+    var from;
+    var to;
+    /*if(months){
+      from = '2017-06-01T03:38:22.242Z';
+      to = '2017-06-14T03:38:22.242Z';
+    }else{
+      from = '2017-06-01T03:38:22.242Z';
+      to = '2017-07-14T03:38:22.242Z';
+    }*/
+    from = moment().subtract(months, 'weeks');
+    to = moment();
+
+    return {"from":from.toISOString(),"to":to.toISOString()};
+  },
+  _getNarrowRange: function(months) {
+    var from;
+    var to;
+    /*if(months){
+      from = '2017-06-03T03:38:22.242Z';
+      to = '2017-06-03T03:58:22.242Z';
+    }else{
+      from = '2017-06-03T03:38:22.242Z';
+      to = '2017-06-04T03:58:22.242Z';
+    }    */
+    from = moment().subtract(months, 'minutes');
+    to = moment();
+    return {"from":from.toISOString(),"to":to.toISOString()};
+  },
+  _getWideRange: function(months) {
+    var from;
+    var to;
+    /*if(months){
+      from = '2017-06-03T03:38:22.242Z';
+      to = '2017-06-03T03:58:22.242Z';
+    }else{
+      from = '2017-06-03T03:38:22.242Z';
+      to = '2017-06-04T03:58:22.242Z';
+    }    */
+    from = moment().subtract(months, 'months');
+    to = moment();
+    return {"from":from.toISOString(),"to":to.toISOString()};
+  },
+  _setEnergyTimes: function(){
+    this.energyStartTime = new Date(this.energySelectedRange.from).getTime();
+    this.energyEndTime = new Date(this.energySelectedRange.to).getTime();
+  },
+  _setLoadTimes: function(){
+    this.loadStartTime = new Date(this.selectedRange.from).getTime();
+    this.loadEndTime = new Date(this.selectedRange.to).getTime();
+  },
+  _setGravityTimes: function(){
+    this.gravityStartTime = new Date(this.selectedGravityRange.from).getTime();
+    this.gravityEndTime = new Date(this.selectedGravityRange.to).getTime();
+  },
+  _setFlowspeedTimes: function(){
+    this.flowspeedStartTime = new Date(this.flowspeedSelectedRange.from).getTime();
+    this.flowspeedEndTime = new Date(this.flowspeedSelectedRange.to).getTime();
+  },
+  _setPeTimes: function(){
+    this.peStartTime = new Date(this.peSelectedRange.from).getTime();
+    this.peEndTime = new Date(this.peSelectedRange.to).getTime();
+  },
+  getClasses: function () {
+    var spanStyle = 'spanStyle';
+    var tempNum = parseInt(this.kpiObject.Speed, 10);
+    if(tempNum < 55){
+      spanStyle += ' greenColor';
+    }else if (tempNum > 65){
+      spanStyle += ' redColor';
+    }else {
+      spanStyle += ' orangeColor';
+    }
+    return spanStyle;
+  },
+  ready: function() {
+    var reqData1 = [];
+    this.assetName = document.getElementById('contextName').value;
+    this.assetId = document.getElementById('contextId').value;
+    this.selectedRange = this._getDefaultRange(2);
+    this.energySelectedRange = this._getWideRange(4);
+    this.selectedGravityRange = this._getDefaultRange(2);
+    this.flowspeedSelectedRange = this._getDefaultRange(1);
+    this.peSelectedRange = this._getNarrowRange(30);
+    this._setLoadTimes();
+    this._setEnergyTimes();
+    this._setGravityTimes();
+    this._setFlowspeedTimes();
+    this._setPeTimes();
+    this.LoadData = [];
+    this.barData = [[0,0],[1,7],[2,1],[3,6],[4,8],[5,6]];
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ];
+    var that = this;
+    that.effChartData = [];
+    //this.dayWeek = '0'//this.$.dayWeekId.displayValue;
+    this.gravityVal = 'GravityX';
+    this.isLive = false;
+
+    that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
+
+    this.$.aboutContentAjaxEl.url = "/api/v1/latestdetails?tagId="+that.assetId;
+
+    this.$.aboutContentAjaxEl.addEventListener('response', function(evt) {
+      that.kpiObject = evt.detail.response;
+      that.alertList = [];
+      that.kpiStatus = {};
+      that.alertList.push({'status':'warning','message':'Check Pump operation (Pump may tend to cavitate).'});
+      that.alertList.push({'status':'danger','message':'Check the pump discharge pressure.'});
+      that.alertList.push({'status':'warning','message':'High motor temperature'});
+      that.kpiObject.Flow = parseFloat(that.kpiObject.Flow).toFixed(2);
+      var flowVal = that.kpiObject.Flow;
+      var currentVal = parseFloat(that.kpiObject.Current);
+      var speedVal = parseFloat(that.kpiObject.Speed);
+      var pressureVal = parseFloat(that.kpiObject.Pressure);
+      var powerVal = parseFloat(that.kpiObject.Power);
+      if(flowVal > 1000 || flowVal<220){
+        that.alertList.push({'status':'danger','message':'Flow above threshold.'});
+        that.kpiStatus.flow = false;
+      }else if(flowVal > 850 || flowVal < 350){
+        that.alertList.push({'status':'warning','message':'Flow requires attention'});
+        that.kpiStatus.flow = true;
+      }else{
+        that.kpiStatus.flow = true;
+      }
+      if(currentVal >= 20 || currentVal <= 5){
+        that.kpiStatus.current = false;
+      }else{
+        that.kpiStatus.current = true;
+      }
+      if(speedVal >= 98){
+        that.kpiStatus.speed = false;
+      }else{
+        that.kpiStatus.speed = true;
+      }
+      if(pressureVal >= 22 || pressureVal <= 5){
+        that.kpiStatus.pressure = false;
+      }else{
+        that.kpiStatus.pressure = true;
+      }
+      if(powerVal >= 18){
+        that.kpiStatus.power = false;
+      }else{
+        that.kpiStatus.power = true;
+      }
+    });
+
+
+    this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
+      console.log(evt.detail.response);
+      that.effChartData = evt.detail.response;
+    });
+    /*this.$.dayWeekId.addEventListener('px-dropdown-value-changed', function(evt) {
+      that.dayWeek = evt.detail.key;
+      var myVar;
+      if(that.dayWeek != 'live'){
+        clearInterval(myVar);
+        that.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+that.loadStartTime+"&endTime="+that.loadEndTime+"&groupType="+that.dayWeek;
+        that.$.loadProfileAjaxEl.generateRequest();
+      }else {
+        console.log("coming here");
+        //that.LoadData = [];
+        that.$.loadProfileLiveAjaxEl.url = "/api/v1/liveflowdata?tagId="+that.assetId;
+        myVar = setInterval(function(){ that.$.loadProfileLiveAjaxEl.generateRequest();}, 30000);
+      }
+
+    });*/
+    this.$.pumpEfficiencyAjaxEl.generateRequest();
+  }
+});
+</script>
+</dom-module>
