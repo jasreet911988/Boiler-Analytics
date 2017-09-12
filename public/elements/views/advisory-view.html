@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/px-vis-timeseries/px-vis-timeseries.html">
 <!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
 <!-- <link rel="import" href="temp-view.html"> -->
 <!-- <link rel="import" href="pump-performance-view.html"> -->
@@ -96,6 +97,14 @@ flex-direction:column;
 display:flex;
 flex-direction:column;
 }
+#column3{
+display:flex;
+flex-direction:column;
+}
+#column4{
+display:flex;
+flex-direction:column;
+}
 .flex-row {
 display:flex;
 flex-direction:row;
@@ -121,32 +130,236 @@ color : green;
 .orangeColor {
 color : orange;
 }
+.overview-header{
+float:left;
+width:200px;
+}
+.nav {
+		background-color: #e2e8ed;
+		padding:10px;
+		height:30px;
+	}
+	.nav .right{
+		width:93%;
+		float:left;
+	}
+	.nav .left{
+		width:7%;
+		float:left;
+	}
+
+  .nav1 {
+  		background-color: #1b2a33;
+  		padding:10px;
+  		height:30px;
+  	}
+  	.nav1 .right{
+  		width:93%;
+  		float:left;
+      color: white;
+      font-size: 20px;
+  	}
+  	.nav1 .left{
+  		width:7%;
+  		float:left;
+  	}
+
+	.search{
+		width:40px;
+		float:left;
+	}
+	.user{
+		width:40px;
+		float:left;
+	}
+.home{
+		width:85px;
+		float:left;
+		vertical-align:middle;
+	}
+  .dashboard{
+  		width:115px;
+  		float:left;
+  		vertical-align:middle;
+      margin-top: 2px;
+  	}
+	.alert{
+		width:100px;
+		float:left;
+		vertical-align:middle;
+	}
+	.performance{
+		width:150px;
+		float:left;
+		vertical-align:middle;
+	}
+	img {
+	vertical-align:middle;
+	}
+	.home-link {
+		text-decoration:none;
+	}
+	a:visited {
+		color: #000;
+	}
+	.custom-size {
+          --iron-icon-width: 25px;
+          --iron-icon-height: 25px;
+		  color:#000;
+        }
+		.menutext{
+			margin-left:5px;
+			position:absolute;
+			top:20px;
+		}
+
 </style>
 <div class="layout horizontal">
 
   <div style="width:100%;">
+
+
+  <!--div class="nav">
+			<div class='right'>
+				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+        <div class='dashboard'><a href='/#/overview' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:dashboard"></px-icon><span class='menutext'>Dashboard</span></a></div>
+				<div class='alert'><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
+			</div-->
+			<!--<div class='left'>
+				<div class='search'><img src='/images/main-search.png'></div>
+				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
+			</div>-->
+		<!--/div-->
+
+    <div class="nav1">
+  			<div class='right'>
+          {{advisoryId}}
+  			</div>
+  			<!--<div class='left'>
+  				<div class='search'><img src='/images/main-search.png'></div>
+  				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
+  			</div>-->
+  		</div>
+      <div style="color: white; margin-left:10px;">Remaining Useful life: {{criticalElementSecond}}</div>
    <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> -->
-    <px-card id="CanvasCard" header-text="Pump Efficiency" chevron>
-        <px-vis-xy-chart
-          debounce-resize-timing="250"
-          width="700"
-          height="311.5"
-          chart-horizontal-alignment="center"
-          chart-vertical-alignment="center"
-          margin='{"top":30,"bottom":60,"left":75,"right":75}'
-          tooltip-config='{"forceDateTimeDisplay":false}'
-          register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
-          selection-type="xy"
-          chart-data="{{effChartData}}"
-          series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
-          chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-          x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
-          y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncation":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
-        </px-vis-xy-chart>
-    </px-card>
+   <px-card id="secondCard" chevron>
+     <div id="column2" >
+
+       <px-vis-timeseries
+       debounce-resize-timing="250"
+       width="700"
+       height="290.5"
+       chart-horizontal-alignment="center"
+       chart-vertical-alignment="center"
+       margin='{"top":20,"bottom":35,"left":65,"right":65}'
+       tooltip-config='{}'
+       register-config='{"type":"horizontal"}'
+       selection-type="xy"
+       chart-data='{{advisoryData}}'
+       series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y1","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},
+       "y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},
+       "y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}'
+       chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+       x-axis-config='{"title":"Time (Min)"}'
+       y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
+       navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+     </px-vis-timeseries>
+       <!-- <px-vis-xy-chart
+                debounce-resize-timing="250"
+                width="700"
+                height="311.5"
+                chart-horizontal-alignment="center"
+                chart-vertical-alignment="center"
+                margin='{"top":30,"bottom":60,"left":75,"right":20}'
+                tooltip-config='{"forceDateTimeDisplay":false}'
+                register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+                selection-type="xy"
+                chart-data="{{flowspeedData}}"
+                series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
+                chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+                x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+                y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
+                        </px-vis-xy-chart>  -->
+     </div>
+
+     <div id="column3">
+
+       <px-vis-timeseries
+       debounce-resize-timing="250"
+       width="700"
+       height="290.5"
+       chart-horizontal-alignment="center"
+       chart-vertical-alignment="center"
+       margin='{"top":20,"bottom":35,"left":65,"right":65}'
+       tooltip-config='{}'
+       register-config='{"type":"horizontal"}'
+       selection-type="xy"
+       chart-data='{{advisoryData}}'
+       series-config='{"y0":{"name":"Power","x":"timeStamp","y":"y3","yAxisUnit":"KW","axis":{"id":"axis1","side":"left","number":"1"}}}'
+       chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+       x-axis-config='{"title":"Time (Min)"}'
+       y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Power","titleTruncation":false,"unit":"KW"}}'
+       navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+     </px-vis-timeseries>
+       <!-- <px-vis-xy-chart
+                debounce-resize-timing="250"
+                width="700"
+                height="311.5"
+                chart-horizontal-alignment="center"
+                chart-vertical-alignment="center"
+                margin='{"top":30,"bottom":60,"left":75,"right":20}'
+                tooltip-config='{"forceDateTimeDisplay":false}'
+                register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+                selection-type="xy"
+                chart-data="{{flowspeedData}}"
+                series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
+                chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+                x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+                y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
+                        </px-vis-xy-chart>  -->
+     </div>
+
+     <div id="column4">
+
+       <px-vis-timeseries
+       debounce-resize-timing="250"
+       width="700"
+       height="290.5"
+       chart-horizontal-alignment="center"
+       chart-vertical-alignment="center"
+       margin='{"top":20,"bottom":35,"left":65,"right":65}'
+       tooltip-config='{}'
+       register-config='{"type":"horizontal"}'
+       selection-type="xy"
+       chart-data='{{advisoryData}}'
+       series-config='{"y0":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis1","side":"left","number":"1"}}}'
+       chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+       x-axis-config='{"title":"Time (Min)"}'
+       y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
+       navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+     </px-vis-timeseries>
+       <!-- <px-vis-xy-chart
+                debounce-resize-timing="250"
+                width="700"
+                height="311.5"
+                chart-horizontal-alignment="center"
+                chart-vertical-alignment="center"
+                margin='{"top":30,"bottom":60,"left":75,"right":20}'
+                tooltip-config='{"forceDateTimeDisplay":false}'
+                register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
+                selection-type="xy"
+                chart-data="{{flowspeedData}}"
+                series-config='{"firstSerie":{"type":"line","name":"FlowVsSpeed","xAxisUnit":"usgpm","yAxisUnit":"%","x":"x","y":"y","axis":{"id":"axis1","number":1,"side":"left"}}}'
+                chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+                x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
+                y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
+                        </px-vis-xy-chart>  -->
+     </div>
+ </px-card>
 
 <iron-ajax id="aboutContentAjaxEl"></iron-ajax>
     <iron-ajax id="pumpEfficiencyAjaxEl"></iron-ajax>
+    <iron-ajax id="advisoryAjaxEl"></iron-ajax>
   </div>
 </div>
 </template>
@@ -168,9 +381,22 @@ Polymer({
       type : String,
       value : ''
     },
+    advisoryId: {
+      type: String,
+      value: ''
+    },
     LoadData : {
       type : Array
+    },
+    seriesCustomConfig: {
+      type: String
+    },
+    yCustomConfig: {
+      type: String
     }
+  },
+  _refresh: function () {
+    window.location.reload(true);
   },
   _getDefaultRange: function(months) {
     var from;
@@ -248,7 +474,11 @@ Polymer({
     return spanStyle;
   },
   ready: function() {
-    var reqData1 = [];
+    //window.location.reload(true);
+    //var reqData1 = [];
+    console.log('Advisory Id'+document.getElementById('advisoryId').value);
+    this.advisoryId = document.getElementById('advisoryId').value;
+
     this.assetName = document.getElementById('contextName').value;
     this.assetId = document.getElementById('contextId').value;
     this.selectedRange = this._getDefaultRange(2);
@@ -268,11 +498,13 @@ Polymer({
     ];
     var that = this;
     that.effChartData = [];
+    //that.advisoryData = [];
     //this.dayWeek = '0'//this.$.dayWeekId.displayValue;
     this.gravityVal = 'GravityX';
     this.isLive = false;
 
     that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
+    that.$.advisoryAjaxEl.url = "/api/v1/predictiveanalytic?tagId="+that.assetId;
 
     this.$.aboutContentAjaxEl.url = "/api/v1/latestdetails?tagId="+that.assetId;
 
@@ -325,23 +557,125 @@ Polymer({
       console.log(evt.detail.response);
       that.effChartData = evt.detail.response;
     });
-    /*this.$.dayWeekId.addEventListener('px-dropdown-value-changed', function(evt) {
-      that.dayWeek = evt.detail.key;
-      var myVar;
-      if(that.dayWeek != 'live'){
-        clearInterval(myVar);
-        that.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+that.loadStartTime+"&endTime="+that.loadEndTime+"&groupType="+that.dayWeek;
-        that.$.loadProfileAjaxEl.generateRequest();
-      }else {
-        console.log("coming here");
-        //that.LoadData = [];
-        that.$.loadProfileLiveAjaxEl.url = "/api/v1/liveflowdata?tagId="+that.assetId;
-        myVar = setInterval(function(){ that.$.loadProfileLiveAjaxEl.generateRequest();}, 30000);
-      }
 
-    });*/
-    this.$.pumpEfficiencyAjaxEl.generateRequest();
-  }
+    this.$.advisoryAjaxEl.addEventListener('response', function(evt) {
+      var advArray = [];
+      var custArray = [];
+      var issues;
+      var probValue;
+      console.log('advisory 1 is'+evt.detail.response.results["Advisory1"]);
+      console.log('advisory 1 second is'+evt.detail.response.results.Advisory1);
+      console.log('results is'+evt.detail.response.results);
+      var advResponse =  evt.detail.response.results;
+      console.log('Advisory id this '+this.advisoryId);
+      console.log('Advisory id that'+that.advisoryId);
+
+      var i;
+      var k;
+      var m;
+      var reqData1
+      var advisoryData1;
+      var advisoryCheckData1;
+      var advisoryData2;
+      var advisoryCheckData2;
+      var advisoryData3;
+      var advisoryCheckData3;
+      var criticalElement;
+      var criticalElementFirst;
+      var criticalElementSecond;
+
+            reqData1 = advResponse[4].Data;
+            advisoryData1 = advResponse[0].Advisory1[0];
+            advisoryData2= advResponse[1].Advisory2[0];
+            advisoryData3 = advResponse[2].Advisory3[0];
+
+            /*reqData1 = [
+                {
+                    "x": 1504920080092,
+                    "y1": 238.3048465994217,
+                    "y2": 29.45590150294591,
+                    "y3": 2.788717562568399,
+                    "y4": 58.39037676646411
+                },
+                {
+                    "x": 1504920380092,
+                    "y1": 468.36825978466607,
+                    "y2": 31.916455876576833,
+                    "y3": 5.7766392461582585,
+                    "y4": 65.0064349894596
+                },
+                {
+                    "x": 1504920680092,
+                    "y1": 589.5585894217329,
+                    "y2": 27.223245989495013,
+                    "y3": 5.061220149565957,
+                    "y4": 64.72586384640903
+                },
+                {
+                    "x": 1504920980092,
+                    "y1": 349.95264060895664,
+                    "y2": 25.60608132536091,
+                    "y3": 3.043693293659019,
+                    "y4": 59.318365312686474
+                }
+              ];*/
+
+            for (k= 0; k < reqData1.length; k++){
+            console.log(reqData1[k]['x']);
+            reqData1[k].timeStamp = new Date(reqData1[k]['x']);
+            reqData1[k].y1 = parseFloat(reqData1[k]['y1'].toFixed(4));   // Flow
+            reqData1[k].y2 = parseFloat(reqData1[k]['y2'].toFixed(4));   // Speed
+            reqData1[k].y3 = parseFloat(reqData1[k]['y3'].toFixed(4));   // Power
+          //  reqData1[k].y2 = parseFloat(reqData1[k]['y3'].toFixed(4));
+            reqData1[k].y4 = parseFloat(reqData1[k]['y4'].toFixed(4));   // Head
+            }
+
+    that.advisoryData = reqData1;
+    for (i=0; i< advisoryData1.length; i++){
+      if(that.advisoryId == advisoryData1[i]){
+        console.log('It is first advisory');
+        criticalElement = advResponse[0].Advisory1[2];
+        criticalElementFirst = criticalElement.Critical_Element;
+        that.criticalElementSecond = criticalElement.Value;
+        document.getElementById("column2").style.display = "block";
+        document.getElementById("column3").style.display = "none";
+        document.getElementById("column4").style.display = "none";
+        //that.seriesCustomConfig = '{"y0":{"name":"Flow","x":"timeStamp","y":"y1","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},"y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},"y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}';
+        //that.yCustomConfig = '{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}';
+      }
+      }
+      for (i=0; i< advisoryData2.length; i++){
+        if(that.advisoryId == advisoryData2[i]){
+          console.log('It is second advisory');
+          criticalElement = advResponse[1].Advisory2[2];
+          criticalElementFirst = criticalElement.Critical_Element;
+          that.criticalElementSecond = criticalElement.Value;
+          document.getElementById("column2").style.display = "none";
+          document.getElementById("column3").style.display = "block";
+          document.getElementById("column4").style.display = "none";
+        }
+        }
+        for (i=0; i< advisoryData3.length; i++){
+          if(that.advisoryId == advisoryData3[i]){
+            console.log('It is third advisory');
+            criticalElement = advResponse[2].Advisory3[2];
+            criticalElementFirst = criticalElement.Critical_Element;
+            that.criticalElementSecond = criticalElement.Value;
+            document.getElementById("column2").style.display = "none";
+            document.getElementById("column3").style.display = "none";
+            document.getElementById("column4").style.display = "block";
+          }
+          }
+
+
+
+    console.log(that.advisoryData);
+    console.log(that.seriesCustomConfig);
+    console.log(that.criticalElementSecond);
+});
+this.$.pumpEfficiencyAjaxEl.generateRequest();
+this.$.advisoryAjaxEl.generateRequest();
+}
 });
 </script>
 </dom-module>

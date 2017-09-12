@@ -29,8 +29,8 @@
     #pxnav {
       --px-app-nav-background-color: #e2e8ed;
     }
-	
-	
+
+
     </style>
 
     <header role="banner">
@@ -53,11 +53,12 @@
           items='[{"label":"Dashboard","path":"dashboards","icon":"px-fea:dashboard"},{"label":"Performance","path":"dashboards","icon":"px-fea:analytics"},{"label":"Alerts","id":"alerts","icon":"px-fea:alerts"}]' collapse-at="6" selected-route='["home"]' selected-meta='{"item":{"label":"Home","id":"home","icon":"px-nav:home"},"path":[{"label":"Home","id":"home","icon":"px-nav:home"}],"route":["home"],"parent":null,"children":[]},{"label":"Dashboards","path":"dashboards","icon":"px-fea:dashboard"}]}'
 		  path-prefix="[[pathPrefix]]">
         </px-app-nav>-->
-		
+
 
         <main class="u-pt-- u-pr-- u-pl--" role="main">
           <input type="hidden" id="contextId" value="">
           <input type="hidden" id="contextName" value="">
+          <input type="hidden" id="advisoryId" value="">
 
           <!-- app-location captures url and assigns _route value -->
           <app-location
@@ -87,7 +88,7 @@
             active="[[_tempActive]]"
             element-href="/elements/views/temp-view.html">
           </px-view>
-		  
+
 		  <app-route
             route="[[_route]]"
             pattern="/advisory"

@@ -10,6 +10,7 @@
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/px-tree/px-tree.html">
+<link rel="import" href="../../bower_components/px-popover/px-popover.html">
 <link rel="import" href="advisory-view.html">
 <!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
 <!-- <link rel="import" href="temp-view.html"> -->
@@ -186,21 +187,80 @@ width:200px;
 			position:absolute;
 			top:20px;
 		}
+    .main-content {
+      margin: 0px;
+      padding: 0px;
+      cursor: pointer;
+    }
+    #close {
+       cursor: pointer;
+       float:right;
+       display:inline-block;
+       padding:3px 5px;
+       background:#ccc;
+       margin-left: 20px;
+   }
+   .close-button {
+     position: relative;
+       right: -15px;
+       top: -15px;
+   }
+   .popoverid{
+     max-width: 400px;
+     --px-popover-max-width: 400px;
+     height:250px;
+     padding: 0px;
+   }
+   .alert {
+     cursor: pointer;
+   }
 </style>
 <div class="layout horizontal">
 
   <div style="width:100%;">
 	<div class="nav">
 			<div class='right'>
-				<div class='home'><a href='/#/pumpManager' class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-				<div class='alert'><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
+				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
 			</div>
 			<!--<div class='left'>
 				<div class='search'><img src='/images/main-search.png'></div>
 				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
 			</div>-->
 		</div>
-		
+
+    <div id="advsioryElement" style="position:absolute; top:-10px; right:950px; width:500px; "></div>
+    <px-popover class="popoverid" id = "pop" for="advsioryElement" orientation="bottom" style="left: 0px" enhanced>
+
+      <span id="close" class="close-button" on-click="close">x</span>
+
+          <div id="column2" class = "main-content">
+            <!--template is="dom-if" if="{{showAdvisory.flowmore}}"-->
+          <p id="para" class="pump-name">Flow exceeded threshold by: {{flowDiffValue}}</p>
+            <!--/template-->
+            <template is="dom-if" if="{{kpiStatus.flowless}}">
+              <hr></hr>
+          <p id="para" class="pump-name">Flow is below threshold by: {{flowDiffValue}}</p>
+            </template>
+
+            <!--template is="dom-if" if="{{kpiStatus.speedmore}}"-->
+              <hr></hr>
+          <p id="para" class="pump-name">Speed exceeded threshold by: {{speedDiffValue}}</p>
+            <!--/template-->
+            <template is="dom-if" if="{{kpiStatus.pressuremore}}">
+              <hr></hr>
+          <p id="para" class="pump-name">Pressure exceeded threshold by: {{pressureDiffValue}}</p>
+            </template>
+            <!--template is="dom-if" if="{{kpiStatus.pressureless}}"-->
+              <hr></hr>
+          <p id="para" class="pump-name">Preesure is below threshold by: {{pressureDiffValue}}</p>
+            <!--/template-->
+          </div>
+
+         <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
+    </px-popover>
+
+
     <px-card id="tempCardId" style="padding:0px;">
       <template is="dom-if" if="{{kpiObject}}">
         <div style="display:flex; flex-direction: row; width: 100%; background-color: #1b2a33;">
@@ -287,8 +347,8 @@ width:200px;
           <div>
             <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block; color:white;">Advisories</span>
             <hr style="margin:0px;">
-			 <px-tree id="advisioryId" style="color: white;" keys='{"id":"label","label":"label","children":"items","icon":"icon"}' items='[{"label":"Check for damage to impeller","items":[{"label":"There is possibility of cavitation","items":[{"label":"Check if NPSHA>NPSHR"},{"label":"Check for rise in temperature of liquid"}]}]}, {"label":"Possibility of voltage unbalance/ voltage surge","items":[{"label":"Possibility of current unbalance","items":[{"label":"Check for looseness of phase windings"}]}, {"label":"Check for inductance for all 3 phases"},{"label":"Check insulation quality. There may be possibility of damage to insulation quality"}]}, {"label":"Check for Speed","items":[{"label":"Check the governor system (if available)"}, {"label":"Sudden Speed decreased"}]}]'></px-tree>
-       
+			 <px-tree style="color: white;" keys='{"id":"label","label":"label","children":"items","icon":"icon"}' items='[{"label":"Check for damage to impeller" }, {"label":"There is possibility of cavitation", "items":[{"label":"Check if NPSHA>NPSHR"},{"label":"Check for rise in temperature of liquid"}]}, {"label":"Possibility of voltage unbalance/ voltage surge"}, {"label":"Possibility of current unbalance","items":[{"label":"Check for looseness of phase windings"}, {"label":"Check for high mechanical overload"},{"label":"Check for inductance for all 3 phases"},{"label":"Check insulation quality"}]}, {"label":"Sudden Speed decreased Check the governor system"}]'></px-tree>
+
             <!--ul>
               <template is="dom-repeat" items="{{alertList}}">
                 <li class="alertListLi" class$="{{item.status}}"><span class="alertSpan">{{item.message}}</span></li>
@@ -297,6 +357,10 @@ width:200px;
               <li class="alertListLi" style="color: red;"><span class="alertSpan" >Check the pump discharge pressure.</span></li>
               <li class="alertListLi" style="color: orange;"><span class="alertSpan" >High motor temperature</span></li> -->
           <!--/ul-->
+
+          <!--px-tree keys='{"id" : "id", "label" : "label", "children" : "children", "icon" : "icon"}'
+                                  items='[{"label":"Leaf 0.0","id":"leaf-0-0"},{"label":"Leaf 0.1","id":"leaf-0-1"},{"label":"Leaf 0.2","id":"leaf-0-2"},{"label":"Branch 0.3","id":"branch-0-3","children":[{"label":"Leaf 1.0","id":"leaf-1-0"},{"label":"Branch 1.1","id":"branch-1-1","children":[{"label":"Leaf 2.0","id":"leaf-2-0"},{"label":"Leaf 2.1","id":"leaf-2-1"},{"label":"Leaf 2.2","id":"leaf-2-2"},{"label":"Leaf 2.3","id":"leaf-2-3"}]},{"label":"Leaf 1.2","id":"leaf-1-2"},{"label":"Branch 1.3","id":"branch-1-3","children":[{"label":"Leaf 2.0","id":"leaf-2-0"},{"label":"Leaf 2.1","id":"leaf-2-1"},{"label":"Leaf 2.2","id":"leaf-2-2"},{"label":"Leaf 2.3","id":"leaf-2-3"},{"label":"Leaf 2.4","id":"leaf-2-4"},{"label":"Leaf 2.5","id":"leaf-2-5"},{"label":"Leaf 2.6","id":"leaf-2-6"},{"label":"Leaf 2.7","id":"leaf-2-7"},{"label":"Leaf 2.8","id":"leaf-2-8"}]},{"label":"Leaf 1.4","id":"leaf-1-4"},{"label":"Leaf 1.5","id":"leaf-1-5"},{"label":"Branch 1.6","id":"branch-1-6","children":[{"label":"Leaf 2.0","id":"leaf-2-0"},{"label":"Leaf 2.1","id":"leaf-2-1"},{"label":"Leaf 2.2","id":"leaf-2-2"},{"label":"Leaf 2.3","id":"leaf-2-3"},{"label":"Leaf 2.4","id":"leaf-2-4"},{"label":"Leaf 2.5","id":"leaf-2-5"},{"label":"Leaf 2.6","id":"leaf-2-6"},{"label":"Leaf 2.7","id":"leaf-2-7"},{"label":"Leaf 2.8","id":"leaf-2-8"},{"label":"Leaf 2.9","id":"leaf-2-9"}]}]},{"label":"Branch 0.4","id":"branch-0-4","children":[{"label":"Leaf 1.0","id":"leaf-1-0"},{"label":"Leaf 1.1","id":"leaf-1-1"},{"label":"Leaf 1.2","id":"leaf-1-2"},{"label":"Leaf 1.3","id":"leaf-1-3"},{"label":"Leaf 1.4","id":"leaf-1-4"},{"label":"Leaf 1.5","id":"leaf-1-5"},{"label":"Leaf 1.6","id":"leaf-1-6"},{"label":"Leaf 1.7","id":"leaf-1-7"},{"label":"Leaf 1.8","id":"leaf-1-8"}]},{"label":"Leaf 0.5","id":"leaf-0-5"},{"label":"Branch 0.6","id":"branch-0-6","children":[{"label":"Leaf 1.0","id":"leaf-1-0"},{"label":"Leaf 1.1","id":"leaf-1-1"},{"label":"Leaf 1.2","id":"leaf-1-2"},{"label":"Leaf 1.3","id":"leaf-1-3"},{"label":"Leaf 1.4","id":"leaf-1-4"},{"label":"Leaf 1.5","id":"leaf-1-5"}]},{"label":"Branch 0.7","id":"branch-0-7","children":[{"label":"Leaf 1.0","id":"leaf-1-0"},{"label":"Leaf 1.1","id":"leaf-1-1"},{"label":"Leaf 1.2","id":"leaf-1-2"},{"label":"Leaf 1.3","id":"leaf-1-3"},{"label":"Leaf 1.4","id":"leaf-1-4"},{"label":"Leaf 1.5","id":"leaf-1-5"}]},{"label":"Leaf 0.8","id":"leaf-0-8"}]'>
+          </px-tree-->
           </div>
         </div>
 
@@ -321,7 +385,7 @@ width:200px;
                 max-cont-character-width='10'
                 items='[{"key":"week","val":"week"},{"key":"day","val":"day"}]'>
               </px-dropdown-content>
-            </px-dropdow>
+            </px-dropdown>
           </div>
           </div>
           <!-- <nvd3-line
@@ -458,7 +522,8 @@ width:200px;
           threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
           "min":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
           x-axis-config='{"title":"Date"}'
-          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Speed","titleTruncation":false,"unit":"%"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
+          navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
           <!-- <px-vis-xy-chart
                    debounce-resize-timing="250"
@@ -509,6 +574,7 @@ width:200px;
     <iron-ajax id="gravityAjaxEl"></iron-ajax>
     <iron-ajax id="flowspeedAjaxEl"></iron-ajax>
     <iron-ajax id="pumpEfficiencyAjaxEl"></iron-ajax>
+    <iron-ajax id="advisoryAjaxEl"></iron-ajax>
   </div>
 </div>
 </template>
@@ -532,7 +598,27 @@ Polymer({
     },
     LoadData : {
       type : Array
+    },
+    showAdvisory: {
+      type: Object
     }
+  },
+  advisoryClicked: function(){
+    console.log("advisory clciked");
+     // this.mapsOn = null;
+  //  this.$.armstrongAssetAjaxEl.generateRequest();
+    //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
+   //this.$.armstrongKPIAjaxEl.generateRequest();
+    document.getElementById('advsioryElement').click();
+  //  document.getElementById('pop').show();
+  //  document.getElementById('pop1').hide();
+    //document.getElementById('pop2').hide();
+
+    //this.$.modalId.click();
+  },
+  close: function(){
+    console.log('it comes here');
+    document.getElementById('pop').hide();
   },
   _getDefaultRange: function(months) {
     var from;
@@ -548,6 +634,9 @@ Polymer({
     to = moment();
 
     return {"from":from.toISOString(),"to":to.toISOString()};
+  },
+  _refresh: function () {
+    window.location.reload(true);
   },
   _getNarrowRange: function(months) {
     var from;
@@ -610,6 +699,7 @@ Polymer({
     return spanStyle;
   },
   ready: function() {
+    //window.location.reload(true);
     var reqData1 = [];
     this.assetName = document.getElementById('contextName').value;
     this.assetId = document.getElementById('contextId').value;
@@ -630,6 +720,7 @@ Polymer({
     ];
     var that = this;
     that.effChartData = [];
+    that.advisoryChartData = [];
     this.dayWeek = this.$.dayWeekId.displayValue;
     this.gravityVal = 'GravityX';
     this.isLive = false;
@@ -642,24 +733,48 @@ Polymer({
     this.$.flowspeedAjaxEl.url = "/api/v1/flowspeed?tagId="+that.assetId+"&startTime="+this.flowspeedStartTime+"&endTime="+this.flowspeedEndTime;
 
     that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
+    that.$.advisoryAjaxEl.url = "/api/v1/predictiveanalytic?tagId="+that.assetId;
 
     this.$.aboutContentAjaxEl.url = "/api/v1/latestdetails?tagId="+that.assetId;
-	
+
     this.$.aboutContentAjaxEl.addEventListener('response', function(evt) {
-	
+
       that.kpiObject = evt.detail.response;
       that.alertList = [];
       that.kpiStatus = {};
+      that.showAdvisory = {};
+      //that.flowDiffValue;
+      //that.speedDiffValue;
+      //that.pressureDiffValue;
       that.alertList.push({'status':'warning','message':'Check Pump operation (Pump may tend to cavitate).'});
       that.alertList.push({'status':'danger','message':'Check the pump discharge pressure.'});
       that.alertList.push({'status':'warning','message':'High motor temperature'});
       that.kpiObject.Flow = parseFloat(that.kpiObject.Flow).toFixed(2);
-      var flowVal = that.kpiObject.Flow;
+      //var flowVal = that.kpiObject.Flow;
+      var flowVal = parseFloat(1200);
       var currentVal = parseFloat(that.kpiObject.Current);
-      var speedVal = parseFloat(that.kpiObject.Speed);
-      var pressureVal = parseFloat(that.kpiObject.Pressure);
+      //var speedVal = parseFloat(that.kpiObject.Speed);
+      var speedVal = 100;
+      var pressureVal = 2;
+      //var pressureVal = parseFloat(that.kpiObject.Pressure);
       var powerVal = parseFloat(that.kpiObject.Power);
+      var maxFlowVal = 1000;
+      var minFlowVal = 220;
+      var maxCurrentVal = 20;
+      var minCurrentVal = 5;
+      var maxSpeedVal = 98;
+      var maxPressureValue = 22;
+      var minPressureValue = 5;
+      var maxPowerValue = 18;
       if(flowVal > 1000 || flowVal<220){
+        if(flowVal > 1000) {
+          that.flowDiffValue = flowVal - 1000;
+          that.showAdvisory.flowmore = true;
+        }
+        if(flowVal<220){
+          that.flowDiffValue = 220 - flowVal;
+          that.kpiStatus.flowless = true;
+        }
         that.alertList.push({'status':'danger','message':'Flow above threshold.'});
         that.kpiStatus.flow = false;
       }else if(flowVal > 850 || flowVal < 350){
@@ -674,11 +789,21 @@ Polymer({
         that.kpiStatus.current = true;
       }
       if(speedVal >= 98){
+          that.speedDiffValue = speedVal - 98;
+          that.kpiStatus.speedmore = true;
         that.kpiStatus.speed = false;
       }else{
         that.kpiStatus.speed = true;
       }
       if(pressureVal >= 22 || pressureVal <= 5){
+        if(pressureVal >= 22) {
+          that.pressureDiffValue = pressureVal - 22;
+          that.kpiStatus.pressuremore = true;
+        }
+        if(pressureVal<=5){
+          that.pressureDiffValue = 5 - pressureVal;
+          that.kpiStatus.pressureless = true;
+        }
         that.kpiStatus.pressure = false;
       }else{
         that.kpiStatus.pressure = true;
@@ -810,6 +935,23 @@ Polymer({
       console.log(evt.detail.response);
       that.effChartData = evt.detail.response;
     });
+
+
+
+    this.$.advisoryAjaxEl.addEventListener('response', function(evt) {
+      //console.log('advisory response'+evt.detail.response);
+      that.advisoryChartData = evt.detail.response.results;
+      document.querySelector("px-tree").addEventListener('px-tree-node-tapped', function(evt){
+        console.log('current selected item event'+evt.detail.item.label);
+        document.getElementById('advisoryId').value = evt.detail.item.label;
+        if((evt.detail.isBranch && evt.detail.isSelected && evt.detail.isActive) || (!evt.detail.isBranch && evt.detail.isSelected)){
+        window.location.hash="#/advisory";
+      }
+      });
+
+    });
+
+
     this.$.dayWeekId.addEventListener('px-dropdown-value-changed', function(evt) {
       that.dayWeek = evt.detail.key;
       var myVar;
@@ -826,15 +968,17 @@ Polymer({
 
     });
 	//this.async(function() {
-		if(typeof this.$.advisioryId!='undefined') {
-			this.$.advisioryId.addEventListener('px-tree-node-tapped', function(evt) {
+		//if(typeof this.$.advisioryId!='undefined') {
+			/*this.$.advisioryId.addEventListener('px-tree-node-tapped', function(evt) {
 				console.log(evt);
-				if(!evt.detail.isBranch) {
-					window.location.href="#/advisory";
-				}
+				//if(!evt.detail.isBranch) {
+
+					window.location.hash="#/advisory";
+
+				//}
 			});
-		}
-	//});
+		//}
+	//});*/
     this.$.gravityDropdownId.addEventListener('px-dropdown-value-changed', function(evt) {
       that.gravityVal = evt.detail.key;
       that.$.gravityAjaxEl.url = "/api/v1/gravitygraph?tagId="+that.assetId+"&startTime="+that.gravityStartTime+"&endTime="+that.gravityEndTime+"&vibration="+that.gravityVal;
@@ -871,6 +1015,7 @@ Polymer({
     this.$.gravityAjaxEl.generateRequest();
     this.$.flowspeedAjaxEl.generateRequest();
     this.$.pumpEfficiencyAjaxEl.generateRequest();
+    this.$.advisoryAjaxEl.generateRequest();
   }
 });
 
