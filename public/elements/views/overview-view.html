@@ -235,26 +235,23 @@ width:200px;
       <span id="close" class="close-button" on-click="close">x</span>
 
           <div id="column2" class = "main-content">
-            <!--template is="dom-if" if="{{showAdvisory.flowmore}}"-->
-          <p id="para" class="pump-name">Flow exceeded threshold by: {{flowDiffValue}}</p>
-            <!--/template-->
-            <template is="dom-if" if="{{kpiStatus.flowless}}">
-              <hr></hr>
-          <p id="para" class="pump-name">Flow is below threshold by: {{flowDiffValue}}</p>
+
+            <template is="dom-if" if="{{!showFlow}}">
+          <p id="para" class="pump-name">Low Discharge Flow</p>
+            </template>
+            <template is="dom-if" if="{{!showSpeed}}">
+          <p id="para" class="pump-name">Pump Over-speed</p>
+            </template>
+            <template is="dom-if" if="{{showSpeed}}">
+          <p id="para" class="pump-name">Pump Under-speed</p>
+            </template>
+            <template is="dom-if" if="{{!showPressure}}">
+          <p id="para" class="pump-name">Pressure is more</p>
+            </template>
+            <template is="dom-if" if="{{showPressure}}">
+          <p id="para" class="pump-name">Pressure is less</p>
             </template>
 
-            <!--template is="dom-if" if="{{kpiStatus.speedmore}}"-->
-              <hr></hr>
-          <p id="para" class="pump-name">Speed exceeded threshold by: {{speedDiffValue}}</p>
-            <!--/template-->
-            <template is="dom-if" if="{{kpiStatus.pressuremore}}">
-              <hr></hr>
-          <p id="para" class="pump-name">Pressure exceeded threshold by: {{pressureDiffValue}}</p>
-            </template>
-            <!--template is="dom-if" if="{{kpiStatus.pressureless}}"-->
-              <hr></hr>
-          <p id="para" class="pump-name">Preesure is below threshold by: {{pressureDiffValue}}</p>
-            <!--/template-->
           </div>
 
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
@@ -599,8 +596,17 @@ Polymer({
     LoadData : {
       type : Array
     },
-    showAdvisory: {
-      type: Object
+    showFlow: {
+      type: Boolean,
+      value: false
+    },
+    showSpeed: {
+      type: Boolean,
+      value: false
+    },
+    showPressure: {
+      type: Boolean,
+      value: false
     }
   },
   advisoryClicked: function(){
@@ -750,13 +756,13 @@ Polymer({
       that.alertList.push({'status':'danger','message':'Check the pump discharge pressure.'});
       that.alertList.push({'status':'warning','message':'High motor temperature'});
       that.kpiObject.Flow = parseFloat(that.kpiObject.Flow).toFixed(2);
-      //var flowVal = that.kpiObject.Flow;
-      var flowVal = parseFloat(1200);
+      var flowVal = that.kpiObject.Flow;
+      //var flowVal = parseFloat(300);
       var currentVal = parseFloat(that.kpiObject.Current);
-      //var speedVal = parseFloat(that.kpiObject.Speed);
-      var speedVal = 100;
-      var pressureVal = 2;
-      //var pressureVal = parseFloat(that.kpiObject.Pressure);
+      var speedVal = parseFloat(that.kpiObject.Speed);
+      //var speedVal = 100;
+      //var pressureVal = 2;
+      var pressureVal = parseFloat(that.kpiObject.Pressure);
       var powerVal = parseFloat(that.kpiObject.Power);
       var maxFlowVal = 1000;
       var minFlowVal = 220;
@@ -766,21 +772,26 @@ Polymer({
       var maxPressureValue = 22;
       var minPressureValue = 5;
       var maxPowerValue = 18;
-      if(flowVal > 1000 || flowVal<220){
-        if(flowVal > 1000) {
+      //if(flowVal > 1000 || flowVal<220){
+        if(flowVal<510){
+        /*if(flowVal > 1000) {
           that.flowDiffValue = flowVal - 1000;
           that.showAdvisory.flowmore = true;
         }
-        if(flowVal<220){
-          that.flowDiffValue = 220 - flowVal;
+        if(flowVal<510){
+          //that.flowDiffValue = 220 - flowVal;
           that.kpiStatus.flowless = true;
-        }
-        that.alertList.push({'status':'danger','message':'Flow above threshold.'});
+        }*/
+        that.alertList.push({'status':'danger','message':'Flow below threshold.'});
+        //this.showFlow = false;
+        that.showFlow = false;
         that.kpiStatus.flow = false;
-      }else if(flowVal > 850 || flowVal < 350){
+      }/*else if(flowVal > 850 || flowVal < 350){
         that.alertList.push({'status':'warning','message':'Flow requires attention'});
         that.kpiStatus.flow = true;
-      }else{
+      }*/else{
+      //this.showFlow = true;
+      that.showFlow = true;
         that.kpiStatus.flow = true;
       }
       if(currentVal >= 20 || currentVal <= 5){
@@ -788,21 +799,34 @@ Polymer({
       }else{
         that.kpiStatus.current = true;
       }
-      if(speedVal >= 98){
-          that.speedDiffValue = speedVal - 98;
-          that.kpiStatus.speedmore = true;
+      if(speedVal >= 87 || speedVal <= 27){
+        if(speedVal >= 87){
+
+        //this.showSpeed = false;
+        that.showSpeed = false;
+        }
+        if(speedVal <= 27){
+
+        //this.showSpeed = true;
+        that.showSpeed = true;
+        }
+
         that.kpiStatus.speed = false;
       }else{
         that.kpiStatus.speed = true;
       }
       if(pressureVal >= 22 || pressureVal <= 5){
         if(pressureVal >= 22) {
-          that.pressureDiffValue = pressureVal - 22;
-          that.kpiStatus.pressuremore = true;
+          //that.pressureDiffValue = pressureVal - 22;
+
+          //this.showPressure = false;
+          that.showPressure = false;
         }
         if(pressureVal<=5){
-          that.pressureDiffValue = 5 - pressureVal;
-          that.kpiStatus.pressureless = true;
+        //  that.pressureDiffValue = 5 - pressureVal;
+
+          //this.showPressure = true;
+          that.showPressure = true;
         }
         that.kpiStatus.pressure = false;
       }else{

@@ -260,6 +260,8 @@ width:200px;
        "y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},
        "y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+       event-data='[{"id":"123","time":1505277717185,"label":"Forecast"}]'
+         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
@@ -297,6 +299,8 @@ width:200px;
        chart-data='{{advisoryData}}'
        series-config='{"y0":{"name":"Power","x":"timeStamp","y":"y3","yAxisUnit":"KW","axis":{"id":"axis1","side":"left","number":"1"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+       event-data='[{"id":"123","time":1505277717185,"label":"Forecast"}]'
+         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Power","titleTruncation":false,"unit":"KW"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
@@ -334,6 +338,8 @@ width:200px;
        chart-data='{{advisoryData}}'
        series-config='{"y0":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis1","side":"left","number":"1"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+       event-data='[{"id":"123","time":1505277717185,"label":"Forecast"}]'
+         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
@@ -521,13 +527,14 @@ Polymer({
       var speedVal = parseFloat(that.kpiObject.Speed);
       var pressureVal = parseFloat(that.kpiObject.Pressure);
       var powerVal = parseFloat(that.kpiObject.Power);
-      if(flowVal > 1000 || flowVal<220){
+      //if(flowVal > 1000 || flowVal<220){
+        if(flowVal<510){
         that.alertList.push({'status':'danger','message':'Flow above threshold.'});
         that.kpiStatus.flow = false;
-      }else if(flowVal > 850 || flowVal < 350){
+      }/*else if(flowVal > 850 || flowVal < 350){
         that.alertList.push({'status':'warning','message':'Flow requires attention'});
         that.kpiStatus.flow = true;
-      }else{
+      }*/else{
         that.kpiStatus.flow = true;
       }
       if(currentVal >= 20 || currentVal <= 5){
@@ -535,7 +542,8 @@ Polymer({
       }else{
         that.kpiStatus.current = true;
       }
-      if(speedVal >= 98){
+      //if(speedVal >= 98){
+      if(speedVal >= 87 || speedVal <= 27){
         that.kpiStatus.speed = false;
       }else{
         that.kpiStatus.speed = true;

@@ -518,17 +518,20 @@
           var thirdCardFlow = that.thirdCard.Flow;
           var thirdCardSpeed = parseFloat(that.thirdCard.Speed);
           var thirdCardPressure = parseFloat(that.thirdCard.Pressure);
-          if(firstCardFlow > 1000 || firstCardFlow<220 || firstCardPressure >=22 || firstCardPressure <= 5 || firstCardSpeed>=98){
+          //if(firstCardFlow > 1000 || firstCardFlow<220 || firstCardPressure >=22 || firstCardPressure <= 5 || firstCardSpeed>=98){
+          if(firstCardFlow<510 || firstCardPressure >=22 || firstCardPressure <= 5 || firstCardSpeed<=27 || firstCardSpeed>=87){
             this.firstCardColor = false;
           }else {
             this.firstCardColor = true;
             }
-          if(secondCardFlow > 1000 || secondCardFlow<220 || secondCardPressure >=22 || secondCardPressure <= 5 || secondCardSpeed>=98){
+          //if(secondCardFlow > 1000 || secondCardFlow<220 || secondCardPressure >=22 || secondCardPressure <= 5 || secondCardSpeed>=98){
+            if(secondCardFlow<510 || secondCardPressure >=22 || secondCardPressure <= 5 || secondCardSpeed<=27 || secondCardSpeed>=87){
             this.secondCardColor = false;
           }else {
             this.secondCardColor = true;
             }
-          if(thirdCardFlow > 1000 || thirdCardFlow<220 || thirdCardPressure >=22 || thirdCardPressure <= 5 || thirdCardSpeed>=98){
+          //if(thirdCardFlow > 1000 || thirdCardFlow<220 || thirdCardPressure >=22 || thirdCardPressure <= 5 || thirdCardSpeed>=98){
+            if(thirdCardFlow<510 || thirdCardPressure >=22 || thirdCardPressure <= 5 || thirdCardSpeed<=27 || thirdCardSpeed>=87){
             this.thirdCardColor = false;
           }else {
             this.thirdCardColor = true;
@@ -548,7 +551,8 @@
           //console.log('ready function flow'+that.kpiObject.flow);
           console.log('Flow Value for first element'+flowVal);
         //  this.flow = responseflow.Flow;
-          if(flowVal > 1000 || flowVal<220){
+        //  if(flowVal > 1000 || flowVal<220){
+              if(flowVal<510){
 
             document.getElementById('symbol2').classList.add('kpiStatusRed');
             that.kpiStatus.flow = false;
@@ -565,7 +569,7 @@
             that.kpiStatus.pressure = true;
             }
 
-            if(speedVal >= 98){
+            if(speedVal >= 87 || speedVal <= 27){
               document.getElementById('symbol1').classList.add('kpiStatusRed');
               that.kpiStatus.speed = false;
             }else{
@@ -596,7 +600,8 @@
           //console.log('ready function flow'+that.kpiObject.flow);
           console.log('Flow Value for first element'+flowVal);
         //  this.flow = responseflow.Flow;
-          if(flowVal > 1000 || flowVal<220){
+        //  if(flowVal > 1000 || flowVal<220){
+        if(flowVal<510){
             //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0';
             document.getElementById('symbol5').classList.add('kpiStatusRed');
             that.kpiStatus1.flow = false;
@@ -613,7 +618,7 @@
             that.kpiStatus1.pressure = true;
             }
 
-            if(speedVal >= 98){
+            if(speedVal >= 87 || speedVal <= 27){
               document.getElementById('symbol4').classList.add('kpiStatusRed');
               that.kpiStatus1.speed = false;
             }else{
@@ -644,7 +649,8 @@
           //console.log('ready function flow'+that.kpiObject.flow);
           console.log('Flow Value for first element'+flowVal);
         //  this.flow = responseflow.Flow;
-          if(flowVal > 1000 || flowVal<220){
+          //if(flowVal > 1000 || flowVal<220){
+            if(flowVal<510){
             //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0';
             document.getElementById('symbol8').classList.add('kpiStatusRed');
             that.kpiStatus2.flow = false;
@@ -661,7 +667,7 @@
             that.kpiStatus2.pressure = true;
             }
 
-            if(speedVal >= 98){
+            if(speedVal >= 87 || speedVal <= 27){
               document.getElementById('symbol7').classList.add('kpiStatusRed');
               that.kpiStatus2.speed = false;
             }else{
