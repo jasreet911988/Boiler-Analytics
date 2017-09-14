@@ -219,17 +219,16 @@ width:200px;
   <div style="width:100%;">
 
 
-  <!--div class="nav">
-			<div class='right'>
-				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-        <div class='dashboard'><a href='/#/overview' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:dashboard"></px-icon><span class='menutext'>Dashboard</span></a></div>
-				<div class='alert'><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
-			</div-->
-			<!--<div class='left'>
-				<div class='search'><img src='/images/main-search.png'></div>
-				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
-			</div>-->
-		<!--/div-->
+    <div class="nav">
+  			<div class='right'>
+  				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+
+  			</div>
+  			<!--<div class='left'>
+  				<div class='search'><img src='/images/main-search.png'></div>
+  				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
+  			</div>-->
+  		</div>
 
     <div class="nav1">
   			<div class='right'>
@@ -260,7 +259,7 @@ width:200px;
        "y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},
        "y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-       event-data='[{"id":"123","time":1505277717185,"label":"Forecast"}]'
+       event-data='{{forecastPutDate}}'
          event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
@@ -299,7 +298,7 @@ width:200px;
        chart-data='{{advisoryData}}'
        series-config='{"y0":{"name":"Power","x":"timeStamp","y":"y3","yAxisUnit":"KW","axis":{"id":"axis1","side":"left","number":"1"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-       event-data='[{"id":"123","time":1505277717185,"label":"Forecast"}]'
+       event-data='{{forecastPutDate}}'
          event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Power","titleTruncation":false,"unit":"KW"}}'
@@ -338,7 +337,7 @@ width:200px;
        chart-data='{{advisoryData}}'
        series-config='{"y0":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis1","side":"left","number":"1"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-       event-data='[{"id":"123","time":1505277717185,"label":"Forecast"}]'
+       event-data='{{forecastPutDate}}'
          event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
@@ -482,7 +481,7 @@ Polymer({
   ready: function() {
     //window.location.reload(true);
     //var reqData1 = [];
-    console.log('Advisory Id'+document.getElementById('advisoryId').value);
+    //console.log('Advisory Id'+document.getElementById('advisoryId').value);
     this.advisoryId = document.getElementById('advisoryId').value;
 
     this.assetName = document.getElementById('contextName').value;
@@ -562,7 +561,7 @@ Polymer({
 
 
     this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
-      console.log(evt.detail.response);
+      //console.log(evt.detail.response);
       that.effChartData = evt.detail.response;
     });
 
@@ -571,12 +570,12 @@ Polymer({
       var custArray = [];
       var issues;
       var probValue;
-      console.log('advisory 1 is'+evt.detail.response.results["Advisory1"]);
-      console.log('advisory 1 second is'+evt.detail.response.results.Advisory1);
-      console.log('results is'+evt.detail.response.results);
+      //console.log('advisory 1 is'+evt.detail.response.results["Advisory1"]);
+      //console.log('advisory 1 second is'+evt.detail.response.results.Advisory1);
+      //console.log('results is'+evt.detail.response.results);
       var advResponse =  evt.detail.response.results;
-      console.log('Advisory id this '+this.advisoryId);
-      console.log('Advisory id that'+that.advisoryId);
+      //console.log('Advisory id this '+this.advisoryId);
+      //console.log('Advisory id that'+that.advisoryId);
 
       var i;
       var k;
@@ -593,6 +592,9 @@ Polymer({
       var criticalElementSecond;
 
             reqData1 = advResponse[4].Data;
+            that.forecastDate = advResponse[5].ForecastStartTime;
+            that.forecastPutDate = [{"id":"123","time": that.forecastDate,"label":"Forecast"}];
+            //console.log(that.forecastPutDate);
             advisoryData1 = advResponse[0].Advisory1[0];
             advisoryData2= advResponse[1].Advisory2[0];
             advisoryData3 = advResponse[2].Advisory3[0];
@@ -629,7 +631,7 @@ Polymer({
               ];*/
 
             for (k= 0; k < reqData1.length; k++){
-            console.log(reqData1[k]['x']);
+            //console.log(reqData1[k]['x']);
             reqData1[k].timeStamp = new Date(reqData1[k]['x']);
             reqData1[k].y1 = parseFloat(reqData1[k]['y1'].toFixed(4));   // Flow
             reqData1[k].y2 = parseFloat(reqData1[k]['y2'].toFixed(4));   // Speed
@@ -641,7 +643,7 @@ Polymer({
     that.advisoryData = reqData1;
     for (i=0; i< advisoryData1.length; i++){
       if(that.advisoryId == advisoryData1[i]){
-        console.log('It is first advisory');
+        //console.log('It is first advisory');
         criticalElement = advResponse[0].Advisory1[2];
         criticalElementFirst = criticalElement.Critical_Element;
         that.criticalElementSecond = criticalElement.Value;
@@ -654,7 +656,7 @@ Polymer({
       }
       for (i=0; i< advisoryData2.length; i++){
         if(that.advisoryId == advisoryData2[i]){
-          console.log('It is second advisory');
+          //console.log('It is second advisory');
           criticalElement = advResponse[1].Advisory2[2];
           criticalElementFirst = criticalElement.Critical_Element;
           that.criticalElementSecond = criticalElement.Value;
@@ -665,7 +667,7 @@ Polymer({
         }
         for (i=0; i< advisoryData3.length; i++){
           if(that.advisoryId == advisoryData3[i]){
-            console.log('It is third advisory');
+            //console.log('It is third advisory');
             criticalElement = advResponse[2].Advisory3[2];
             criticalElementFirst = criticalElement.Critical_Element;
             that.criticalElementSecond = criticalElement.Value;
@@ -677,9 +679,9 @@ Polymer({
 
 
 
-    console.log(that.advisoryData);
-    console.log(that.seriesCustomConfig);
-    console.log(that.criticalElementSecond);
+  //  console.log(that.advisoryData);
+  //  console.log(that.seriesCustomConfig);
+  //  console.log(that.criticalElementSecond);
 });
 this.$.pumpEfficiencyAjaxEl.generateRequest();
 this.$.advisoryAjaxEl.generateRequest();
