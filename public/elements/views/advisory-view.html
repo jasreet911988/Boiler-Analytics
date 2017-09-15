@@ -398,7 +398,13 @@ Polymer({
     },
     yCustomConfig: {
       type: String
-    }
+    },
+	advisoryData:{
+		type:Array,
+		notify:true,
+		reflectToAttribute: true,
+		value:[]
+	}
   },
   _refresh: function () {
     window.location.reload(true);
@@ -478,10 +484,16 @@ Polymer({
     }
     return spanStyle;
   },
+  created: function() {
+        console.log(' was created');
+      },
+	  attached: function() {
+        console.log(' was attached');
+      },
   ready: function() {
     //window.location.reload(true);
     //var reqData1 = [];
-    //console.log('Advisory Id'+document.getElementById('advisoryId').value);
+    console.log('Advisory Id'+document.getElementById('advisoryId').value);
     this.advisoryId = document.getElementById('advisoryId').value;
 
     this.assetName = document.getElementById('contextName').value;
@@ -566,6 +578,7 @@ Polymer({
     });
 
     this.$.advisoryAjaxEl.addEventListener('response', function(evt) {
+	
       var advArray = [];
       var custArray = [];
       var issues;
@@ -574,18 +587,18 @@ Polymer({
       //console.log('advisory 1 second is'+evt.detail.response.results.Advisory1);
       //console.log('results is'+evt.detail.response.results);
       var advResponse =  evt.detail.response.results;
-      //console.log('Advisory id this '+this.advisoryId);
+      console.log('Advisory id this '+this.advisoryId);
       //console.log('Advisory id that'+that.advisoryId);
 
       var i;
       var k;
       var m;
       var reqData1
-      var advisoryData1;
+      var advisoryData1 = [];
       var advisoryCheckData1;
-      var advisoryData2;
+      var advisoryData2 = [];
       var advisoryCheckData2;
-      var advisoryData3;
+      var advisoryData3 =[];
       var advisoryCheckData3;
       var criticalElement;
       var criticalElementFirst;
@@ -639,7 +652,7 @@ Polymer({
           //  reqData1[k].y2 = parseFloat(reqData1[k]['y3'].toFixed(4));
             reqData1[k].y4 = parseFloat(reqData1[k]['y4'].toFixed(4));   // Head
             }
-
+	that.advisoryData = [];
     that.advisoryData = reqData1;
     for (i=0; i< advisoryData1.length; i++){
       if(that.advisoryId == advisoryData1[i]){
@@ -679,7 +692,7 @@ Polymer({
 
 
 
-  //  console.log(that.advisoryData);
+   console.log(that.advisoryData);
   //  console.log(that.seriesCustomConfig);
   //  console.log(that.criticalElementSecond);
 });

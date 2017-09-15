@@ -344,7 +344,19 @@ width:200px;
           <div>
             <span style="padding:20px;font-size:12px;font-weight:bold;text-transform:uppercase;display:block; color:white;">Advisories</span>
             <hr style="margin:0px;">
-			 <px-tree style="color: white;" keys='{"id":"label","label":"label","children":"items","icon":"icon"}' items='[{"label":"Check for damage to impeller" }, {"label":"There is possibility of cavitation", "items":[{"label":"Check if NPSHA>NPSHR"},{"label":"Check for rise in temperature of liquid"}]}, {"label":"Possibility of voltage unbalance/ voltage surge"}, {"label":"Possibility of current unbalance","items":[{"label":"Check for looseness of phase windings"}, {"label":"Check for high mechanical overload"},{"label":"Check for inductance for all 3 phases"},{"label":"Check insulation quality"}]}, {"label":"Sudden Speed decreased Check the governor system"}]'></px-tree>
+			 <px-tree style="color: white;" 
+			 keys='{"id":"label","label":"label","children":"items","icon":"icon"}' 
+			 items='[{"label":"Check for damage to impeller" }, 
+			 {"label":"There is possibility of cavitation", 
+			 "items":[{"label":"Check if NPSHA>NPSHR"},
+			 {"label":"Check for rise in temperature of liquid"}]}, 
+			 {"label":"Possibility of voltage unbalance/ voltage surge"}, 
+			 {"label":"Possibility of current unbalance",
+			 "items":[{"label":"Check for looseness of phase windings"}, 
+			 {"label":"Check for high mechanical overload"},
+			 {"label":"Check for inductance for all 3 phases"},
+			 {"label":"Check insulation quality"}]}, 
+			 {"label":"Sudden Speed decreased Check the governor system"}]'></px-tree>
 
             <!--ul>
               <template is="dom-repeat" items="{{alertList}}">
@@ -582,6 +594,12 @@ Polymer({
     selectedRange: {
       type: Object
     },
+	effChartData:{
+		type: Array,
+		notify:true,
+		reflectToAttribute: true,
+		observer:'notifyEffChange'
+	}
     energySelectedRange: {
       type: Object
     },
@@ -605,6 +623,10 @@ Polymer({
     showPressure: {
       type: Boolean
     }
+  },
+  notifyEffChange:function(newValue, oldValue){
+	console.log(newValue);
+	console.log(oldValue);
   },
   advisoryClicked: function(){
     console.log("advisory clciked");
@@ -966,7 +988,10 @@ Polymer({
         console.log('current selected item event'+evt.detail.item.label);
         document.getElementById('advisoryId').value = evt.detail.item.label;
         if((evt.detail.isBranch && evt.detail.isSelected && evt.detail.isActive) || (!evt.detail.isBranch && evt.detail.isSelected)){
-        window.location.hash="#/advisory";
+        //window.location.hash="#/advisory";
+		//window.location.hash="#/advisory";
+		window.history.pushState({}, null, '#/advisory');
+window.dispatchEvent(new CustomEvent('location-changed'));
       }
       });
 
