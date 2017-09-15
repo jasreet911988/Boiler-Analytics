@@ -569,6 +569,8 @@ width:200px;
           register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
           selection-type="xy"
           chart-data="{{effChartData}}"
+		  event-data='{{xyData}}'
+         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[10,0],"lineColor":"red","lineWeight":5}}'
           series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
@@ -594,12 +596,12 @@ Polymer({
     selectedRange: {
       type: Object
     },
-	effChartData:{
-		type: Array,
-		notify:true,
-		reflectToAttribute: true,
-		observer:'notifyEffChange'
-	}
+	<!-- effChartData:{ -->
+		<!-- type: Array, -->
+		<!-- notify:true, -->
+		<!-- reflectToAttribute: true, -->
+		<!-- observer:'notifyEffChange' -->
+	<!-- } -->
     energySelectedRange: {
       type: Object
     },
@@ -624,10 +626,10 @@ Polymer({
       type: Boolean
     }
   },
-  notifyEffChange:function(newValue, oldValue){
-	console.log(newValue);
-	console.log(oldValue);
-  },
+  <!-- notifyEffChange:function(newValue, oldValue){ -->
+	<!-- console.log(newValue); -->
+	<!-- console.log(oldValue); -->
+  <!-- }, -->
   advisoryClicked: function(){
     console.log("advisory clciked");
      // this.mapsOn = null;
@@ -726,6 +728,9 @@ Polymer({
   ready: function() {
     //window.location.reload(true);
     var reqData1 = [];
+	
+//{flow: 582.106, head: 60.628, efficiency: 118.2795782579258}
+	this.xyData = [{"id":"123","flow": "650","label":"Forecast"}];
     this.assetName = document.getElementById('contextName').value;
     this.assetId = document.getElementById('contextId').value;
     this.selectedRange = this._getDefaultRange(2);

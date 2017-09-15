@@ -169,9 +169,9 @@
     <template is="dom-if" if="{{mapView}}">
     <google-map fit-to-marker api-key="AIzaSyD3E1D9b-Z7ekrT3tbhl_dy8DCXuIuDDRc" style="width:100%;height:370px;" latitude="40.7555" longitude="-73.985">
 
-     <google-map-marker latitude="40.790454" longitude="-73.953519" draggable="true" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-     <google-map-marker latitude="40.761449" longitude="-73.977622" draggable="true" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
-    <google-map-marker latitude="40.74829" longitude="-73.955799" draggable="true" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+     <google-map-marker latitude="40.790454" longitude="-73.953519" draggable="false" click-events="true" icon = '{{icon1}}' on-google-map-marker-click="mapClicked"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+     <google-map-marker latitude="40.761449" longitude="-73.977622" draggable="false" click-events="true" icon = '{{icon2}}' on-google-map-marker-click="mapClicked1"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
+    <google-map-marker latitude="40.74829" longitude="-73.955799" draggable="false" click-events="true" icon = '{{icon3}}' on-google-map-marker-click="mapClicked2"></google-map-marker><!-- on-google-map-marker-click="mapClicked" -->
 
     </google-map>
     <div id="mapElement" style="position:absolute; top:200px; right:500px; width:500px; "></div>
