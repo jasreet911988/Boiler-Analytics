@@ -497,7 +497,7 @@ width:200px;
           register-config='{"type":"horizontal"}'
           selection-type="xy"
           chart-data='{{gravityData}}'
-          series-config='{"y0":{"name":"Vibration","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"1"}}}'
+          series-config='{"y0":{"name":"Vibration","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"2"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y0","type":"max","value":0.1}]'
           display-threshold-title
@@ -569,9 +569,7 @@ width:200px;
           register-config='{"type":"horizontal","forceDateTimeDisplay":false}'
           selection-type="xy"
           chart-data="{{effChartData}}"
-		  event-data='{{xyData}}'
-         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[10,0],"lineColor":"red","lineWeight":5}}'
-          series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
+		  series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
           y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncation":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
@@ -990,13 +988,14 @@ Polymer({
       //console.log('advisory response'+evt.detail.response);
       that.advisoryChartData = evt.detail.response.results;
       document.querySelector("px-tree").addEventListener('px-tree-node-tapped', function(evt){
-        console.log('current selected item event'+evt.detail.item.label);
+        console.log(evt);
+		console.log('current selected item event'+evt.detail.item.label);
         document.getElementById('advisoryId').value = evt.detail.item.label;
-        if((evt.detail.isBranch && evt.detail.isSelected && evt.detail.isActive) || (!evt.detail.isBranch && evt.detail.isSelected)){
-        //window.location.hash="#/advisory";
-		//window.location.hash="#/advisory";
+		if(!evt.detail.isBranch){
+        //if((evt.detail.isBranch && evt.detail.isSelected && evt.detail.isActive) || (!evt.detail.isBranch && evt.detail.isSelected)){
+        
 		window.history.pushState({}, null, '#/advisory');
-window.dispatchEvent(new CustomEvent('location-changed'));
+		window.dispatchEvent(new CustomEvent('location-changed'));
       }
       });
 
