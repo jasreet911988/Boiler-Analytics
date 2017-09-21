@@ -225,7 +225,6 @@ width:200px;
 	    text-align: center;
     color: #fff;
 	background:red;
-	display:none;
    }
 </style>
 <div class="layout horizontal">
@@ -234,7 +233,7 @@ width:200px;
 	<div class="nav">
 			<div class='right'>
 				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'></span></div>
+				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'>0</span></div>
 			</div>
 			<!--<div class='left'>
 				<div class='search'><img src='/images/main-search.png'></div>
@@ -883,16 +882,16 @@ Polymer({
       }
 	  var alertCount = 0;
 	  
-			  document.getElementById('noAlerts').style.display = 'none';
+			 // document.getElementById('noAlerts').style.display = 'none';
 			  setTimeout(function(){ 
 alertCount = document.querySelectorAll('.pump-name').length;
 		  if(alertCount>0){
-			  document.getElementById('alertCount').style.display = 'block';
+			  //document.getElementById('alertCount').style.display = 'block';
 			  document.getElementById('noAlerts').style.display = 'none';
 			  document.getElementById('alertCount').innerHTML = alertCount;
 			  }else{
 			  document.getElementById('noAlerts').style.display = 'block';
-			  document.getElementById('alertCount').style.display = 'none';
+			//  document.getElementById('alertCount').style.display = 'none';
 			  }
 			  }, 2000);
 			  

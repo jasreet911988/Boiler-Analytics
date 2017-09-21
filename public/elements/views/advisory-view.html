@@ -251,7 +251,7 @@ width:200px;
 	  text-align: center;
     color: #fff;
 	background:red;
-	display:none;
+	
    }
 </style>
 <div class="layout horizontal">
@@ -266,23 +266,23 @@ width:200px;
           <div id="column2j" class = "main-content">
 
             <template is="dom-if" if="{{!showFlow}}">
-          <p id="para" class="pump-name">Low Discharge Flow</p>
+          <p id="para" class="pump-name-adv">Low Discharge Flow</p>
             </template>
 			<template is="dom-if" if="{{!showCurrent}}">
-          <p id="para" class="pump-name">Current Over-speed</p>
+          <p id="para" class="pump-name-adv">Current Over-speed</p>
             </template>
            
             <template is="dom-if" if="{{!showSpeed}}">
-          <p id="para" class="pump-name">Pump Over-speed</p>
+          <p id="para" class="pump-name-adv">Pump Over-speed</p>
             </template>
             <template is="dom-if" if="{{showSpeed}}">
-          <p id="para" class="pump-name">Pump Under-speed</p>
+          <p id="para" class="pump-name-adv">Pump Under-speed</p>
             </template>
             <template is="dom-if" if="{{!showPressure}}">
-          <p id="para" class="pump-name">Pressure is more</p>
+          <p id="para" class="pump-name-adv">Pressure is more</p>
             </template>
             <template is="dom-if" if="{{showPressure}}">
-          <p id="para" class="pump-name">Pressure is less</p>
+          <p id="para" class="pump-name-adv">Pressure is less</p>
             </template>
 <p id="noAlerts" class="pump-name">No Alerts</p>
           </div>
@@ -293,7 +293,7 @@ width:200px;
     <div class="nav">
   			<div class='right'>
   				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'></span></div>
+<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'>0</span></div>
 						
   			</div>
   			<!--<div class='left'>
@@ -725,16 +725,16 @@ Polymer({
         that.kpiStatus.power = true;
       }
 	  var alertCount = 0;
-	  document.getElementById('noAlerts').style.display = 'none';
+	 // document.getElementById('noAlerts').style.display = 'none';
 	   setTimeout(function(){ 
-alertCount = document.querySelectorAll('.pump-name').length;
+alertCount = document.querySelectorAll('.pump-name-adv').length;
 		  if(alertCount>0){
-			  document.getElementById('alertCount').style.display = 'block';
+			  //document.getElementById('alertCount').style.display = 'block';
 			  document.getElementById('noAlerts').style.display = 'none';
 			  document.getElementById('alertCount').innerHTML = alertCount;
 			  }else{
 			  document.getElementById('noAlerts').style.display = 'block';
-			  document.getElementById('alertCount').style.display = 'none';
+			 // document.getElementById('alertCount').style.display = 'none';
 			  }
 			  }, 2000);
     });
