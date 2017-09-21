@@ -214,6 +214,19 @@ width:200px;
    .alert {
      cursor: pointer;
    }
+   #alertCount {
+	font-size: 8px;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    padding: 3px;
+    top: 15px;
+    position: absolute;
+	    text-align: center;
+    color: #fff;
+	background:red;
+	display:none;
+   }
 </style>
 <div class="layout horizontal">
 
@@ -221,7 +234,7 @@ width:200px;
 	<div class="nav">
 			<div class='right'>
 				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
+				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'></span></div>
 			</div>
 			<!--<div class='left'>
 				<div class='search'><img src='/images/main-search.png'></div>
@@ -239,6 +252,10 @@ width:200px;
             <template is="dom-if" if="{{!showFlow}}">
           <p id="para" class="pump-name">Low Discharge Flow</p>
             </template>
+			<template is="dom-if" if="{{!showCurrent}}">
+          <p id="para" class="pump-name">Current Over-speed</p>
+            </template>
+           
             <template is="dom-if" if="{{!showSpeed}}">
           <p id="para" class="pump-name">Pump Over-speed</p>
             </template>
@@ -251,7 +268,7 @@ width:200px;
             <template is="dom-if" if="{{showPressure}}">
           <p id="para" class="pump-name">Pressure is less</p>
             </template>
-
+<p id="noAlerts" class="pump-name-no">No Alerts</p>
           </div>
 
          <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
@@ -272,7 +289,7 @@ width:200px;
           <div style=" display: flex; flex-direction: row;">
         <div>
           <span style="padding:10px;font-size:12px;color:darkgrey;">UPCOMING SERVICE</span><br>
-          <span style="padding:10px;font-weight:bold;">31st Sep 2017</span>
+          <span style="padding:10px;font-weight:bold;">30th Sep 2017</span>
         </div>
         <div>
           <span style="padding:10px;font-size:12px;color:darkgrey;">INSTALLATION DATE</span><br>
@@ -572,7 +589,7 @@ width:200px;
 		  series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
-          y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncation":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
+          y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncaheadtion":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
         </px-vis-xy-chart>
     </px-card>
     <!-- <pump-performance-view></pump-performance-view> -->
@@ -621,6 +638,9 @@ Polymer({
       type: Boolean
     },
     showPressure: {
+      type: Boolean
+    },
+	showCurrent: {
       type: Boolean
     }
   },
@@ -817,8 +837,10 @@ Polymer({
         that.kpiStatus.flow = true;
       }
       if(currentVal >= 20 || currentVal <= 5){
+	  that.showCurrent = false;
         that.kpiStatus.current = false;
       }else{
+	  that.showCurrent = true;
         that.kpiStatus.current = true;
       }
       if(speedVal >= 87 || speedVal <= 27){
@@ -859,6 +881,22 @@ Polymer({
       }else{
         that.kpiStatus.power = true;
       }
+	  var alertCount = 0;
+	  
+			  document.getElementById('noAlerts').style.display = 'none';
+			  setTimeout(function(){ 
+alertCount = document.querySelectorAll('.pump-name').length;
+		  if(alertCount>0){
+			  document.getElementById('alertCount').style.display = 'block';
+			  document.getElementById('noAlerts').style.display = 'none';
+			  document.getElementById('alertCount').innerHTML = alertCount;
+			  }else{
+			  document.getElementById('noAlerts').style.display = 'block';
+			  document.getElementById('alertCount').style.display = 'none';
+			  }
+			  }, 2000);
+			  
+	  
     });
     this.$.overviewAjaxEl.addEventListener('response', function(evt) {
       var reqData = evt.detail.response;
@@ -979,7 +1017,7 @@ Polymer({
     });
     this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
       console.log(evt.detail.response);
-      that.effChartData = evt.detail.response;
+      that.effChartData = evt.detail.response;	  
     });
 
 
