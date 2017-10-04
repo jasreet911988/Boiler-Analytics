@@ -153,6 +153,9 @@ width:200px;
 		width:40px;
 		float:left;
 	}
+	.highcharts-credits{
+	display:none;
+	}
 .home{
 		width:100px;
 		float:left;
@@ -574,7 +577,8 @@ width:200px;
           <px-rangepicker id="peRangeId" range="{{peSelectedRange}}">
           </px-rangepicker>
         </div>
-        <px-vis-xy-chart
+		<div id="pumpHighchart" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
+        <!-- <px-vis-xy-chart
           debounce-resize-timing="250"
           width="700"
           height="311.5"
@@ -588,8 +592,8 @@ width:200px;
 		  series-config='{"firstSerie":{"type":"scatter","name":"Head Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"ft","x":"flow","y":"head","axis":{"id":"axis1","number":1,"side":"left"}},"secondSerie":{"type":"scatter","name":"Efficiency Vs Flow","xAxisUnit":"usgpm","yAxisUnit":"%","x":"flow","y":"efficiency","axis":{"id":"axis2","number":1,"side":"right"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
-          y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncaheadtion":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
-        </px-vis-xy-chart>
+          y-axis-config='{"title":"Y","labelPosition":"center","axis1":{"title":"Head","titleTruncation":false,"unit":"ft"},"axis2":{"title":"Efficiency","titleTruncation":false,"unit":"%"}}'>
+        </px-vis-xy-chart>-->
     </px-card>
     <!-- <pump-performance-view></pump-performance-view> -->
     <iron-ajax id="aboutContentAjaxEl"></iron-ajax>
@@ -1017,6 +1021,103 @@ alertCount = document.querySelectorAll('.pump-name').length;
     this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
       console.log(evt.detail.response);
       that.effChartData = evt.detail.response;	  
+	  var flow = [];
+	  var head = [];
+	  var efficiency = [];
+		that.effChartData = that.effChartData.sort(function(a, b) {
+			return parseFloat(a.flow) - parseFloat(b.flow);
+		});
+	  for(var i=0;i<that.effChartData.length;i++){
+		if(i == that.effChartData.length-1){
+			flow.push(that.effChartData[i].flow);
+			var hjson = {
+                y: that.effChartData[i].head,
+                color: '#BF0B23',
+                marker:{
+                    fillColor:'#BF0B23'
+                }
+            }
+			var ejson = {
+                y: that.effChartData[i].efficiency,
+                color: '#c10b23',
+                marker:{
+                    fillColor:'#c10b23'
+                }
+            }
+			head.push(hjson);
+			efficiency.push(ejson);
+		}else{
+			flow.push(that.effChartData[i].flow);
+			head.push(that.effChartData[i].head);
+			efficiency.push(that.effChartData[i].efficiency);
+		}
+	  }
+	  
+	  new Highcharts.chart(that.$.pumpHighchart, {
+    chart: {
+        type: 'scatter'
+    },
+    title: {
+        text: ''
+    },
+    xAxis: [{
+        categories: flow,
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}'
+        },
+        title: {
+            text: 'Efficiency [%]'
+        },
+        opposite: true
+
+    }, { // Secondary yAxis
+        gridLineWidth: 0,
+        title: {
+            text: 'Head [ft]'
+        },
+        labels: {
+            format: '{value}'
+        }
+
+    }],
+    tooltip: {
+        formatter: function() {
+            console.log(this)
+            if (this.color == '#434348' || this.color=='#c10b23') {
+                return 'Efficiency: '+this.key + ' usgpm / ' + this.y + ' %';
+            } else {
+                return 'Head: '+this.key + ' usgpm / ' + this.y + ' ft';
+            }
+        }
+    },
+    series: [{
+        marker: {
+            radius: 5,
+            lineColor: 'rgb(93,165,218)',
+            fillColor: 'rgb(93,165,218)',
+            lineWidth: 0,
+            symbol: 'circle'
+        },
+        name: 'Head',
+        yAxis: 1,
+        data: head
+
+    }, {
+        marker: {
+            radius: 5,
+            lineColor: 'rgb(250,164,58)',
+            fillColor: 'rgb(250,164,58)',
+            lineWidth: 0,
+            symbol: 'circle'
+        },
+        name: 'Efficiency',
+        data: efficiency
+    }]
+});
+	  
     });
 
 

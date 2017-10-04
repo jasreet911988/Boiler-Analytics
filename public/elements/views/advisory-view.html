@@ -5,11 +5,15 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html"> 
 <link rel="import" href="../../bower_components/px-vis-timeseries/px-vis-timeseries.html">
-<!-- <link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html"> -->
+<link rel="import" href="../../bower_components/google-map/google-map.html">
+<link rel="import" href="../../bower_components/google-map/google-map-marker.html">
 <!-- <link rel="import" href="temp-view.html"> -->
 <!-- <link rel="import" href="pump-performance-view.html"> -->
+<!-- <script src="../../bower_components/highcharts/highcharts.js"></script> -->
+
+<!-- <script src="../../bower_components/highcharts/highstock.js"></script> -->
 <dom-module id="advisory-view">
 <template>
 <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
@@ -172,6 +176,9 @@ width:200px;
 		width:40px;
 		float:left;
 	}
+	.highcharts-credits{
+	display:none;
+	}
 .home{
 		width:85px;
 		float:left;
@@ -254,11 +261,19 @@ width:200px;
 	
    }
 </style>
+<template>
+  <iron-ajax id="armstrongAssetAjaxEl" url="/api/v1/asset"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxEl" on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxFirstEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxSecondEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxThirdEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003"></iron-ajax>
+    <iron-ajax id="gridViewId" url="/api/v1/gridviewdata"></iron-ajax>
+    
+</template>
 <div class="layout horizontal">
-
   <div style="width:100%;">
-
- <div id="advsioryElement" style="position:absolute; top:-10px; right:950px; width:500px; "></div>
+  
+<div id="advsioryElement" style="position:absolute; top:-10px; right:950px; width:500px; "></div>
     <px-popover class="popoverid" id = "pop" for="advsioryElement" orientation="bottom" style="left: 0px" enhanced>
 
       <span id="close" class="close-button" on-click="close">x</span>
@@ -312,11 +327,23 @@ width:200px;
   			</div>-->
   		</div>
       <div style="color: white; margin-left:10px;">Remaining Useful life: {{criticalElementSecond}}</div>
-   <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> -->
-   <px-card id="secondCard" chevron>
+  
+ <div id="column2" >
+	 
+	  <div id="column2flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
+	 </div>
+    <div id="column3" >
+	 
+	  <div id="column3flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
+	 </div>
+	  <div id="column4" >
+	 
+	  <div id="column4flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
+	 </div>
+  <px-card id="secondCard" chevron>
     
-	 <div id="column2" >
-       <px-vis-timeseries
+	
+       <!--  <px-vis-timeseries
        debounce-resize-timing="250"
        width="700"
        height="290.5"
@@ -336,7 +363,10 @@ width:200px;
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
-     </px-vis-timeseries>
+     </px-vis-timeseries> -->
+	 
+	 
+	 
        <!-- <px-vis-xy-chart
                 debounce-resize-timing="250"
                 width="700"
@@ -356,9 +386,9 @@ width:200px;
     
 
  </div>
-     <div id="column3">
+     <div id="column34">
 
-       <px-vis-timeseries
+       <!-- <px-vis-timeseries
        debounce-resize-timing="250"
        width="700"
        height="290.5"
@@ -371,12 +401,10 @@ width:200px;
        chart-data='{{advisoryData}}'
        series-config='{"y0":{"name":"Power","x":"timeStamp","y":"y3","yAxisUnit":"KW","axis":{"id":"axis1","side":"left","number":"1"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-       event-data='{{forecastPutDate}}'
-         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":3.5}}'
-       x-axis-config='{"title":"Time (Min)"}'
+      x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Power","titleTruncation":false,"unit":"KW"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
-     </px-vis-timeseries>
+     </px-vis-timeseries> -->
        <!-- <px-vis-xy-chart
                 debounce-resize-timing="250"
                 width="700"
@@ -395,8 +423,8 @@ width:200px;
                         </px-vis-xy-chart>  -->
      </div>
  
-     <div id="column4">
-       <px-vis-timeseries
+     <div id="column4y">
+       <!-- <px-vis-timeseries
        debounce-resize-timing="250"
        width="700"
        height="290.5"
@@ -409,12 +437,10 @@ width:200px;
        chart-data='{{advisoryData}}'
        series-config='{"y0":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis1","side":"left","number":"1"}}}'
        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-       event-data='{{forecastPutDate}}'
-         event-config='{"Forecast":{"color":"blue","icon":"px-fea:deployments","type":"fa","offset":[0,0],"lineColor":"red","lineWeight":3.5}}'
        x-axis-config='{"title":"Time (Min)"}'
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
-     </px-vis-timeseries>
+     </px-vis-timeseries>-->
        <!-- <px-vis-xy-chart
                 debounce-resize-timing="250"
                 width="700"
@@ -446,6 +472,67 @@ width:200px;
 Polymer({
   is: 'advisory-view',
   properties: {
+  chartdata:{type:Array},
+		yo:{type:Array},
+        y1:{type:Array},
+        y2:{type:Array},
+        y3:{type:Array},
+		y4:{type:Array},
+        xaxis:{type:Array},
+		selected: {
+          type : Object
+        },
+        firstCard : {
+          type : Object
+        },
+        secondCard : {
+          type : Object
+        },
+        thirdCard : {
+          type : Object
+        },
+        icon: {
+          type: String
+        },
+        icon1: {
+          type: Object
+        //  value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0' // Red
+        },
+        icon2: {
+          type: Object
+          //value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752063_en_v0'  // yellow
+        },
+        icon3: {
+          type: Object
+        //  value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0'  // green
+        },
+           pressure: {
+             type: String
+           },
+           speed: {
+             type: String
+           },
+           flow: {
+             type: String
+           },
+              pressure1: {
+                type: String
+              },
+              speed1: {
+                type: String
+              },
+              flow1: {
+                type: String
+              },
+                 pressure2: {
+                   type: String
+                 },
+                 speed2: {
+                   type: String
+                 },
+                 flow2: {
+                   type: String
+                 },
     selectedRange: {
       type: Object
     },
@@ -487,8 +574,8 @@ Polymer({
     },
 	advisoryData:{
 		type:Array,
-		notify:true,
 		reflectToAttribute: true,
+		notify:true,
 		value:[]
 	},
 	showCurrent: {
@@ -590,9 +677,46 @@ Polymer({
     }
     return spanStyle;
   },
+  attached: function attached() {
+          
+        },
+      convertTimeStamp : function(timestamp) {
+		var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+				];
+
+			var date = new Date(timestamp);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month,year,day;
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var day = date.getDate();
+			if (date.getHours() < 10)
+				h = '0' + date.getHours();
+			else
+				h = date.getHours();
+			if (date.getMinutes() < 10)
+				m = '0' + date.getMinutes();
+			else
+				m = date.getMinutes();
+			if (date.getSeconds() < 10)
+				s = '0' + date.getSeconds();
+			else
+				s = date.getSeconds();
+			
+			var hours  = date.getHours();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; 
+			var dateString = monthShortNames[date.getMonth()] + " "+day + "-"+hours +" "+ampm;
+			return dateString; 
+		},
   ready: function() {
-    //window.location.reload(true);
-    //var reqData1 = [];
+    
+	var that = this;
+	
     console.log('Advisory Id'+document.getElementById('advisoryId').value);
     this.advisoryId = document.getElementById('advisoryId').value;
 	/*this.showGraph = true;
@@ -617,7 +741,7 @@ Polymer({
     var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
     ];
-    var that = this;
+    
     that.effChartData = [];
     //that.advisoryData = [];
     //this.dayWeek = '0'//this.$.dayWeekId.displayValue;
@@ -773,8 +897,8 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
       var criticalElementSecond;
 
             reqData1 = advResponse[4].Data;
-            that.forecastDate = advResponse[5].ForecastStartTime;
-            that.forecastPutDate = [{"id":"123","time": that.forecastDate,"label":"Forecast"}];
+            var forecastDate = advResponse[5].ForecastStartTime;
+            that.forecastPutDate = [{"id":"123","time": forecastDate,"label":"Forecast"}];
             console.log(that.forecastPutDate);
             advisoryData1 = advResponse[0].Advisory1[0];
             advisoryData2= advResponse[1].Advisory2[0];
@@ -822,6 +946,39 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
             }
 	that.advisoryData = [];
     that.advisoryData = reqData1;
+	
+	
+	
+       that.y1s = [];
+        that.y2s = [];
+        that.y3s = [];
+        that.yos = [];
+        that.xaxis = [];
+        var startDots = 0;
+        for(i=0; i<that.advisoryData.length;i++){
+		//console.log(that.advisoryData[i].x);
+        	that.y1s.push(that.advisoryData[i].y1);
+        	that.y2s.push(that.advisoryData[i].y2);
+        	that.y3s.push(that.advisoryData[i].y3);
+        	that.yos.push(that.advisoryData[i].y4);
+			if(startDots==0){
+				if( (new Date().getTime() - that.advisoryData[i].x) < 0 ){
+					startDots = i;
+				}
+			}
+        	/*if(forecastDate == that.advisoryData[i].x){
+				startDots = i;
+			}*/
+        	that.xaxis.push(that.convertTimeStamp(that.advisoryData[i].x));
+        	
+        	
+        }
+        that.yo = that.yos.map(parseFloat);
+        that.y1 = that.y1s.map(parseFloat);
+        that.y2 = that.y2s.map(parseFloat);
+        that.y3 = that.y3s.map(parseFloat);
+       
+	
     for (i=0; i< advisoryData1.length; i++){
       if(that.advisoryId == advisoryData1[i]){
         //console.log('It is first advisory');
@@ -831,7 +988,84 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
         document.getElementById("column2").style.display = "block";
         document.getElementById("column3").style.display = "none";
         document.getElementById("column4").style.display = "none";
-        //that.seriesCustomConfig = '{"y0":{"name":"Flow","x":"timeStamp","y":"y1","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},"y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},"y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}';
+		new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
+    chart: {
+        zoomType: 'xy'
+    },
+    title: {
+        text: 'Speed Flow Head'
+    },
+    xAxis: [{
+        type: 'datetime',
+        categories: that.xaxis,
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}'
+        },
+        title: {
+            text: 'Flow [usgpm]'
+        }
+    },{ // Tertiary yAxis
+        gridLineWidth: 0,
+        title: {
+            text: 'Head [ft]'
+        },
+        labels: {
+            format: '{value}'
+        }
+    }, { // Secondary yAxis
+        gridLineWidth: 0,
+        title: {
+            text: 'Speed [%]'
+        },
+        labels: {
+            format: '{value}'
+        }
+
+    } ],
+    tooltip: {
+        shared: true
+    },
+    series: [{
+        name: 'Speed',
+        type: 'line',
+		zoneAxis: 'x',
+		yAxis: 2,
+        data: that.y2,
+		zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+    }, {
+        name: 'Flow',
+        type: 'line',
+        
+		zoneAxis: 'x',
+		data: that.y1,
+       zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+
+    }, {
+        name: 'Head',
+        type: 'line',
+		zoneAxis: 'x',
+		yAxis: 1,
+        data: that.yo,
+		 zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+    }]
+});
+
+		//that.seriesCustomConfig = '{"y0":{"name":"Flow","x":"timeStamp","y":"y1","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},"y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},"y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}';
         //that.yCustomConfig = '{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}';
       }
       }
@@ -844,7 +1078,84 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
         document.getElementById("column2").style.display = "block";
         document.getElementById("column3").style.display = "none";
         document.getElementById("column4").style.display = "none";
-        //that.seriesCustomConfig = '{"y0":{"name":"Flow","x":"timeStamp","y":"y1","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},"y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},"y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}';
+new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
+    chart: {
+        zoomType: 'xy'
+    },
+    title: {
+        text: 'Speed Flow Head'
+    },
+    xAxis: [{
+        type: 'datetime',
+        categories: that.xaxis,
+        crosshair: true
+    }],
+    yAxis: [{ // Primary yAxis
+        labels: {
+            format: '{value}'
+        },
+        title: {
+            text: 'Flow [usgpm]'
+        }
+    },{ // Tertiary yAxis
+        gridLineWidth: 0,
+        title: {
+            text: 'Head [ft]'
+        },
+        labels: {
+            format: '{value}'
+        }
+    }, { // Secondary yAxis
+        gridLineWidth: 0,
+        title: {
+            text: 'Speed [%]'
+        },
+        labels: {
+            format: '{value}'
+        }
+
+    } ],
+    tooltip: {
+        shared: true
+    },
+    series: [{
+        name: 'Speed',
+        type: 'line',
+		zoneAxis: 'x',
+		 yAxis: 2,
+        data: that.y2,
+		zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+    }, {
+        name: 'Flow',
+        type: 'line',
+       
+		zoneAxis: 'x',
+		data: that.y1,
+       zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+
+    }, {
+        name: 'Head',
+        type: 'line',
+		zoneAxis: 'x',
+		yAxis: 1,
+        data: that.yo,
+		 zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+    }]
+});
+
+		//that.seriesCustomConfig = '{"y0":{"name":"Flow","x":"timeStamp","y":"y1","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},"y1":{"name":"Head","x":"timeStamp","y":"y4","yAxisUnit":"ft","axis":{"id":"axis2","side":"left","number":"2"}},"y2":{"name":"Speed","x":"timeStamp","y":"y2","yAxisUnit":"%","axis":{"id":"axis3","side":"left","number":"3"}}}';
         //that.yCustomConfig = '{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}';
       }
       }
@@ -857,6 +1168,49 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
           document.getElementById("column2").style.display = "none";
           document.getElementById("column3").style.display = "block";
           document.getElementById("column4").style.display = "none";
+		   new Highcharts.Chart(that.$.column3flowcontainerHighcharts, {
+            
+            chart: {
+              type: 'line',
+              zoomType: 'xy'
+            },
+            defs: {
+              style: {
+                tagName: 'style',
+                textContent: '.highcharts-tooltip {}'
+              }
+            },
+            title: {
+              text: 'Power'
+            },
+            xAxis: {
+            	 type: 'datetime',
+                 categories: that.xaxis/* ,
+                 plotBands: [{ // another way to show data
+                     from: 4.5,
+                     to: 6.5,
+                     color: 'rgba(68, 170, 213, .2)'
+                 }] */
+            },
+            yAxis: {
+              title: {
+                text: ''
+              }
+            },
+            series: [{
+              name: 'Power',
+              data: that.y3,
+              zoneAxis: 'x',
+              zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+            }],
+            tooltip: {
+              shadow: true
+            }
+          });
         }
         }
 		var advisoryDataInner = advisoryData2[2];
@@ -868,6 +1222,49 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
           document.getElementById("column2").style.display = "none";
           document.getElementById("column3").style.display = "block";
           document.getElementById("column4").style.display = "none";
+		   new Highcharts.Chart(that.$.column3flowcontainerHighcharts, {
+            
+            chart: {
+              type: 'line',
+              zoomType: 'x'
+            },
+            defs: {
+              style: {
+                tagName: 'style',
+                textContent: '.highcharts-tooltip {}'
+              }
+            },
+            title: {
+              text: 'Power'
+            },
+            xAxis: {
+            	 type: 'datetime',
+                 categories: that.xaxis/* ,
+                 plotBands: [{ // another way to show data
+                     from: 4.5,
+                     to: 6.5,
+                     color: 'rgba(68, 170, 213, .2)'
+                 }] */
+            },
+            yAxis: {
+              title: {
+                text: ''
+              }
+            },
+            series: [{
+              name: 'Power',
+              data: that.y3,
+              zoneAxis: 'x',
+              zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+            }],
+            tooltip: {
+              shadow: true
+            }
+          });
         }
         }
         for (i=0; i< advisoryData3.length; i++){
@@ -879,6 +1276,49 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
             document.getElementById("column2").style.display = "none";
             document.getElementById("column3").style.display = "none";
             document.getElementById("column4").style.display = "block";
+			 new Highcharts.Chart(that.$.column4flowcontainerHighcharts, {
+            
+            chart: {
+              type: 'line',
+              zoomType: 'x'
+            },
+            defs: {
+              style: {
+                tagName: 'style',
+                textContent: '.highcharts-tooltip {}'
+              }
+            },
+            title: {
+              text: 'Speed'
+            },
+            xAxis: {
+            	 type: 'datetime',
+                 categories: that.xaxis/* ,
+                 plotBands: [{ // another way to show data
+                     from: 4.5,
+                     to: 6.5,
+                     color: 'rgba(68, 170, 213, .2)'
+                 }] */
+            },
+            yAxis: {
+              title: {
+                text: ''
+              }
+            },
+            series: [{
+              name: 'Speed',
+              data: that.y2,
+              zoneAxis: 'x',
+              zones: [{
+                  value: startDots
+              }, {
+                  dashStyle: 'dot'
+              }]
+            }],
+            tooltip: {
+              shadow: true
+            }
+          });
           }
           }
 

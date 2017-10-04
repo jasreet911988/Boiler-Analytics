@@ -1,0 +1,783 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html">
+<link rel="import" href="../../bower_components/px-dropdown/px-dropdown.html">
+<link rel="import" href="../../bower_components/px-dropdown/px-dropdown-content.html">
+<link rel="import" href="../../bower_components/px-modal/px-modal.html">
+<link rel="import" href="../../bower_components/px-popover/px-popover.html">
+<link rel="import" href="../../bower_components/google-map/google-map.html">
+<link rel="import" href="../../bower_components/google-map/google-map-marker.html">
+<script src="../../bower_components/highcharts/highcharts.js"></script>
+<!-- <link rel="import" href="../armstrong-asset-list/armstrong-asset-list.html"> -->
+<link rel="import" href="overview-view.html">
+<!-- <link rel="import" href="../kpi-bar/kpi-bar.html"> -->
+
+<dom-module id="rmd-view">
+  <style>
+  :host {
+    --iron-icon-width: 16px;
+    --iron-icon-height: 16px;
+  }
+  #row1{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-around;
+  }
+
+  #column1{
+        display:flex;
+        flex-direction:column;
+
+  }
+
+
+  #column2{
+        display:flex;
+        flex-direction:column;
+  }
+
+  .popoverid{
+    max-width: 400px;
+    --px-popover-max-width: 400px;
+    height:250px;
+    padding: 0px;
+  }
+  .pump-symbol {
+    height: 14px;margin-right: 1px;width: 3px;display: inline-block;
+  }
+  .kpiStatusRed {
+    background-color: #f44336;
+  }
+  .kpiStatusGreen {
+    background-color: #4CAF50;
+  }
+  .kpiStatusYellow {
+    background-color: #ff9800;
+  }
+  .main-content {
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+  }
+  .pump-name {
+    height:25px;
+    color:white;
+    font-size: 1.5em;
+    margin: 0px;
+    padding:0px;
+    width: 350px;
+  }
+  .inner-content {
+    display: flex;
+    margin-top: 20px;
+    width: 350px;
+  }
+  .pump-image {
+    margin-right: 20px;
+  }
+  .inner-image {
+    width:50px; height:50px;
+  }
+  .pump-main-first {
+    flex-direction: column;
+    margin-right: 10px;
+  }
+  .pump-main-headline {
+    font-size:1em; font-weight: bold;
+  }
+  .pump-main-value {
+    text-align: center;
+    font-size: 13px;
+  }
+  .pump-main-second {
+    flex-direction: column;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .pump-main-third {
+  flex-direction:column; margin-left: 10px; margin-right: 10px;
+ }
+ .pump-address {
+   margin: 0px;
+ }
+ #close {
+    cursor: pointer;
+    float:right;
+    display:inline-block;
+    padding:3px 5px;
+    background:#ccc;
+    margin-left: 20px;
+}
+.close-button {
+  position: relative;
+    right: -15px;
+    top: -15px;
+}
+
+.gridItem {
+  display:inline-block;
+  width:28%;
+  height:200px;
+  padding:5px;
+  border:1px solid grey;
+  margin:5px;
+  box-shadow: 10px 10px 5px #888888;
+  cursor: pointer;
+  background-color: whitesmoke;
+}
+.gridHeader {
+  display: block;
+  background-color: #4caf50;
+  text-align: center;
+  color: white;
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+.gridKpi {
+  display: block;
+  height : 20px;
+  padding: 5px;
+  padding-left: 30px;
+}
+.gridKpiLabel{
+  display: inline-block;
+  width: 36%;
+  border-right: 1px solid grey;
+}
+.gridKpiValue {
+  display: inline-block;
+  padding-left : 20px;
+}
+  </style>
+  <template>
+  <div id="containerHighcharts"></div>
+    
+    <iron-ajax id="armstrongAssetAjaxEl" url="/api/v1/asset"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxEl" on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxFirstEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxSecondEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002"></iron-ajax>
+    <iron-ajax id="armstrongKPIAjaxThirdEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003"></iron-ajax>
+    <iron-ajax id="gridViewId" url="/api/v1/gridviewdata"></iron-ajax>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'rmd-view',
+      properties: {
+        mapsOn : {
+          type : String,
+          value : "on"
+        },
+        chartdata:{type:Array},
+        yo:{type:Array},
+        y1:{type:Array},
+        y2:{type:Array},
+        y3:{type:Array},
+        xaxis:{type:Array},
+        selected: {
+          type : Object
+        },
+        firstCard : {
+          type : Object
+        },
+        secondCard : {
+          type : Object
+        },
+        thirdCard : {
+          type : Object
+        },
+        icon: {
+          type: String
+        },
+        icon1: {
+          type: Object
+        //  value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0' // Red
+        },
+        icon2: {
+          type: Object
+          //value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752063_en_v0'  // yellow
+        },
+        icon3: {
+          type: Object
+        //  value: 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0'  // green
+        },
+           pressure: {
+             type: String
+           },
+           speed: {
+             type: String
+           },
+           flow: {
+             type: String
+           },
+              pressure1: {
+                type: String
+              },
+              speed1: {
+                type: String
+              },
+              flow1: {
+                type: String
+              },
+                 pressure2: {
+                   type: String
+                 },
+                 speed2: {
+                   type: String
+                 },
+                 flow2: {
+                   type: String
+                 }
+      },
+      _viewChange: function(){
+        this.mapView = !this.mapView;
+      },
+      mapClicked: function(){
+        console.log("clciked");
+         // this.mapsOn = null;
+        this.$.armstrongAssetAjaxEl.generateRequest();
+        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
+       //this.$.armstrongKPIAjaxEl.generateRequest();
+        document.getElementById('mapElement').click();
+      //  document.getElementById('pop').show();
+        document.getElementById('pop1').hide();
+        document.getElementById('pop2').hide();
+
+        //this.$.modalId.click();
+      },
+      mapClicked1: function(){
+        console.log("clciked");
+         // this.mapsOn = null;
+        this.$.armstrongAssetAjaxEl.generateRequest();
+        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002";
+       //this.$.armstrongKPIAjaxEl.generateRequest();
+        document.getElementById('mapElement1').click();
+        document.getElementById('pop').hide();
+        document.getElementById('pop2').hide();
+
+        //this.$.modalId.click();
+      },
+      mapClicked2: function(){
+        console.log("clciked");
+         // this.mapsOn = null;
+        this.$.armstrongAssetAjaxEl.generateRequest();
+        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003";
+       //this.$.armstrongKPIAjaxEl.generateRequest();
+        document.getElementById('mapElement2').click();
+        document.getElementById('pop').hide();
+        document.getElementById('pop1').hide();
+
+        //this.$.modalId.click();
+      },
+      close: function(){
+        console.log('it comes here');
+        document.getElementById('pop').hide();
+      },
+      close1: function(){
+        console.log('it comes here');
+        document.getElementById('pop1').hide();
+      },
+      close2: function(){
+        console.log('it comes here');
+        document.getElementById('pop2').hide();
+      },
+      _imageClicked: function(){
+        console.log('clicking on factory image');
+        this.$.armstrongAssetAjaxEl.generateRequest();
+      },
+      attached: function attached() {
+          console.log(this.yo ,"this.yo");
+          console.log(this.y1 ,"this.y1");
+          console.log(this.y2 ,"this.y2");  
+          console.log(this.y3 ,"this.y3");  
+          console.log(this.xaxis ,"this.xaxis");  
+      
+          new Highcharts.Chart(this.$.containerHighcharts, {
+            
+            chart: {
+              type: 'line',
+              zoomType: 'x'
+            },
+            defs: {
+              style: {
+                tagName: 'style',
+                textContent: '.highcharts-tooltip {}'
+              }
+            },
+            title: {
+              text: 'Testchart'
+            },
+            xAxis: {
+            	 type: 'datetime',
+                 categories: this.xaxis/* ,
+                 plotBands: [{ // another way to show data
+                     from: 4.5,
+                     to: 6.5,
+                     color: 'rgba(68, 170, 213, .2)'
+                 }] */
+            },
+            yAxis: {
+              title: {
+                text: ''
+              }
+            },
+            series: [{
+              name: 'Speed',
+              data: this.y1,
+              zoneAxis: 'x',
+              zones: [{
+                  value: 10
+              }, {
+                  dashStyle: 'dot'
+              }]
+            }, {
+              name: 'Hit',
+              data: this.yo,
+              zoneAxis: 'x',
+              zones: [{
+                  value: 10
+              }, {
+                  dashStyle: 'dot'
+              }]
+            }, {
+              name: 'Flow',
+              data: this.y2,
+              zoneAxis: 'x',
+              zones: [{
+                  value: 10
+              }, {
+                  dashStyle: 'dot'
+              }]
+            }],
+            tooltip: {
+              shadow: true
+            }
+          });
+        },
+      ready: function(){
+        // set copy of 'this' for callback function use below
+
+      var that = this;
+        
+        that.chartdata = [{
+        	  "timeStamp": 1227232494001,
+        	  "y0": "6.44",
+        	  "y1": "-3.96",
+        	  "y2": "-7.89",
+        	  "y3": "4.26"
+        	}, {
+        	  "timeStamp": 1228472111570,
+        	  "y0": "6.31",
+        	  "y1": "-4.38",
+        	  "y2": "-7.60",
+        	  "y3": "3.65"
+        	}, {
+        	  "timeStamp": 1229711729139,
+        	  "y0": "5.75",
+        	  "y1": "-4.17",
+        	  "y2": "-7.47",
+        	  "y3": "3.90"
+        	}, {
+        	  "timeStamp": 1230951346708,
+        	  "y0": "5.96",
+        	  "y1": "-4.24",
+        	  "y2": "-6.78",
+        	  "y3": "4.15"
+        	}, {
+        	  "timeStamp": 1232190964277,
+        	  "y0": "5.56",
+        	  "y1": "-3.89",
+        	  "y2": "-6.87",
+        	  "y3": "3.94"
+        	}, {
+        	  "timeStamp": 1233430581846,
+        	  "y0": "5.90",
+        	  "y1": "-4.52",
+        	  "y2": "-7.46",
+        	  "y3": "3.29"
+        	}, {
+        	  "timeStamp": 1234670199415,
+        	  "y0": "6.08",
+        	  "y1": "-5.01",
+        	  "y2": "-7.60",
+        	  "y3": "2.74"
+        	}, {
+        	  "timeStamp": 1235909816984,
+        	  "y0": "6.75",
+        	  "y1": "-4.32",
+        	  "y2": "-7.05",
+        	  "y3": "2.30"
+        	}, {
+        	  "timeStamp": 1237149434553,
+        	  "y0": "6.91",
+        	  "y1": "-4.90",
+        	  "y2": "-7.18",
+        	  "y3": "1.71"
+        	}, {
+        	  "timeStamp": 1238389052122,
+        	  "y0": "7.38",
+        	  "y1": "-4.31",
+        	  "y2": "-6.94",
+        	  "y3": "1.20"
+        	}, {
+        	  "timeStamp": 1239628669691,
+        	  "y0": "7.56",
+        	  "y1": "-4.61",
+        	  "y2": "-7.14",
+        	  "y3": "1.11"
+        	}, {
+        	  "timeStamp": 1240868287260,
+        	  "y0": "8.23",
+        	  "y1": "-4.84",
+        	  "y2": "-6.95",
+        	  "y3": "1.35"
+        	}, {
+        	  "timeStamp": 1242107904829,
+        	  "y0": "7.75",
+        	  "y1": "-5.12",
+        	  "y2": "-6.35",
+        	  "y3": "0.70"
+        	}, {
+        	  "timeStamp": 1243347522398,
+        	  "y0": "8.25",
+        	  "y1": "-5.05",
+        	  "y2": "-5.71",
+        	  "y3": "1.09"
+        	}, {
+        	  "timeStamp": 1244587139967,
+        	  "y0": "7.71",
+        	  "y1": "-4.91",
+        	  "y2": "-5.11",
+        	  "y3": "1.01"
+        	}, {
+        	  "timeStamp": 1245826757536,
+        	  "y0": "7.27",
+        	  "y1": "-5.60",
+        	  "y2": "-5.51",
+        	  "y3": "0.50"
+        	}, {
+        	  "timeStamp": 1247066375105,
+        	  "y0": "7.65",
+        	  "y1": "-5.96",
+        	  "y2": "-6.11",
+        	  "y3": "0.21"
+        	}, {
+        	  "timeStamp": 1248305992674,
+        	  "y0": "8.29",
+        	  "y1": "-5.28",
+        	  "y2": "-5.90",
+        	  "y3": "-0.22"
+        	}, {
+        	  "timeStamp": 1499948359181,
+        	  "y0": "6.77",
+        	  "y1": "-8.30",
+        	  "y2": "-1.82",
+        	  "y3": "7.64"
+        	}];
+        
+        
+        var i;
+        this.yos = [];
+        this.y1s = [];
+        this.y2s = [];
+        this.y3s = [];
+        this.xaxis = [];
+        
+        for(i=0; i<this.chartdata.length;i++){
+        	this.yos.push(this.chartdata[i].y0);
+        	this.y1s.push(this.chartdata[i].y1);
+        	this.y2s.push(this.chartdata[i].y2);
+        	this.y3s.push(this.chartdata[i].y3);
+        	
+        	this.xaxis.push(this.convertTimeStamp(this.chartdata[i].timeStamp));
+        	
+        	
+        }
+        this.yo = this.yos.map(parseFloat);
+        this.y1 = this.y1s.map(parseFloat);
+        this.y2 = this.y2s.map(parseFloat);
+        this.y3 = this.y3s.map(parseFloat);
+        console.log(this.y1 ,"this.y1");
+        console.log(this.y2 ,"this.y2");  
+        console.log(this.y3 ,"this.y3");  
+        console.log(this.xaxis ,"this.xaxis");  
+        
+      this.mapView = true;
+      that.kpiStatus = {};
+      that.kpiStatus1 = {};
+      that.kpiStatus2 = {};
+        this.$.armstrongAssetAjaxEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          this.assetList = evt.detail.response;
+        }.bind(this));
+        this.$.armstrongKPIAjaxFirstEl.generateRequest();
+        this.$.gridViewId.addEventListener('response', function(evt) {
+          var gridResponse = evt.detail.response;
+          that.firstCard = gridResponse.Condenser_Water_Pump_001;
+          that.secondCard = gridResponse.Condenser_Water_Pump_002;
+          that.thirdCard = gridResponse.Condenser_Water_Pump_003;
+          that.firstCard.Flow = parseFloat(that.firstCard.Flow).toFixed(2);
+          var firstCardFlow = that.firstCard.Flow;
+          var firstCardSpeed = parseFloat(that.firstCard.Speed);
+          var firstCardPressure = parseFloat(that.firstCard.Pressure);
+          that.secondCard.Flow = parseFloat(that.secondCard.Flow).toFixed(2);
+          var secondCardFlow = that.secondCard.Flow;
+          var secondCardSpeed = parseFloat(that.secondCard.Speed);
+          var secondCardPressure = parseFloat(that.secondCard.Pressure);
+          that.thirdCard.Flow = parseFloat(that.thirdCard.Flow).toFixed(2);
+          var thirdCardFlow = that.thirdCard.Flow;
+          var thirdCardSpeed = parseFloat(that.thirdCard.Speed);
+          var thirdCardPressure = parseFloat(that.thirdCard.Pressure);
+          //if(firstCardFlow > 1000 || firstCardFlow<220 || firstCardPressure >=22 || firstCardPressure <= 5 || firstCardSpeed>=98){
+          if(firstCardFlow<510 || firstCardPressure >=22 || firstCardPressure <= 5 || firstCardSpeed<=27 || firstCardSpeed>=87){
+            this.firstCardColor = false;
+          }else {
+            this.firstCardColor = true;
+            }
+          //if(secondCardFlow > 1000 || secondCardFlow<220 || secondCardPressure >=22 || secondCardPressure <= 5 || secondCardSpeed>=98){
+            if(secondCardFlow<510 || secondCardPressure >=22 || secondCardPressure <= 5 || secondCardSpeed<=27 || secondCardSpeed>=87){
+            this.secondCardColor = false;
+          }else {
+            this.secondCardColor = true;
+            }
+          //if(thirdCardFlow > 1000 || thirdCardFlow<220 || thirdCardPressure >=22 || thirdCardPressure <= 5 || thirdCardSpeed>=98){
+            if(thirdCardFlow<510 || thirdCardPressure >=22 || thirdCardPressure <= 5 || thirdCardSpeed<=27 || thirdCardSpeed>=87){
+            this.thirdCardColor = false;
+          }else {
+            this.thirdCardColor = true;
+            }
+        }.bind(this));
+        this.$.gridViewId.generateRequest();
+        this.$.armstrongKPIAjaxFirstEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          var responseflow = evt.detail.response;
+          var flowVal = parseFloat(responseflow.Flow).toFixed(2);
+          var speedVal = parseFloat(responseflow.Speed);
+          var pressureVal = parseFloat(responseflow.Pressure);
+          this.flow = flowVal;
+          this.speed = speedVal;
+          this.pressure= pressureVal;
+        //  that.kpiObject.flow = flowVal;
+          //console.log('ready function flow'+that.kpiObject.flow);
+          console.log('Flow Value for first element'+flowVal);
+        //  this.flow = responseflow.Flow;
+        //  if(flowVal > 1000 || flowVal<220){
+              if(flowVal<510){
+
+            document.getElementById('symbol2').classList.add('kpiStatusRed');
+            that.kpiStatus.flow = false;
+          }else {
+
+            document.getElementById('symbol2').classList.add('kpiStatusGreen');
+            that.kpiStatus.flow = true;
+            }
+          if(pressureVal >= 22 || pressureVal <= 5){
+            document.getElementById('symbol').classList.add('kpiStatusRed');
+            that.kpiStatus.pressure = false;
+          }else{
+            document.getElementById('symbol').classList.add('kpiStatusGreen');
+            that.kpiStatus.pressure = true;
+            }
+
+            if(speedVal >= 87 || speedVal <= 27){
+              document.getElementById('symbol1').classList.add('kpiStatusRed');
+              that.kpiStatus.speed = false;
+            }else{
+              document.getElementById('symbol1').classList.add('kpiStatusGreen');
+              that.kpiStatus.speed = true;
+            }
+
+            if(!that.kpiStatus.pressure || !that.kpiStatus.flow || !that.kpiStatus.speed){
+              this.icon1 = 'http://maps.gstatic.com/mapfiles/markers2/marker_sprite.png'; //red
+              document.getElementById('para').classList.add('kpiStatusRed');
+            }
+            else{
+              this.icon1 = 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png'; //green
+              document.getElementById('para').classList.add('kpiStatusGreen');
+            }
+        }.bind(this));
+        this.$.armstrongKPIAjaxSecondEl.generateRequest();
+        this.$.armstrongKPIAjaxSecondEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          var responseflow = evt.detail.response;
+          var flowVal = parseFloat(responseflow.Flow).toFixed(2);
+          var speedVal = parseFloat(responseflow.Speed);
+          var pressureVal = parseFloat(responseflow.Pressure);
+          this.flow1 = flowVal;
+          this.speed1 = speedVal;
+          this.pressure1= pressureVal;
+        //  that.kpiObject.flow = flowVal;
+          //console.log('ready function flow'+that.kpiObject.flow);
+          console.log('Flow Value for first element'+flowVal);
+        //  this.flow = responseflow.Flow;
+        //  if(flowVal > 1000 || flowVal<220){
+        if(flowVal<510){
+            //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0';
+            document.getElementById('symbol5').classList.add('kpiStatusRed');
+            that.kpiStatus1.flow = false;
+          }else {
+          //  this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0';
+            document.getElementById('symbol5').classList.add('kpiStatusGreen');
+            that.kpiStatus1.flow = true;
+            }
+          if(pressureVal >= 22 || pressureVal <= 5){
+            document.getElementById('symbol3').classList.add('kpiStatusRed');
+            that.kpiStatus1.pressure = false;
+          }else{
+            document.getElementById('symbol3').classList.add('kpiStatusGreen');
+            that.kpiStatus1.pressure = true;
+            }
+
+            if(speedVal >= 87 || speedVal <= 27){
+              document.getElementById('symbol4').classList.add('kpiStatusRed');
+              that.kpiStatus1.speed = false;
+            }else{
+              document.getElementById('symbol4').classList.add('kpiStatusGreen');
+              that.kpiStatus1.speed = true;
+            }
+
+            if(!that.kpiStatus1.pressure || !that.kpiStatus1.flow || !that.kpiStatus1.speed){
+              this.icon2 = 'http://maps.gstatic.com/mapfiles/markers2/marker_sprite.png'; //red
+              document.getElementById('para1').classList.add('kpiStatusRed');
+            }
+            else{
+              this.icon2 = 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png'; //green
+              document.getElementById('para1').classList.add('kpiStatusGreen');
+            }
+        }.bind(this));
+        this.$.armstrongKPIAjaxThirdEl.generateRequest();
+        this.$.armstrongKPIAjaxThirdEl.addEventListener('response', function(evt) {
+          console.log(evt.detail.response);
+          var responseflow = evt.detail.response;
+          var flowVal = parseFloat(responseflow.Flow).toFixed(2);
+          var speedVal = parseFloat(responseflow.Speed);
+          var pressureVal = parseFloat(responseflow.Pressure);
+          this.flow2 = flowVal;
+          this.speed2 = speedVal;
+          this.pressure2= pressureVal;
+        //  that.kpiObject.flow = flowVal;
+          //console.log('ready function flow'+that.kpiObject.flow);
+          console.log('Flow Value for first element'+flowVal);
+        //  this.flow = responseflow.Flow;
+          //if(flowVal > 1000 || flowVal<220){
+            if(flowVal<510){
+            //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752125_en_v0';
+            document.getElementById('symbol8').classList.add('kpiStatusRed');
+            that.kpiStatus2.flow = false;
+          }else {
+            //this.icon = 'https://storage.googleapis.com/support-kms-prod/SNP_2752129_en_v0';
+            document.getElementById('symbol8').classList.add('kpiStatusGreen');
+            that.kpiStatus2.flow = true;
+            }
+          if(pressureVal >= 22 || pressureVal <= 5){
+            document.getElementById('symbol6').classList.add('kpiStatusRed');
+            that.kpiStatus2.pressure = false;
+          }else{
+            document.getElementById('symbol6').classList.add('kpiStatusGreen');
+            that.kpiStatus2.pressure = true;
+            }
+
+            if(speedVal >= 87 || speedVal <= 27){
+              document.getElementById('symbol7').classList.add('kpiStatusRed');
+              that.kpiStatus2.speed = false;
+            }else{
+              document.getElementById('symbol7').classList.add('kpiStatusGreen');
+              that.kpiStatus2.speed = true;
+            }
+
+            if(!that.kpiStatus2.pressure || !that.kpiStatus2.flow || !that.kpiStatus2.speed){
+              this.icon3 = 'http://maps.gstatic.com/mapfiles/markers2/marker_sprite.png'; //red
+              document.getElementById('para2').classList.add('kpiStatusRed');
+            }
+            else{
+              this.icon3 = 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png'; //green
+              document.getElementById('para2').classList.add('kpiStatusGreen');
+            }
+        }.bind(this));
+        },
+        
+        convertTimeStamp : function(timestamp) {
+			var date = new Date(timestamp);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month,year,day;
+			var month = date.getMonth();
+			var year = date.getFullYear();
+			var day = date.getDate();
+			if (date.getHours() < 10)
+				h = '0' + date.getHours();
+			else
+				h = date.getHours();
+			if (date.getMinutes() < 10)
+				m = '0' + date.getMinutes();
+			else
+				m = date.getMinutes();
+			if (date.getSeconds() < 10)
+				s = '0' + date.getSeconds();
+			else
+				s = date.getSeconds();
+			//var dateString = h + ':' + m + ':' + s;
+			var dateString = day+'/'+month+'/'+year;
+			return dateString; 
+		},
+      order: function(e){
+        console.log(e);
+         /*var selectedItem = e.target.firstChild.data;
+        var i;
+        for(i=0; i<this.assetList.length;i++){
+          if(selectedItem == this.assetList[i].name){
+            this.selected = this.assetList[i];
+          }
+        }*/
+        document.getElementById('pop').hide();
+        console.log("hi");
+        document.getElementById('contextId').value = "Condenser_Water_Pump_001";
+        document.getElementById('contextName').value = "Design Envelope 4300 Pumps";
+        console.log(document.getElementById('contextId').value);
+        window.location.hash="#/overview";
+      },
+      order1: function(e){
+        console.log(e);
+      /*   var selectedItem = e.target.firstChild.data;
+        var i;
+        for(i=0; i<this.assetList.length;i++){
+          if(selectedItem == this.assetList[i].name){
+            this.selected = this.assetList[i];
+          }
+        }*/
+        document.getElementById('pop1').hide();
+        console.log("hi");
+        document.getElementById('contextId').value = "Condenser_Water_Pump_002";
+        document.getElementById('contextName').value = "Design Envelope 4322 Tango Pumps";
+        console.log(document.getElementById('contextId').value);
+        window.location.hash="#/overview";
+      },
+      order2: function(e){
+        console.log(e);
+      /*   var selectedItem = e.target.firstChild.data;
+        var i;
+        for(i=0; i<this.assetList.length;i++){
+          if(selectedItem == this.assetList[i].name){
+            this.selected = this.assetList[i];
+          }
+        }*/
+      document.getElementById('pop2').hide();
+        console.log("hi");
+        document.getElementById('contextId').value = "Condenser_Water_Pump_003";
+        document.getElementById('contextName').value = "Design Envelope 4372 Tango Pumps";
+        console.log(document.getElementById('contextId').value);
+        window.location.hash="#/overview";
+      },
+      handleResponse : function(e){
+        var respTxt = e.detail.response;
+        this.pressure = respTxt.Pressure;
+        this.speed = respTxt.Speed;
+        this.flow = respTxt.Flow;
+        console.log('Pressure is'+this.pressure);
+        console.log('Speed is'+this.speed);
+      }
+    });
+  </script>
+</dom-module>
