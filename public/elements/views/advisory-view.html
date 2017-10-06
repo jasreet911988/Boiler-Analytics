@@ -710,6 +710,7 @@ Polymer({
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
 			hours = hours ? hours : 12; 
+			//var dateString = hours +" "+ampm;
 			var dateString = monthShortNames[date.getMonth()] + " "+day + "-"+hours +" "+ampm;
 			return dateString; 
 		},
@@ -969,9 +970,9 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
         	/*if(forecastDate == that.advisoryData[i].x){
 				startDots = i;
 			}*/
-        	that.xaxis.push(that.convertTimeStamp(that.advisoryData[i].x));
+        	//that.xaxis.push(that.convertTimeStamp(that.advisoryData[i].x));
         	
-        	
+        	that.xaxis.push(that.advisoryData[i].x);
         }
         that.yo = that.yos.map(parseFloat);
         that.y1 = that.y1s.map(parseFloat);
@@ -998,8 +999,12 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
     xAxis: [{
         type: 'datetime',
         categories: that.xaxis,
-        crosshair: true
-    }],
+			labels: {
+				formatter: function() {
+					return that.convertTimeStamp(this.value);
+				}
+			}
+		}],
     yAxis: [{ // Primary yAxis
         labels: {
             format: '{value}'
@@ -1026,7 +1031,37 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
 
     } ],
     tooltip: {
-        shared: true
+        shared: true,
+		formatter: function() {
+            console.log(this)
+            var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+				];
+
+			var date = new Date(this.points[0].x);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var day = date.getDate();
+			
+			if (date.getMinutes() < 10){
+				m = '0' + date.getMinutes();}
+			else{
+				m = date.getMinutes();}
+			if (date.getSeconds() < 10){
+				s = '0' + date.getSeconds();}
+			else{
+				s = date.getSeconds();}
+			
+			var hours  = date.getHours();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; 
+			
+			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Speed: "+this.points[0].y+", Flow: "+this.points[1].y+", Head: "+this.points[2].y;
+        }
     },
     series: [{
         name: 'Speed',
@@ -1088,8 +1123,12 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
     xAxis: [{
         type: 'datetime',
         categories: that.xaxis,
-        crosshair: true
-    }],
+		labels: {
+				formatter: function() {
+					return that.convertTimeStamp(this.value);
+				}
+			}
+		}],
     yAxis: [{ // Primary yAxis
         labels: {
             format: '{value}'
@@ -1116,7 +1155,37 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 
     } ],
     tooltip: {
-        shared: true
+        shared: true,
+		formatter: function() {
+            console.log(this)
+            var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+				];
+
+			var date = new Date(this.points[0].x);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var day = date.getDate();
+			
+			if (date.getMinutes() < 10){
+				m = '0' + date.getMinutes();}
+			else{
+				m = date.getMinutes();}
+			if (date.getSeconds() < 10){
+				s = '0' + date.getSeconds();}
+			else{
+				s = date.getSeconds();}
+			
+			var hours  = date.getHours();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; 
+			
+			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Speed: "+this.points[0].y+", Flow: "+this.points[1].y+", Head: "+this.points[2].y;
+        }
     },
     series: [{
         name: 'Speed',
@@ -1185,12 +1254,17 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
             },
             xAxis: {
             	 type: 'datetime',
-                 categories: that.xaxis/* ,
-                 plotBands: [{ // another way to show data
-                     from: 4.5,
-                     to: 6.5,
-                     color: 'rgba(68, 170, 213, .2)'
-                 }] */
+                 categories: that.xaxis,
+				<!-- tickInterval :24*3600*1000, -->
+				<!-- tickInterval :12*3600*1000, -->
+				 tickInterval :6*3600*1000, 
+				<!-- tickInterval :3*3600*1000, -->
+				<!-- tickInterval :2*3600*1000, -->
+				labels: {
+				formatter: function() {
+					return that.convertTimeStamp(this.value);
+				}
+			}
             },
             yAxis: {
               title: {
@@ -1199,6 +1273,9 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
             },
             series: [{
               name: 'Power',
+			  <!-- pointInterval: 24*3600 * 1000, --> 
+			  <!-- pointInterval: 12*3600 * 1000, -->
+			  <!-- pointStart: Date.UTC(2017, 9, 05, 0, 0, 0, 0),  -->
               data: that.y3,
               zoneAxis: 'x',
               zones: [{
@@ -1208,7 +1285,37 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
               }]
             }],
             tooltip: {
-              shadow: true
+              shadow: true,
+				formatter: function() {
+            console.log(this)
+            var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+				];
+
+			var date = new Date(this.x);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var day = date.getDate();
+			
+			if (date.getMinutes() < 10){
+				m = '0' + date.getMinutes();}
+			else{
+				m = date.getMinutes();}
+			if (date.getSeconds() < 10){
+				s = '0' + date.getSeconds();}
+			else{
+				s = date.getSeconds();}
+			
+			var hours  = date.getHours();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; 
+			
+			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Power: "+this.y;
+        }
             }
           });
         }
@@ -1239,12 +1346,12 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
             },
             xAxis: {
             	 type: 'datetime',
-                 categories: that.xaxis/* ,
-                 plotBands: [{ // another way to show data
-                     from: 4.5,
-                     to: 6.5,
-                     color: 'rgba(68, 170, 213, .2)'
-                 }] */
+                 categories: that.xaxis,
+				 labels: {
+				formatter: function() {
+					return that.convertTimeStamp(this.value);
+				}
+			}
             },
             yAxis: {
               title: {
@@ -1262,8 +1369,39 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
               }]
             }],
             tooltip: {
-              shadow: true
+              shadow: true,
+	formatter: function() {
+            console.log(this)
+            var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+				];
+
+			var date = new Date(this.x);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var day = date.getDate();
+			
+			if (date.getMinutes() < 10){
+				m = '0' + date.getMinutes();}
+			else{
+				m = date.getMinutes();}
+			if (date.getSeconds() < 10){
+				s = '0' + date.getSeconds();}
+			else{
+				s = date.getSeconds();}
+			
+			var hours  = date.getHours();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; 
+			
+			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Power: "+this.y;
+        }
             }
+            
           });
         }
         }
@@ -1293,12 +1431,12 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
             },
             xAxis: {
             	 type: 'datetime',
-                 categories: that.xaxis/* ,
-                 plotBands: [{ // another way to show data
-                     from: 4.5,
-                     to: 6.5,
-                     color: 'rgba(68, 170, 213, .2)'
-                 }] */
+                 categories: that.xaxis,
+				 labels: {
+				formatter: function() {
+					return that.convertTimeStamp(this.value);
+				}
+			}
             },
             yAxis: {
               title: {
@@ -1316,7 +1454,38 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
               }]
             }],
             tooltip: {
-              shadow: true
+              shadow: true,
+			  	formatter: function() {
+            console.log(this)
+            var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+				];
+
+			var date = new Date(this.x);
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
+			var day = date.getDate();
+			
+			if (date.getMinutes() < 10){
+				m = '0' + date.getMinutes();}
+			else{
+				m = date.getMinutes();}
+			if (date.getSeconds() < 10){
+				s = '0' + date.getSeconds();}
+			else{
+				s = date.getSeconds();}
+			
+			var hours  = date.getHours();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; 
+			
+			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Speed: "+this.y;
+        }
+            
             }
           });
           }
