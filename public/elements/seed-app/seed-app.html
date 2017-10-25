@@ -10,7 +10,7 @@
 <!-- px components -->
 <link rel="import" href="../../bower_components/px-app-nav/px-app-nav.html">
 <link rel="import" href="../../bower_components/px-view/px-view.html">
-<link rel="import" href="../../bower_components/px-login/px-login.html">
+<!--<link rel="import" href="../../bower_components/px-login/px-login.html">-->
 <!-- seed app components -->
 <link rel="import" href="../ge-svg-logo/ge-svg-logo.html">
 <link rel="import" href="../predix-logo/predix-logo.html">
@@ -35,13 +35,17 @@
 
     <header role="banner">
       <div class="viewport flex flex--justify flex--middle">
-        <h3>
+        <h3 class="app-top-header">
           <!-- <ge-svg-logo class="u-mr--"></ge-svg-logo> -->
-          <img src="../../images/armstrong-pumps-logo.png" height="25" width="25" style="position:relative; top:5px;"> [[appHeader]]
+          <img src="../../images/thermal_power_plant.jpg" height="55" width="55" style="position:relative; top:5px;"></h3>
+        <h3 style="position:relative;right:281px;top:-6px;">[[appHeader]]
         </h3>
-        <div>
-          <px-login style="margin-left: auto;"></px-login>
-        </div>
+        <h3 style="position:relative;top:-2px;">
+          <img src="../../images/TCS-Logo.jpg" height="55" width="60" style="position:relative; top:5px;"></h3>
+        </h3>
+        <!--<div>-->
+          <!--<px-login style="margin-left: auto;"></px-login>-->
+        <!--</div>-->
       </div>
     </header>
 
@@ -70,7 +74,7 @@
           <!-- main /rmd route and view -->
           <app-route
             route="[[_route]]"
-            pattern="/pumpManager"
+            pattern="/boilerAnalytics"
             active="{{_pumpManagerActive}}">
           </app-route>
           <px-view id="pumpManagerPxView"
@@ -175,7 +179,7 @@
               {
                 "label": "Dashboard",
                 "id": "dashboard",
-                "path": "/pumpManager",
+                "path": "/boilerAnalytics",
                 "icon": "px-fea:dashboard"
               }/*,
               {
@@ -240,14 +244,14 @@
         // set default route to /rmd
         var l = window.location;
         if((l.hash === "#/" || l.hash === "") && l.pathname === "/") {
-          l.hash = "/pumpManager";
+          l.hash = "/boilerAnalytics";
         }
       },
 
       _routeChanged: function(newRoute) {
         console.log('new route:', newRoute);
         if(newRoute.path != "/overview") this.$.overviewPxView._resetView();
-        if(newRoute.path != "/pumpManager") this.$.pumpManagerPxView._resetView();    
+        if(newRoute.path != "/boilerAnalytics") this.$.pumpManagerPxView._resetView();
 	    if(newRoute.path != "/advisory") this.$.advisoryPxView._resetView();
       }
 

@@ -78,7 +78,7 @@ display: block;
   height: 14px;
     margin-right: 5px;
     width: 3px;
-    background-color: green;
+    background-color: red;
     display: inline-block;
 }
 #dropdownDiv {
@@ -221,26 +221,17 @@ width:200px;
 
     <div class="nav">
   			<div class='right'>
-  				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+  				<div class='home'><a href='/#/boilerAnalytics' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
 
   			</div>
-  			<!--<div class='left'>
-  				<div class='search'><img src='/images/main-search.png'></div>
-  				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
-  			</div>-->
   		</div>
 
     <div class="nav1">
   			<div class='right'>
           {{advisoryId}}
   			</div>
-  			<!--<div class='left'>
-  				<div class='search'><img src='/images/main-search.png'></div>
-  				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
-  			</div>-->
   		</div>
       <div style="color: white; margin-left:10px;">Remaining Useful life: {{criticalElementSecond}}</div>
-   <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> -->
    <px-card id="secondCard" chevron>
      <div id="column2" >
 
@@ -539,8 +530,8 @@ Polymer({
       var pressureVal = parseFloat(that.kpiObject.Pressure);
       var powerVal = parseFloat(that.kpiObject.Power);
       //if(flowVal > 1000 || flowVal<220){
-        if(flowVal<510){
-        that.alertList.push({'status':'danger','message':'Flow above threshold.'});
+        if(flowVal<800){
+        that.alertList.push({'status':'danger','message':'Carbon Emmission higher than limit.'});
         that.kpiStatus.flow = false;
       }/*else if(flowVal > 850 || flowVal < 350){
         that.alertList.push({'status':'warning','message':'Flow requires attention'});

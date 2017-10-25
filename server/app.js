@@ -193,9 +193,9 @@ app.get('/favicon.ico', function (req, res) {
 });
 
 app.get('/config', function(req, res) {
-  let title = "Predix WebApp Starter";
+  let title = "COMBUSTION OPTIMIZATION & GREENHOUSE GAS EMISSIONS MONITORING";
   if (config.isAssetConfigured()) {
-    title = "Performance Management Center";
+    title = "COMBUSTION OPTIMIZATION & GREENHOUSE GAS EMISSIONS MONITORING";
   }
   res.send({wsUrl: config.websocketServerURL, appHeader: title});
 });

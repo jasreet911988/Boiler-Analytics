@@ -7,9 +7,7 @@
 <link rel="import" href="../../bower_components/px-popover/px-popover.html">
 <link rel="import" href="../../bower_components/google-map/google-map.html">
 <link rel="import" href="../../bower_components/google-map/google-map-marker.html">
-<!-- <link rel="import" href="../armstrong-asset-list/armstrong-asset-list.html"> -->
 <link rel="import" href="overview-view.html">
-<!-- <link rel="import" href="../kpi-bar/kpi-bar.html"> -->
 
 <dom-module id="rmd-view">
   <style>
@@ -48,10 +46,10 @@
     background-color: #f44336;
   }
   .kpiStatusGreen {
-    background-color: #4CAF50;
+    background-color: #f44336;
   }
   .kpiStatusYellow {
-    background-color: #ff9800;
+    background-color: #f44336;
   }
   .main-content {
     margin: 0px;
@@ -60,7 +58,7 @@
   }
   .pump-name {
     height:25px;
-    color:white;
+    color:#000;
     font-size: 1.5em;
     margin: 0px;
     padding:0px;
@@ -126,7 +124,7 @@
 }
 .gridHeader {
   display: block;
-  background-color: #4caf50;
+  background-color: red;
   text-align: center;
   color: white;
   height: 30px;
@@ -148,13 +146,15 @@
   display: inline-block;
   padding-left : 20px;
 }
+  .u-mb.u--mh+.u-ph+.flex.flex--middle .flex--justify .style-scope .px-card-header{
+      margin-bottom: 0rem !important;
+  }
   </style>
   <template>
 
     <template is="dom-if" if="{{mapsOn}}">
-      <px-card header-text="Locations">
+      <px-card header-text="POWER PLANTS">
       <!-- <px-modal btn-modal-positive="OK"><button id="modalId" class='btn btn--primary modal-trigger' width="0" height="0"></button><div id="column2" style="padding: 20px;">
-         <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list>
       </div>
           </px-modal> -->
           <div style="height:20px;">
@@ -178,119 +178,116 @@
     <px-popover class="popoverid" id = "pop" for="mapElement" orientation="right" enhanced>
       <span id="close" class="close-button" on-click="close">x</span>
           <div id="column2" class = "main-content" on-click="order">
-          <p id="para" class="pump-name">Design Envelope 4300 Pumps</p>
-          <p class="pump-address">953 Shyanne Camp Suite</p>
+          <p id="para" class="pump-name" style="background:red;">Pulverized Coal Boiler</p>
+          <p class="pump-address">Location:953 Shyanne Camp Suite</p>
           <div class="inner-content">
-            <div class="pump-image"><img class="inner-image" src="../../images/pump.png"/></div>
+            <div class="pump-image"><img class="inner-image" src="../../images/coal-boiler1.jpg"/></div>
             <div class="pump-main-first">
-              <div class="pump-main-headline">Pressure</div>
+              <div class="pump-main-headline">Air</div>
               <span id = "symbol" class="pump-symbol"></span>
-              <span class="pump-main-value">{{pressure}} kg/cm2</span>
+              <span class="pump-main-value">{{pressure}}</span>
             </div>
             <hr width="1" size="50">
             <div class="pump-main-second">
-              <div class="pump-main-headline">Speed</div>
+              <div class="pump-main-headline">Coal</div>
               <span id = "symbol1" class="pump-symbol"></span>
-              <span class="pump-main-value">{{speed}} %</span>
+              <span class="pump-main-value">{{speed}} </span>
             </div>
             <hr width="1" size="50">
             <div class="pump-main-third" style="">
-              <div class="pump-main-headline">Flow</div>
+              <div class="pump-main-headline">Carbon Emissions</div>
               <span id = "symbol2" class="pump-symbol"></span>
-              <span class="pump-main-value">{{flow}} usgpm</span>
+              <span class="pump-main-value">{{flow}}</span>
             </div>
           </div>
           </div>
 
-         <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
     <div id="mapElement1" style="position:absolute; top:200px; right:500px; width:500px; "></div>
     <px-popover class="popoverid" id = "pop1" for="mapElement1" orientation="right" enhanced>
       <span id="close" class="close-button" on-click="close1">x</span>
           <div id="column2" class = "main-content" on-click="order1">
-          <p id = "para1" class="pump-name">Design Envelope 4322 Tango Pumps</p>
-          <p class="pump-address">953 Shyanne Camp Suite</p>
+          <p id = "para1" class="pump-name" style="background:red;">Gasoline Boiler</p>
+          <p class="pump-address">Location: 953 Shyanne Camp Suite</p>
           <div class="inner-content">
-            <div class="pump-image"><img src="../../images/pump.png" class="inner-image"/></div>
+            <div class="pump-image"><img src="../../images/coal-bolier2.jpg" class="inner-image"/></div>
             <div class="pump-main-first">
-              <div class="pump-main-headline">Pressure</div>
+              <div class="pump-main-headline">Air</div>
               <span id = "symbol3" class="pump-symbol"></span>
-              <span class="pump-main-value">{{pressure1}} kg/cm2</span>
+              <span class="pump-main-value">{{pressure1}}</span>
             </div>
             <hr width="1" size="50">
             <div class="pump-main-second">
-              <div class="pump-main-headline">Speed</div>
+              <div class="pump-main-headline">Coal</div>
               <span id = "symbol4" class="pump-symbol"></span>
-              <span class="pump-main-value">{{speed1}} %</span>
+              <span class="pump-main-value">{{speed1}}</span>
             </div>
             <hr width="1" size="50">
             <div class="pump-main-third">
-              <div class="pump-main-headline">Flow</div>
+              <div class="pump-main-headline">Carbon Emissions</div>
               <span id = "symbol5" class="pump-symbol"></span>
-              <span class="pump-main-value">{{flow1}} usgpm</span>
+              <span class="pump-main-value">{{flow1}}</span>
             </div>
           </div>
           </div>
-         <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
     <div id="mapElement2" style="position:absolute; top:200px; right:500px; width:500px;"></div>
     <px-popover class="popoverid" id = "pop2" for="mapElement2" orientation="right" enhanced>
       <span id="close" class="close-button" on-click="close2">x</span>
           <div id="column2" class = "main-content" on-click="order2">
-          <p id = "para2" class="pump-name">Design Envelope 4372 Tango Pumps</p>
-          <p class="pump-address">95 Shyanne Camp Suite</p>
+          <p id = "para2" class="pump-name" style="background:red;">Stoker Lump Boiler</p>
+          <p class="pump-address">Location: 95 Shyanne Camp Suite</p>
           <div class="inner-content">
-            <div class="pump-image"><img src="../../images/pump.png" class="inner-image"/></div>
+            <div class="pump-image"><img src="../../images/coal-boiler3.jpg" class="inner-image"/></div>
             <div class="pump-main-first">
-              <div class="pump-main-headline">Pressure</div>
+              <div class="pump-main-headline">Air</div>
               <span id = "symbol6" class="pump-symbol"></span>
-              <span class="pump-main-value">{{pressure2}} kg/cm2</span>
+              <span class="pump-main-value">{{pressure2}}</span>
             </div>
             <hr width="1" size="50">
             <div class="pump-main-second">
-              <div class="pump-main-headline">Speed</div>
+              <div class="pump-main-headline">Coal</div>
               <span id = "symbol7" class="pump-symbol"></span>
-              <span class="pump-main-value">{{speed2}} %</span>
+              <span class="pump-main-value">{{speed2}}</span>
             </div>
             <hr width="1" size="50">
             <div class="pump-main-third">
-              <div class="pump-main-headline">Flow</div>
+              <div class="pump-main-headline">Carbon Emissions</div>
               <span id = "symbol8" class="pump-symbol"></span>
-              <span class="pump-main-value">{{flow2}} usgpm</span>
+              <span class="pump-main-value">{{flow2}}</span>
             </div>
           </div>
           </div>
-         <!-- <armstrong-asset-list datapoints="{{assetList}}"></armstrong-asset-list> -->
     </px-popover>
   </template>
   <template is="dom-if" if="{{!mapView}}">
     <div style="height:360px;">
       <div class="gridItem" on-click="order">
         <template is="dom-if" if="{{firstCardColor}}">
-          <span id="firstCardId" class="gridHeader" style="background-color:#4caf50;">{{firstCard.name}}</span>
+          <span id="firstCardId" class="gridHeader" style="background-color:#f44336;">{{firstCard.name}}</span>
         </template>
         <template is="dom-if" if="{{!firstCardColor}}">
           <span id="firstCardId" class="gridHeader" style="background-color:#f44336;">{{firstCard.name}}</span>
         </template>
         <span class="gridKpi">
           <span class="gridKpiLabel">Current</span>
-          <span class="gridKpiValue">{{firstCard.Current}} A</span>
+          <span class="gridKpiValue">{{firstCard.Current}}</span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Flow</span>
-          <span class="gridKpiValue">{{firstCard.Flow}} usgpm</span>
+          <span class="gridKpiLabel">Carbon Emissions</span>
+          <span class="gridKpiValue">{{firstCard.Flow}}</span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Power</span>
-          <span class="gridKpiValue">{{firstCard.Power}} kW</span>
+          <span class="gridKpiLabel">Efficiency</span>
+          <span class="gridKpiValue">{{firstCard.Power}}</span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Pressure</span>
-          <span class="gridKpiValue">{{firstCard.Pressure}} kg/cm2</span>
+          <span class="gridKpiLabel">Air</span>
+          <span class="gridKpiValue">{{firstCard.Pressure}}</span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Speed</span>
-          <span class="gridKpiValue">{{firstCard.Speed}} %</span>
+          <span class="gridKpiLabel">Coal</span>
+          <span class="gridKpiValue">{{firstCard.Speed}}</span>
         </span>
 
 
@@ -299,7 +296,7 @@
       </div>
       <div class="gridItem" on-click="order1">
         <template is="dom-if" if="{{secondCardColor}}">
-          <span id="secondCardId" class="gridHeader" style="background-color:#4caf50;">{{secondCard.name}}</span>
+          <span id="secondCardId" class="gridHeader" style="background-color:#f44336;">{{secondCard.name}}</span>
         </template>
         <template is="dom-if" if="{{!secondCardColor}}">
           <span id="secondCardId" class="gridHeader" style="background-color:#f44336;">{{secondCard.name}}</span>
@@ -307,29 +304,29 @@
 
         <span class="gridKpi">
           <span class="gridKpiLabel">Current</span>
-          <span class="gridKpiValue">{{secondCard.Current}} A</span>
+          <span class="gridKpiValue">{{secondCard.Current}} </span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Flow</span>
-          <span class="gridKpiValue">{{secondCard.Flow}} usgpm</span>
+          <span class="gridKpiLabel">Carbon Emissions</span>
+          <span class="gridKpiValue">{{secondCard.Flow}} </span>
         </span>
 
         <span class="gridKpi">
-          <span class="gridKpiLabel">Power</span>
-          <span class="gridKpiValue">{{secondCard.Power}} kW</span>
+          <span class="gridKpiLabel">Efficiency</span>
+          <span class="gridKpiValue">{{secondCard.Power}}</span>
         </span>
          <span class="gridKpi">
-          <span class="gridKpiLabel">Pressure</span>
-          <span class="gridKpiValue">{{secondCard.Pressure}} kg/cm2</span>
+          <span class="gridKpiLabel">Air</span>
+          <span class="gridKpiValue">{{secondCard.Pressure}}</span>
         </span>
          <span class="gridKpi">
-          <span class="gridKpiLabel">Speed</span>
-          <span class="gridKpiValue">{{secondCard.Speed}} %</span>
+          <span class="gridKpiLabel">Coal</span>
+          <span class="gridKpiValue">{{secondCard.Speed}}</span>
         </span>
       </div>
       <div class="gridItem" on-click="order2">
        <template is="dom-if" if="{{thirdCardColor}}">
-          <span id="thirdCardId" class="gridHeader" style="background-color:#4caf50;">{{thirdCard.name}}</span>
+          <span id="thirdCardId" class="gridHeader" style="background-color:##f44336;">{{thirdCard.name}}</span>
         </template>
         <template is="dom-if" if="{{!thirdCardColor}}">
           <span id="thirdCardId" class="gridHeader" style="background-color:#f44336;">{{thirdCard.name}}</span>
@@ -337,35 +334,35 @@
 
         <span class="gridKpi">
           <span class="gridKpiLabel">Current</span>
-          <span class="gridKpiValue">{{thirdCard.Current}} A</span>
+          <span class="gridKpiValue">{{thirdCard.Current}}</span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Flow</span>
-          <span class="gridKpiValue">{{thirdCard.Flow}} usgpm</span>
+          <span class="gridKpiLabel">Carbon Emissions</span>
+          <span class="gridKpiValue">{{thirdCard.Flow}}</span>
         </span>
 
         <span class="gridKpi">
-          <span class="gridKpiLabel">Power</span>
-          <span class="gridKpiValue">{{thirdCard.Power}} kW</span>
+          <span class="gridKpiLabel">Efficiency</span>
+          <span class="gridKpiValue">{{thirdCard.Power}}</span>
         </span>
          <span class="gridKpi">
-          <span class="gridKpiLabel">Pressure</span>
-          <span class="gridKpiValue">{{thirdCard.Pressure}} kg/cm2</span>
+          <span class="gridKpiLabel">Air</span>
+          <span class="gridKpiValue">{{thirdCard.Pressure}}</span>
         </span>
         <span class="gridKpi">
-          <span class="gridKpiLabel">Speed</span>
-          <span class="gridKpiValue">{{thirdCard.Speed}} %</span>
+          <span class="gridKpiLabel">Coal</span>
+          <span class="gridKpiValue">{{thirdCard.Speed}} </span>
         </span>
       </div>
     </div>
   </template>
     </px-card>
   </template>
-    <iron-ajax id="armstrongAssetAjaxEl" url="/api/v1/asset"></iron-ajax>
-    <iron-ajax id="armstrongKPIAjaxEl" on-response="handleResponse"></iron-ajax>
-    <iron-ajax id="armstrongKPIAjaxFirstEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001"></iron-ajax>
-    <iron-ajax id="armstrongKPIAjaxSecondEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002"></iron-ajax>
-    <iron-ajax id="armstrongKPIAjaxThirdEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003"></iron-ajax>
+    <iron-ajax id="banalyticsAssetAjaxEl" url="/api/v1/asset"></iron-ajax>
+    <iron-ajax id="banalyticsKPIAjaxEl" on-response="handleResponse"></iron-ajax>
+    <iron-ajax id="banalyticsKPIAjaxFirstEl" url="/api/v1/latestdetails?tagId=Gasoline_Based_Boiler_002"></iron-ajax>
+    <iron-ajax id="banalyticsKPIAjaxSecondEl" url="/api/v1/latestdetails?tagId=Pulverized_Coal_Boiler_001"></iron-ajax>
+    <iron-ajax id="banalyticsKPIAjaxThirdEl" url="/api/v1/latestdetails?tagId=Stoker_Lump_Boiler_003"></iron-ajax>
     <iron-ajax id="gridViewId" url="/api/v1/gridviewdata"></iron-ajax>
 
   </template>
@@ -438,9 +435,7 @@
       mapClicked: function(){
         console.log("clciked");
          // this.mapsOn = null;
-        this.$.armstrongAssetAjaxEl.generateRequest();
-        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
-       //this.$.armstrongKPIAjaxEl.generateRequest();
+        this.$.banalyticsAssetAjaxEl.generateRequest();
         document.getElementById('mapElement').click();
       //  document.getElementById('pop').show();
         document.getElementById('pop1').hide();
@@ -451,9 +446,7 @@
       mapClicked1: function(){
         console.log("clciked");
          // this.mapsOn = null;
-        this.$.armstrongAssetAjaxEl.generateRequest();
-        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002";
-       //this.$.armstrongKPIAjaxEl.generateRequest();
+        this.$.banalyticsAssetAjaxEl.generateRequest();
         document.getElementById('mapElement1').click();
         document.getElementById('pop').hide();
         document.getElementById('pop2').hide();
@@ -463,9 +456,7 @@
       mapClicked2: function(){
         console.log("clciked");
          // this.mapsOn = null;
-        this.$.armstrongAssetAjaxEl.generateRequest();
-        //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003";
-       //this.$.armstrongKPIAjaxEl.generateRequest();
+        this.$.banalyticsAssetAjaxEl.generateRequest();
         document.getElementById('mapElement2').click();
         document.getElementById('pop').hide();
         document.getElementById('pop1').hide();
@@ -486,7 +477,7 @@
       },
       _imageClicked: function(){
         console.log('clicking on factory image');
-        this.$.armstrongAssetAjaxEl.generateRequest();
+        this.$.banalyticsAssetAjaxEl.generateRequest();
       },
       ready: function(){
         // set copy of 'this' for callback function use below
@@ -496,16 +487,16 @@
       that.kpiStatus = {};
       that.kpiStatus1 = {};
       that.kpiStatus2 = {};
-        this.$.armstrongAssetAjaxEl.addEventListener('response', function(evt) {
+        this.$.banalyticsAssetAjaxEl.addEventListener('response', function(evt) {
           console.log(evt.detail.response);
           this.assetList = evt.detail.response;
         }.bind(this));
-        this.$.armstrongKPIAjaxFirstEl.generateRequest();
+        this.$.banalyticsKPIAjaxFirstEl.generateRequest();
         this.$.gridViewId.addEventListener('response', function(evt) {
           var gridResponse = evt.detail.response;
-          that.firstCard = gridResponse.Condenser_Water_Pump_001;
-          that.secondCard = gridResponse.Condenser_Water_Pump_002;
-          that.thirdCard = gridResponse.Condenser_Water_Pump_003;
+          that.firstCard = gridResponse.Gasoline_Based_Boiler_002;
+          that.secondCard = gridResponse.Pulverized_Coal_Boiler_001;
+          that.thirdCard = gridResponse.Stoker_Lump_Boiler_003;
           that.firstCard.Flow = parseFloat(that.firstCard.Flow).toFixed(2);
           var firstCardFlow = that.firstCard.Flow;
           var firstCardSpeed = parseFloat(that.firstCard.Speed);
@@ -538,7 +529,7 @@
             }
         }.bind(this));
         this.$.gridViewId.generateRequest();
-        this.$.armstrongKPIAjaxFirstEl.addEventListener('response', function(evt) {
+        this.$.banalyticsKPIAjaxFirstEl.addEventListener('response', function(evt) {
           console.log(evt.detail.response);
           var responseflow = evt.detail.response;
           var flowVal = parseFloat(responseflow.Flow).toFixed(2);
@@ -586,8 +577,8 @@
               document.getElementById('para').classList.add('kpiStatusGreen');
             }
         }.bind(this));
-        this.$.armstrongKPIAjaxSecondEl.generateRequest();
-        this.$.armstrongKPIAjaxSecondEl.addEventListener('response', function(evt) {
+        this.$.banalyticsKPIAjaxSecondEl.generateRequest();
+        this.$.banalyticsKPIAjaxSecondEl.addEventListener('response', function(evt) {
           console.log(evt.detail.response);
           var responseflow = evt.detail.response;
           var flowVal = parseFloat(responseflow.Flow).toFixed(2);
@@ -635,8 +626,8 @@
               document.getElementById('para1').classList.add('kpiStatusGreen');
             }
         }.bind(this));
-        this.$.armstrongKPIAjaxThirdEl.generateRequest();
-        this.$.armstrongKPIAjaxThirdEl.addEventListener('response', function(evt) {
+        this.$.banalyticsKPIAjaxThirdEl.generateRequest();
+        this.$.banalyticsKPIAjaxThirdEl.addEventListener('response', function(evt) {
           console.log(evt.detail.response);
           var responseflow = evt.detail.response;
           var flowVal = parseFloat(responseflow.Flow).toFixed(2);
@@ -696,8 +687,8 @@
         }*/
         document.getElementById('pop').hide();
         console.log("hi");
-        document.getElementById('contextId').value = "Condenser_Water_Pump_001";
-        document.getElementById('contextName').value = "Design Envelope 4300 Pumps";
+        document.getElementById('contextId').value = "Pulverized_Coal_Boiler_001";
+        document.getElementById('contextName').value = "Pulverized Coal Boiler";
         console.log(document.getElementById('contextId').value);
         window.location.hash="#/overview";
       },
@@ -712,8 +703,8 @@
         }*/
         document.getElementById('pop1').hide();
         console.log("hi");
-        document.getElementById('contextId').value = "Condenser_Water_Pump_002";
-        document.getElementById('contextName').value = "Design Envelope 4322 Tango Pumps";
+        document.getElementById('contextId').value = "Gasoline_Based_Boiler_002";
+        document.getElementById('contextName').value = "Gasoline Boiler";
         console.log(document.getElementById('contextId').value);
         window.location.hash="#/overview";
       },
@@ -728,8 +719,8 @@
         }*/
       document.getElementById('pop2').hide();
         console.log("hi");
-        document.getElementById('contextId').value = "Condenser_Water_Pump_003";
-        document.getElementById('contextName').value = "Design Envelope 4372 Tango Pumps";
+        document.getElementById('contextId').value = "Stoker_Lump_Boiler_003";
+        document.getElementById('contextName').value = "Stoker Lump Boiler";
         console.log(document.getElementById('contextId').value);
         window.location.hash="#/overview";
       },
