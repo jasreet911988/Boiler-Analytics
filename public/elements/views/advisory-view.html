@@ -5,15 +5,12 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-multi-bar.html">
 <link rel="import" href="../../bower_components/nvd3-elements/nvd3-line.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html"> 
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/px-vis-timeseries/px-vis-timeseries.html">
 <link rel="import" href="../../bower_components/google-map/google-map.html">
 <link rel="import" href="../../bower_components/google-map/google-map-marker.html">
 <!-- <link rel="import" href="temp-view.html"> -->
 <!-- <link rel="import" href="pump-performance-view.html"> -->
-<!-- <script src="../../bower_components/highcharts/highcharts.js"></script> -->
-
-<!-- <script src="../../bower_components/highcharts/highstock.js"></script> -->
 <dom-module id="advisory-view">
 <template>
 <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
@@ -82,7 +79,7 @@ display: block;
   height: 14px;
     margin-right: 5px;
     width: 3px;
-    background-color: green;
+    background-color: red;
     display: inline-block;
 }
 #dropdownDiv {
@@ -222,7 +219,7 @@ width:200px;
        background:#ccc;
        margin-left: 20px;
    }
-   
+
    .popoverid{
      max-width: 400px;
      --px-popover-max-width: 400px;
@@ -258,7 +255,7 @@ width:200px;
 	  text-align: center;
     color: #fff;
 	background:red;
-	
+
    }
 </style>
 <template>
@@ -268,11 +265,11 @@ width:200px;
     <iron-ajax id="armstrongKPIAjaxSecondEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_002"></iron-ajax>
     <iron-ajax id="armstrongKPIAjaxThirdEl" url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_003"></iron-ajax>
     <iron-ajax id="gridViewId" url="/api/v1/gridviewdata"></iron-ajax>
-    
+
 </template>
 <div class="layout horizontal">
   <div style="width:100%;">
-  
+
 <div id="advsioryElement" style="position:absolute; top:-10px; right:950px; width:500px; "></div>
     <px-popover class="popoverid" id = "pop" for="advsioryElement" orientation="bottom" style="left: 0px" enhanced>
 
@@ -286,7 +283,7 @@ width:200px;
 			<template is="dom-if" if="{{!showCurrent}}">
           <p id="para" class="pump-name-adv">Current Over-speed</p>
             </template>
-           
+
             <template is="dom-if" if="{{!showSpeed}}">
           <p id="para" class="pump-name-adv">Pump Over-speed</p>
             </template>
@@ -307,42 +304,33 @@ width:200px;
 
     <div class="nav">
   			<div class='right'>
-  				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'>0</span></div>
-						
+  				<div class='home'><a href='/#/boilerAnalytics' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+
   			</div>
-  			<!--<div class='left'>
-  				<div class='search'><img src='/images/main-search.png'></div>
-  				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
-  			</div>-->
   		</div>
 
     <div class="nav1">
   			<div class='right'>
           {{advisoryId}}
   			</div>
-  			<!--<div class='left'>
-  				<div class='search'><img src='/images/main-search.png'></div>
-  				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
-  			</div>-->
   		</div>
       <div style="color: white; margin-left:10px;">Remaining Useful life: {{criticalElementSecond}}</div>
-  
+
  <div id="column2" >
-	 
+
 	  <div id="column2flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
 	 </div>
     <div id="column3" >
-	 
+
 	  <div id="column3flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
 	 </div>
 	  <div id="column4" >
-	 
+
 	  <div id="column4flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
 	 </div>
   <px-card id="secondCard" chevron>
-    
-	
+
+
        <!--  <px-vis-timeseries
        debounce-resize-timing="250"
        width="700"
@@ -364,9 +352,9 @@ width:200px;
        y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Head","titleTruncation":false,"unit":"ft"}, "axis3":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
        navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
      </px-vis-timeseries> -->
-	 
-	 
-	 
+
+
+
        <!-- <px-vis-xy-chart
                 debounce-resize-timing="250"
                 width="700"
@@ -383,12 +371,11 @@ width:200px;
                 x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
                 y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
                         </px-vis-xy-chart>  -->
-    
+     </div>
 
- </div>
-     <div id="column34">
+     <div id="column3">
 
-       <!-- <px-vis-timeseries
+      <!-- <px-vis-timeseries
        debounce-resize-timing="250"
        width="700"
        height="290.5"
@@ -422,7 +409,7 @@ width:200px;
                 y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
                         </px-vis-xy-chart>  -->
      </div>
- 
+
      <div id="column4y">
        <!-- <px-vis-timeseries
        debounce-resize-timing="250"
@@ -457,7 +444,7 @@ width:200px;
                 x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
                 y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
                         </px-vis-xy-chart>  -->
-    
+
 
 	  </div>
  </px-card>
@@ -678,7 +665,7 @@ Polymer({
     return spanStyle;
   },
   attached: function attached() {
-          
+
         },
       convertTimeStamp : function(timestamp) {
 		var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -705,23 +692,23 @@ Polymer({
 				s = '0' + date.getSeconds();
 			else
 				s = date.getSeconds();
-			
+
 			var hours  = date.getHours();
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
-			hours = hours ? hours : 12; 
+			hours = hours ? hours : 12;
 			//var dateString = hours +" "+ampm;
 			var dateString = monthShortNames[date.getMonth()] + " "+day + "-"+hours +" "+ampm;
-			return dateString; 
+			return dateString;
 		},
   ready: function() {
-    
+
 	var that = this;
-	
+
     console.log('Advisory Id'+document.getElementById('advisoryId').value);
     this.advisoryId = document.getElementById('advisoryId').value;
 	/*this.showGraph = true;
-	var arr= ["Check for looseness of phase windings","Check for high mechanical overload","Check for inductance for all 3 phases","Check insulation quality","Sudden Speed decreased Check the governor system"];	
+	var arr= ["Check for looseness of phase windings","Check for high mechanical overload","Check for inductance for all 3 phases","Check insulation quality","Sudden Speed decreased Check the governor system"];
 	if(arr.indexOf(this.advisoryId)>-1){
 		this.showGraph = false;
 	}*/
@@ -742,7 +729,7 @@ Polymer({
     var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
     ];
-    
+
     that.effChartData = [];
     //that.advisoryData = [];
     //this.dayWeek = '0'//this.$.dayWeekId.displayValue;
@@ -783,6 +770,8 @@ Polymer({
       var minPressureValue = 5;
       var maxPowerValue = 18;
       //if(flowVal > 1000 || flowVal<220){
+        if(flowVal<800){
+        that.alertList.push({'status':'danger','message':'Carbon Emmission higher than limit.'});
         if(flowVal<510){
         /*if(flowVal > 1000) {
           that.flowDiffValue = flowVal - 1000;
@@ -851,7 +840,7 @@ Polymer({
       }
 	  var alertCount = 0;
 	 // document.getElementById('noAlerts').style.display = 'none';
-	   setTimeout(function(){ 
+	   setTimeout(function(){
 alertCount = document.querySelectorAll('.pump-name-adv').length;
 		  if(alertCount>0){
 			  //document.getElementById('alertCount').style.display = 'block';
@@ -947,9 +936,9 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
             }
 	that.advisoryData = [];
     that.advisoryData = reqData1;
-	
-	
-	
+
+
+
        that.y1s = [];
         that.y2s = [];
         that.y3s = [];
@@ -971,15 +960,15 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
 				startDots = i;
 			}*/
         	//that.xaxis.push(that.convertTimeStamp(that.advisoryData[i].x));
-        	
+
         	that.xaxis.push(that.advisoryData[i].x);
         }
         that.yo = that.yos.map(parseFloat);
         that.y1 = that.y1s.map(parseFloat);
         that.y2 = that.y2s.map(parseFloat);
         that.y3 = that.y3s.map(parseFloat);
-       
-	
+
+
     for (i=0; i< advisoryData1.length; i++){
       if(that.advisoryId == advisoryData1[i]){
         //console.log('It is first advisory');
@@ -1045,7 +1034,7 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
 			var month = date.getMonth()+1;
 			var year = date.getFullYear();
 			var day = date.getDate();
-			
+
 			if (date.getMinutes() < 10){
 				m = '0' + date.getMinutes();}
 			else{
@@ -1054,12 +1043,12 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
 				s = '0' + date.getSeconds();}
 			else{
 				s = date.getSeconds();}
-			
+
 			var hours  = date.getHours();
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
-			hours = hours ? hours : 12; 
-			
+			hours = hours ? hours : 12;
+
 			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Speed: "+this.points[0].y+", Flow: "+this.points[1].y+", Head: "+this.points[2].y;
         }
     },
@@ -1077,7 +1066,7 @@ alertCount = document.querySelectorAll('.pump-name-adv').length;
     }, {
         name: 'Flow',
         type: 'line',
-        
+
 		zoneAxis: 'x',
 		data: that.y1,
        zones: [{
@@ -1169,7 +1158,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 			var month = date.getMonth()+1;
 			var year = date.getFullYear();
 			var day = date.getDate();
-			
+
 			if (date.getMinutes() < 10){
 				m = '0' + date.getMinutes();}
 			else{
@@ -1178,12 +1167,12 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 				s = '0' + date.getSeconds();}
 			else{
 				s = date.getSeconds();}
-			
+
 			var hours  = date.getHours();
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
-			hours = hours ? hours : 12; 
-			
+			hours = hours ? hours : 12;
+
 			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Speed: "+this.points[0].y+", Flow: "+this.points[1].y+", Head: "+this.points[2].y;
         }
     },
@@ -1201,7 +1190,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
     }, {
         name: 'Flow',
         type: 'line',
-       
+
 		zoneAxis: 'x',
 		data: that.y1,
        zones: [{
@@ -1238,7 +1227,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
           document.getElementById("column3").style.display = "block";
           document.getElementById("column4").style.display = "none";
 		   new Highcharts.Chart(that.$.column3flowcontainerHighcharts, {
-            
+
             chart: {
               type: 'line',
               zoomType: 'xy'
@@ -1257,7 +1246,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
                  categories: that.xaxis,
 				<!-- tickInterval :24*3600*1000, -->
 				<!-- tickInterval :12*3600*1000, -->
-				 tickInterval :6*3600*1000, 
+				 tickInterval :6*3600*1000,
 				<!-- tickInterval :3*3600*1000, -->
 				<!-- tickInterval :2*3600*1000, -->
 				labels: {
@@ -1273,7 +1262,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
             },
             series: [{
               name: 'Power',
-			  <!-- pointInterval: 24*3600 * 1000, --> 
+			  <!-- pointInterval: 24*3600 * 1000, -->
 			  <!-- pointInterval: 12*3600 * 1000, -->
 			  <!-- pointStart: Date.UTC(2017, 9, 05, 0, 0, 0, 0),  -->
               data: that.y3,
@@ -1299,7 +1288,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 			var month = date.getMonth()+1;
 			var year = date.getFullYear();
 			var day = date.getDate();
-			
+
 			if (date.getMinutes() < 10){
 				m = '0' + date.getMinutes();}
 			else{
@@ -1308,12 +1297,12 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 				s = '0' + date.getSeconds();}
 			else{
 				s = date.getSeconds();}
-			
+
 			var hours  = date.getHours();
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
-			hours = hours ? hours : 12; 
-			
+			hours = hours ? hours : 12;
+
 			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Power: "+this.y;
         }
             }
@@ -1330,7 +1319,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
           document.getElementById("column3").style.display = "block";
           document.getElementById("column4").style.display = "none";
 		   new Highcharts.Chart(that.$.column3flowcontainerHighcharts, {
-            
+
             chart: {
               type: 'line',
               zoomType: 'x'
@@ -1383,7 +1372,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 			var month = date.getMonth()+1;
 			var year = date.getFullYear();
 			var day = date.getDate();
-			
+
 			if (date.getMinutes() < 10){
 				m = '0' + date.getMinutes();}
 			else{
@@ -1392,16 +1381,16 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 				s = '0' + date.getSeconds();}
 			else{
 				s = date.getSeconds();}
-			
+
 			var hours  = date.getHours();
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
-			hours = hours ? hours : 12; 
-			
+			hours = hours ? hours : 12;
+
 			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Power: "+this.y;
         }
             }
-            
+
           });
         }
         }
@@ -1415,7 +1404,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
             document.getElementById("column3").style.display = "none";
             document.getElementById("column4").style.display = "block";
 			 new Highcharts.Chart(that.$.column4flowcontainerHighcharts, {
-            
+
             chart: {
               type: 'line',
               zoomType: 'x'
@@ -1468,7 +1457,7 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 			var month = date.getMonth()+1;
 			var year = date.getFullYear();
 			var day = date.getDate();
-			
+
 			if (date.getMinutes() < 10){
 				m = '0' + date.getMinutes();}
 			else{
@@ -1477,15 +1466,15 @@ new Highcharts.Chart(that.$.column2flowcontainerHighcharts, {
 				s = '0' + date.getSeconds();}
 			else{
 				s = date.getSeconds();}
-			
+
 			var hours  = date.getHours();
 			var ampm = hours >= 12 ? 'pm' : 'am';
 			hours = hours % 12;
-			hours = hours ? hours : 12; 
-			
+			hours = hours ? hours : 12;
+
 			return monthShortNames[date.getMonth()] + " "+day + "-"+hours +":"+m+":"+s+" "+ampm+",Speed: "+this.y;
         }
-            
+
             }
           });
           }

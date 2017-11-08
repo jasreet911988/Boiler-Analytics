@@ -1,22 +1,22 @@
 ---
 applications:
-  - name: armstrong-pump-manager2
+  - name: boiler-analytics
     memory: 128M
     timeout: 180
     buildpack: nodejs_buildpack
     command: node server/app.js
     path: dist
 services:
- - armstrong-uaa
- - armstrong-timeseries
- - armstrong-asset
+ - boiler-optimization-uaa
+ - boiler-optimization-timeseries
+ - boiler-optimization-asset
 env:
     node_env: cloud
     uaa_service_label : predix-uaa
     # Add these values for authentication in the cloud
-    base64ClientCredential: YWRtaW46YXJtc3Ryb25n
+    base64ClientCredential: YWRtaW46YWRtaW4yMg==
     loginBase64ClientCredential: Y2xpZW50OmNsaWVudA==
     # Use a full wss:// URL for actual web socket server. use /livestream for mock data.
     websocketServerURL: /livestream
-    rmdDatasourceURL: "https://armstrong-client-service.run.aws-usw02-pr.ice.predix.io"
+    rmdDatasourceURL: "https://boiler-optimization-client-service.run.aws-usw02-pr.ice.predix.io"
     rmdDocsURL: "https://raw.githubusercontent.com/PredixDev/predix-rmd-ref-app/master/README.md"

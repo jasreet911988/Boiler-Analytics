@@ -1,18 +1,18 @@
 <!-- import polymer -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="armstrong-asset.html">
+<link rel="import" href="boiler-analytics-asset.html">
 
-<dom-module id="armstrong-asset-list">
+<dom-module id="boiler-analytics-asset-list">
   <template>
     <div>
       <template id="assetList" is="dom-repeat" items="[[datapoints]]">
-        <armstrong-asset name="[[item.name]]"></armstrong-asset>
+        <boiler-analytics-asset name="[[item.name]]"></boiler-analytics-asset>
       </template>
-    <div>
+    </div>
   </template>
   <script>
   Polymer({
-    is: 'armstrong-asset-list',
+    is: 'boiler-analytics-asset-list',
     properties: {
       datapoints: []
     },

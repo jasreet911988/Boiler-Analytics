@@ -98,7 +98,7 @@
           }
         }
         var that = this;
-        that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];  
+        that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Gasoline_Based_Boiler_002&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];
           that.$.pumpPerformanceAjaxEl.generateRequest();
       },
       _getDefaultRange: function(months) {
@@ -117,7 +117,7 @@
         this.checkedArray.push("Flow");
         this.checkedArray.push("Head");
         var that = this;  
-        that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];      
+        that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Gasoline_Based_Boiler_002&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];
         this.$.pumpPerformanceAjaxEl.addEventListener('response', function(evt) {
           
           var data = evt.detail.response;
@@ -161,13 +161,13 @@
 
         this.$.perfRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
           that._setPerfTimes();
-          that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];  
+          that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Gasoline_Based_Boiler_002&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];
           that.$.pumpPerformanceAjaxEl.generateRequest();
         });
 
         this.$.perfGroupId.addEventListener('px-dropdown-value-changed', function(evt) {
           that.groupType = evt.detail.key;  
-          that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Condenser_Water_Pump_001&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];  
+          that.$.pumpPerformanceAjaxEl.url = "/api/v1/pumpperformance?tagId=Gasoline_Based_Boiler_002&startTime="+that.perfStartTime+"&endTime="+that.perfEndTime+"&groupType="+that.groupType+"&var1="+that.checkedArray[0]+"&var2="+that.checkedArray[1];
           that.$.pumpPerformanceAjaxEl.generateRequest();
         });
                 

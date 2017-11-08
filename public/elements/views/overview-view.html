@@ -54,7 +54,6 @@ display: block;
 .kpiContent {
   color: white;
   font-size: 18px;
-  /* color: #FF8000; */
 }
 .kpiUnits{
   margin-left: 5px;
@@ -84,7 +83,7 @@ display: block;
   height: 14px;
     margin-right: 5px;
     width: 3px;
-    background-color: green;
+    background-color: red;
     display: inline-block;
 }
 #dropdownDiv {
@@ -235,13 +234,9 @@ width:200px;
   <div style="width:100%;">
 	<div class="nav">
 			<div class='right'>
-				<div class='home'><a href='/#/pumpManager' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
-				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert <span id='alertCount'>0</span></div>
+				<div class='home'><a href='/#/boilerAnalytics' on-click="_refresh" class='home-link'><px-icon class="custom-size" icon="px-fea:home"></px-icon><span class='menutext'>Home</span></a></div>
+				<div class='alert' on-click="advisoryClicked"><img src='/images/alert.png'>&nbsp;&nbsp;Alert</div>
 			</div>
-			<!--<div class='left'>
-				<div class='search'><img src='/images/main-search.png'></div>
-				<div class='user'><img src='/images/armstrong-pumps-logo.png' width='25' height='25'/></div>
-			</div>-->
 		</div>
 
     <div id="advsioryElement" style="position:absolute; top:-10px; right:950px; width:500px; "></div>
@@ -252,23 +247,19 @@ width:200px;
           <div id="column2" class = "main-content">
 
             <template is="dom-if" if="{{!showFlow}}">
-          <p id="para" class="pump-name">Low Discharge Flow</p>
+          <p id="para" class="pump-name">Carbon Emmission higher than limit</p>
             </template>
-			<template is="dom-if" if="{{!showCurrent}}">
-          <p id="para" class="pump-name">Current Over-speed</p>
-            </template>
-           
             <template is="dom-if" if="{{!showSpeed}}">
-          <p id="para" class="pump-name">Pump Over-speed</p>
+          <p id="para" class="pump-name">Carbon Emmission higher than limit</p>
             </template>
             <template is="dom-if" if="{{showSpeed}}">
-          <p id="para" class="pump-name">Pump Under-speed</p>
+          <p id="para" class="pump-name">Carbon Emmission higher than limit</p>
             </template>
             <template is="dom-if" if="{{!showPressure}}">
-          <p id="para" class="pump-name">Pressure is more</p>
+          <p id="para" class="pump-name">Carbon Emmission higher than limit</p>
             </template>
             <template is="dom-if" if="{{showPressure}}">
-          <p id="para" class="pump-name">Pressure is less</p>
+          <p id="para" class="pump-name">Carbon Emmission higher than limit</p>
             </template>
 <p id="noAlerts" class="pump-name-no">No Alerts</p>
           </div>
@@ -285,17 +276,17 @@ width:200px;
             <span style="font-weight:bold;text-align:center;text-transform:uppercase;">{{assetName}}</span>
           </div>
           <div>
-          <img src="../../images/pump.png" style="width:80px; height:100px; padding-left: 20px;">
+          <img src="../../images/coal-boiler1.jpg" style="width:80px; height:100px; padding-left: 20px;">
         </div>
           <hr>
           <div style=" display: flex; flex-direction: row;">
         <div>
           <span style="padding:10px;font-size:12px;color:darkgrey;">UPCOMING SERVICE</span><br>
-          <span style="padding:10px;font-weight:bold;">30th Sep 2017</span>
+          <span style="padding:10px;font-weight:bold;">Oct 31, 2017</span>
         </div>
         <div>
           <span style="padding:10px;font-size:12px;color:darkgrey;">INSTALLATION DATE</span><br>
-          <span style="padding:10px;font-weight:bold;">29th Mar 2017</span>
+          <span style="padding:10px;font-weight:bold;">Mar 29,2017</span>
         </div>
         </div>
         </div>
@@ -309,51 +300,51 @@ width:200px;
               <template is="dom-if" if="{{!kpiStatus.current}}">
                 <span class="kpiStatusRed"></span>
               </template>
-            <span class="kpiContent">{{kpiObject.Current}}</span><span class="kpiUnits">A</span>
+            <span class="kpiContent">{{kpiObject.Current}}</span><span class="kpiUnits"></span>
           </div>
           <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
-            <span class="kpiHeader">Speed</span><br>
+            <span class="kpiHeader">Coal</span><br>
             <template is="dom-if" if="{{kpiStatus.speed}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.speed}}">
                 <span class="kpiStatusRed"></span>
               </template>
-            <span class="kpiContent">{{kpiObject.Speed}}</span><span class="kpiUnits">%</span>
+            <span class="kpiContent">{{kpiObject.Speed}}</span><span class="kpiUnits"></span>
           </div>
           </div>
           <div class="layout horizontal center-center">
             <div class="kpi" style="width:65%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
-            <span class="kpiHeader">Flow</span><br>
+            <span class="kpiHeader">Water</span><br>
               <template is="dom-if" if="{{kpiStatus.flow}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.flow}}">
                 <span class="kpiStatusRed"></span>
               </template>
-            <span class="kpiContent">{{kpiObject.Flow}}</span><span class="kpiUnits">usgpm</span>
+            <span class="kpiContent">{{kpiObject.Flow}}</span><span class="kpiUnits"></span>
             </div>
           <div class="kpi" style="width:35%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
-            <span class="kpiHeader">Power</span><br>
+            <span class="kpiHeader">Efficiency</span><br>
            <template is="dom-if" if="{{kpiStatus.power}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.power}}">
                 <span class="kpiStatusRed"></span>
               </template>
-          <span class="kpiContent">{{kpiObject.Power}}</span><span class="kpiUnits">kW</span>
+          <span class="kpiContent">{{kpiObject.Power}}</span><span class="kpiUnits"></span>
           </div>
           </div>
           <div class="layout horizontal center-center">
             <div class="kpi" style="width:100%;border-right:1px solid #9bacb6;">
-            <span class="kpiHeader">Discharge Pressure</span><br>
+            <span class="kpiHeader">Discharge Carbon Emissions </span><br>
             <template is="dom-if" if="{{kpiStatus.pressure}}">
                 <span class="kpiStatusGreen"></span>
               </template>
               <template is="dom-if" if="{{!kpiStatus.pressure}}">
                 <span class="kpiStatusRed"></span>
               </template>
-            <span class="kpiContent">{{kpiObject.Pressure}}</span><span class="kpiUnits">kg/cm2</span>
+            <span class="kpiContent">{{kpiObject.Pressure}}</span><span class="kpiUnits"></span>
 
           </div>
           </div>
@@ -478,7 +469,7 @@ width:200px;
       <!-- </div> -->
     </px-card>
     <!-- new card starts-->
-    <px-card id="secondCard" header-text="Vibration Profile" chevron>
+    <px-card id="secondCard" header-text="Carbon Emissions" chevron>
         <div id="column1" style="padding-right:10px;">
           <div class="layout horizontal">
             <div>
@@ -495,7 +486,7 @@ width:200px;
                 max-cont-character-width='10'
                 items='[{"key":"GravityX","val":"X"},{"key":"GravityY","val":"Y"},{"key":"GravityZ","val":"Z"}]'>
               </px-dropdown-content>
-            </px-dropdow>
+            </px-dropdown>
           </div>
           </div>
           <!-- <nvd3-line
@@ -522,7 +513,7 @@ width:200px;
           display-threshold-title
           threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
           x-axis-config='{"title":"Date"}'
-          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Vibration","titleTruncation":false,"unit":"mm/s2"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Carbon Emissions","titleTruncation":false,"unit":"mm/s2"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
         </div>
       </px-card>
@@ -572,7 +563,7 @@ width:200px;
         </div>
     </px-card>
    <!--  <canvas id="chart" style="width:400px;height:400px;"></canvas> -->
-    <px-card id="CanvasCard" header-text="Pump Efficiency" chevron>
+    <px-card id="CanvasCard" header-text="Boiler Efficiency" chevron>
         <div id="column2" >
           <px-rangepicker id="peRangeId" range="{{peSelectedRange}}">
           </px-rangepicker>
@@ -647,22 +638,8 @@ Polymer({
       type: Boolean
     }
   },
-  <!-- notifyEffChange:function(newValue, oldValue){ -->
-	<!-- console.log(newValue); -->
-	<!-- console.log(oldValue); -->
-  <!-- }, -->
   advisoryClicked: function(){
-    console.log("advisory clciked");
-     // this.mapsOn = null;
-  //  this.$.armstrongAssetAjaxEl.generateRequest();
-    //this.$.armstrongKPIAjaxEl.url="/api/v1/latestdetails?tagId=Condenser_Water_Pump_001";
-   //this.$.armstrongKPIAjaxEl.generateRequest();
     document.getElementById('advsioryElement').click();
-  //  document.getElementById('pop').show();
-  //  document.getElementById('pop1').hide();
-    //document.getElementById('pop2').hide();
-
-    //this.$.modalId.click();
   },
   close: function(){
     console.log('it comes here');
@@ -817,18 +794,8 @@ Polymer({
       var maxPressureValue = 22;
       var minPressureValue = 5;
       var maxPowerValue = 18;
-      //if(flowVal > 1000 || flowVal<220){
-        if(flowVal<510){
-        /*if(flowVal > 1000) {
-          that.flowDiffValue = flowVal - 1000;
-          that.showAdvisory.flowmore = true;
-        }
-        if(flowVal<510){
-          //that.flowDiffValue = 220 - flowVal;
-          that.kpiStatus.flowless = true;
-        }*/
-        that.alertList.push({'status':'danger','message':'Flow below threshold.'});
-        //this.showFlow = false;
+        if(flowVal<800){
+        that.alertList.push({'status':'danger','message':'Carbon Emission higher than limit '});
         that.showFlow = false;
         that.kpiStatus.flow = false;
       }/*else if(flowVal > 850 || flowVal < 350){
@@ -885,9 +852,9 @@ Polymer({
         that.kpiStatus.power = true;
       }
 	  var alertCount = 0;
-	  
+
 			 // document.getElementById('noAlerts').style.display = 'none';
-			  setTimeout(function(){ 
+			  setTimeout(function(){
 alertCount = document.querySelectorAll('.pump-name').length;
 		  if(alertCount>0){
 			  //document.getElementById('alertCount').style.display = 'block';
@@ -898,8 +865,8 @@ alertCount = document.querySelectorAll('.pump-name').length;
 			//  document.getElementById('alertCount').style.display = 'none';
 			  }
 			  }, 2000);
-			  
-	  
+
+
     });
     this.$.overviewAjaxEl.addEventListener('response', function(evt) {
       var reqData = evt.detail.response;
@@ -1020,7 +987,7 @@ alertCount = document.querySelectorAll('.pump-name').length;
     });
     this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {
       console.log(evt.detail.response);
-      that.effChartData = evt.detail.response;	  
+      that.effChartData = evt.detail.response;
 	  var flow = [];
 	  var head = [];
 	  var efficiency = [];
@@ -1052,7 +1019,7 @@ alertCount = document.querySelectorAll('.pump-name').length;
 			efficiency.push(that.effChartData[i].efficiency);
 		}
 	  }
-	  
+
 	  new Highcharts.chart(that.$.pumpHighchart, {
     chart: {
         type: 'scatter'
@@ -1117,7 +1084,7 @@ alertCount = document.querySelectorAll('.pump-name').length;
         data: efficiency
     }]
 });
-	  
+
     });
 
 
@@ -1148,7 +1115,6 @@ alertCount = document.querySelectorAll('.pump-name').length;
         that.$.loadProfileAjaxEl.url = "/api/v1/loadprofilegraph?tagId="+that.assetId+"&startTime="+that.loadStartTime+"&endTime="+that.loadEndTime+"&groupType="+that.dayWeek;
         that.$.loadProfileAjaxEl.generateRequest();
       }else {
-        console.log("coming here");
         //that.LoadData = [];
         that.$.loadProfileLiveAjaxEl.url = "/api/v1/liveflowdata?tagId="+that.assetId;
         myVar = setInterval(function(){ that.$.loadProfileLiveAjaxEl.generateRequest();}, 30000);
@@ -1189,7 +1155,7 @@ alertCount = document.querySelectorAll('.pump-name').length;
     });
     this.$.peRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
       that._setPeTimes();
-      that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime="+that.peStartTime+"&endTime="+that.peEndTime;
+      that.$.pumpEfficiencyAjaxEl.url = "/api/v1/pumpefficiency?tagId="+that.assetId+"&startTime=1508953721000&endTime=1508953721127";
       that.$.pumpEfficiencyAjaxEl.generateRequest();
     });
     this.$.gravityRangeId.addEventListener('px-datetime-range-submitted', function(evt) {
