@@ -329,9 +329,7 @@ width:200px;
 	  <div id="column4flowcontainerHighcharts" style="min-width: 700px; height: 400px; margin: 0 auto"></div>
 	 </div>
   <px-card id="secondCard" chevron>
-
-
-       <!--  <px-vis-timeseries
+      <!--  <px-vis-timeseries
        debounce-resize-timing="250"
        width="700"
        height="290.5"
@@ -371,8 +369,6 @@ width:200px;
                 x-axis-config='{"title":"Flow","labelPosition":"center","orientation":"bottom"}'
                 y-axis-config='{"title":"Speed","labelPosition":"center","orientation":"left"}'>
                         </px-vis-xy-chart>  -->
-     </div>
-
      <div id="column3">
 
       <!-- <px-vis-timeseries
@@ -770,10 +766,10 @@ Polymer({
       var minPressureValue = 5;
       var maxPowerValue = 18;
       //if(flowVal > 1000 || flowVal<220){
-        if(flowVal<800){
-        that.alertList.push({'status':'danger','message':'Carbon Emmission higher than limit.'});
-        if(flowVal<510){
-        /*if(flowVal > 1000) {
+        if(flowVal<800) {
+            that.alertList.push({'status': 'danger', 'message': 'Carbon Emmission higher than limit.'});
+            if (flowVal < 510) {
+                /*if(flowVal > 1000) {
           that.flowDiffValue = flowVal - 1000;
           that.showAdvisory.flowmore = true;
         }
@@ -781,77 +777,78 @@ Polymer({
           //that.flowDiffValue = 220 - flowVal;
           that.kpiStatus.flowless = true;
         }*/
-        that.alertList.push({'status':'danger','message':'Flow below threshold.'});
-        //this.showFlow = false;
-        that.showFlow = false;
-        that.kpiStatus.flow = false;
-      }/*else if(flowVal > 850 || flowVal < 350){
+                that.alertList.push({'status': 'danger', 'message': 'Flow below threshold.'});
+                //this.showFlow = false;
+                that.showFlow = false;
+                that.kpiStatus.flow = false;
+            }/*else if(flowVal > 850 || flowVal < 350){
         that.alertList.push({'status':'warning','message':'Flow requires attention'});
         that.kpiStatus.flow = true;
-      }*/else{
-      //this.showFlow = true;
-      that.showFlow = true;
-        that.kpiStatus.flow = true;
-      }
-      if(currentVal >= 20 || currentVal <= 5){
-	  that.showCurrent = false;
-        that.kpiStatus.current = false;
-      }else{
-	  that.showCurrent = true;
-        that.kpiStatus.current = true;
-      }
-      if(speedVal >= 87 || speedVal <= 27){
-        if(speedVal >= 87){
+      }*/ else {
+                //this.showFlow = true;
+                that.showFlow = true;
+                that.kpiStatus.flow = true;
+            }
+            if (currentVal >= 20 || currentVal <= 5) {
+                that.showCurrent = false;
+                that.kpiStatus.current = false;
+            } else {
+                that.showCurrent = true;
+                that.kpiStatus.current = true;
+            }
+            if (speedVal >= 87 || speedVal <= 27) {
+                if (speedVal >= 87) {
 
-        //this.showSpeed = false;
-        that.showSpeed = false;
+                    //this.showSpeed = false;
+                    that.showSpeed = false;
+                }
+                if (speedVal <= 27) {
+
+                    //this.showSpeed = true;
+                    that.showSpeed = true;
+                }
+
+                that.kpiStatus.speed = false;
+            } else {
+                that.kpiStatus.speed = true;
+            }
+            if (pressureVal >= 22 || pressureVal <= 5) {
+                if (pressureVal >= 22) {
+                    //that.pressureDiffValue = pressureVal - 22;
+
+                    //this.showPressure = false;
+                    that.showPressure = false;
+                }
+                if (pressureVal <= 5) {
+                    //  that.pressureDiffValue = 5 - pressureVal;
+
+                    //this.showPressure = true;
+                    that.showPressure = true;
+                }
+                that.kpiStatus.pressure = false;
+            } else {
+                that.kpiStatus.pressure = true;
+            }
+            if (powerVal >= 18) {
+                that.kpiStatus.power = false;
+            } else {
+                that.kpiStatus.power = true;
+            }
+            var alertCount = 0;
+            // document.getElementById('noAlerts').style.display = 'none';
+            setTimeout(function () {
+                alertCount = document.querySelectorAll('.pump-name-adv').length;
+                if (alertCount > 0) {
+                    //document.getElementById('alertCount').style.display = 'block';
+                    document.getElementById('noAlerts').style.display = 'none';
+                    document.getElementById('alertCount').innerHTML = alertCount;
+                } else {
+                    document.getElementById('noAlerts').style.display = 'block';
+                    // document.getElementById('alertCount').style.display = 'none';
+                }
+            }, 2000);
         }
-        if(speedVal <= 27){
-
-        //this.showSpeed = true;
-        that.showSpeed = true;
-        }
-
-        that.kpiStatus.speed = false;
-      }else{
-        that.kpiStatus.speed = true;
-      }
-      if(pressureVal >= 22 || pressureVal <= 5){
-        if(pressureVal >= 22) {
-          //that.pressureDiffValue = pressureVal - 22;
-
-          //this.showPressure = false;
-          that.showPressure = false;
-        }
-        if(pressureVal<=5){
-        //  that.pressureDiffValue = 5 - pressureVal;
-
-          //this.showPressure = true;
-          that.showPressure = true;
-        }
-        that.kpiStatus.pressure = false;
-      }else{
-        that.kpiStatus.pressure = true;
-      }
-      if(powerVal >= 18){
-        that.kpiStatus.power = false;
-      }else{
-        that.kpiStatus.power = true;
-      }
-	  var alertCount = 0;
-	 // document.getElementById('noAlerts').style.display = 'none';
-	   setTimeout(function(){
-alertCount = document.querySelectorAll('.pump-name-adv').length;
-		  if(alertCount>0){
-			  //document.getElementById('alertCount').style.display = 'block';
-			  document.getElementById('noAlerts').style.display = 'none';
-			  document.getElementById('alertCount').innerHTML = alertCount;
-			  }else{
-			  document.getElementById('noAlerts').style.display = 'block';
-			 // document.getElementById('alertCount').style.display = 'none';
-			  }
-			  }, 2000);
-    });
+        });
 
 
     this.$.pumpEfficiencyAjaxEl.addEventListener('response', function(evt) {

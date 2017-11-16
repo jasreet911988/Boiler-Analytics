@@ -228,6 +228,12 @@ width:200px;
     color: #fff;
 	background:red;
    }
+    .changeBarColor{
+        height: 14px;
+        margin-right: 5px;
+        width: 3px;
+        display: inline-block;
+    }
 </style>
 <div class="layout horizontal">
 
@@ -286,7 +292,7 @@ width:200px;
         </div>
         <div>
           <span style="padding:10px;font-size:12px;color:darkgrey;">INSTALLATION DATE</span><br>
-          <span style="padding:10px;font-weight:bold;">Mar 29,2017</span>
+          <span style="padding:10px;font-weight:bold;">Mar 29, 2017</span>
         </div>
         </div>
         </div>
@@ -294,21 +300,21 @@ width:200px;
           <div class="layout horizontal center-center">
             <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Current</span><br>
-            <template is="dom-if" if="{{kpiStatus.current}}">
-                <span class="kpiStatusGreen"></span>
+            <template is="dom-if" if="{{checkForGreen(assetName)}}">
+                <span class="changeBarColor" style="background-color: green"></span>
               </template>
-              <template is="dom-if" if="{{!kpiStatus.current}}">
-                <span class="kpiStatusRed"></span>
+              <template is="dom-if" if="{{checkForRed(assetName)}}">
+                <span class="changeBarColor" style="background-color: red"></span>
               </template>
             <span class="kpiContent">{{kpiObject.Current}}</span><span class="kpiUnits"></span>
           </div>
           <div class="kpi" style="width:50%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Coal</span><br>
-            <template is="dom-if" if="{{kpiStatus.speed}}">
-                <span class="kpiStatusGreen"></span>
+            <template is="dom-if" if="{{checkForGreen(assetName)}}">
+                <span class="changeBarColor" style="background-color: green"></span>
               </template>
-              <template is="dom-if" if="{{!kpiStatus.speed}}">
-                <span class="kpiStatusRed"></span>
+              <template is="dom-if" if="{{checkForRed(assetName)}}">
+                  <span class="changeBarColor" style="background-color: red"></span>
               </template>
             <span class="kpiContent">{{kpiObject.Speed}}</span><span class="kpiUnits"></span>
           </div>
@@ -316,21 +322,21 @@ width:200px;
           <div class="layout horizontal center-center">
             <div class="kpi" style="width:65%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Water</span><br>
-              <template is="dom-if" if="{{kpiStatus.flow}}">
-                <span class="kpiStatusGreen"></span>
+              <template is="dom-if" if="{{checkForGreen(assetName)}}">
+                  <span class="changeBarColor" style="background-color: green"></span>
               </template>
-              <template is="dom-if" if="{{!kpiStatus.flow}}">
-                <span class="kpiStatusRed"></span>
+              <template is="dom-if" if="{{checkForRed(assetName)}}">
+                  <span class="changeBarColor" style="background-color: red"></span>
               </template>
             <span class="kpiContent">{{kpiObject.Flow}}</span><span class="kpiUnits"></span>
             </div>
           <div class="kpi" style="width:35%;border-bottom:1px solid #9bacb6;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Efficiency</span><br>
-           <template is="dom-if" if="{{kpiStatus.power}}">
-                <span class="kpiStatusGreen"></span>
+           <template is="dom-if" if="{{checkForGreen(assetName)}}">
+               <span class="changeBarColor" style="background-color: green"></span>
               </template>
-              <template is="dom-if" if="{{!kpiStatus.power}}">
-                <span class="kpiStatusRed"></span>
+              <template is="dom-if" if="{{checkForRed(assetName)}}">
+                  <span class="changeBarColor" style="background-color: red"></span>
               </template>
           <span class="kpiContent">{{kpiObject.Power}}</span><span class="kpiUnits"></span>
           </div>
@@ -338,11 +344,11 @@ width:200px;
           <div class="layout horizontal center-center">
             <div class="kpi" style="width:100%;border-right:1px solid #9bacb6;">
             <span class="kpiHeader">Discharge Carbon Emissions </span><br>
-            <template is="dom-if" if="{{kpiStatus.pressure}}">
-                <span class="kpiStatusGreen"></span>
+            <template is="dom-if" if="{{checkForGreen(assetName)}}">
+                <span class="changeBarColor" style="background-color: green"></span>
               </template>
-              <template is="dom-if" if="{{!kpiStatus.pressure}}">
-                <span class="kpiStatusRed"></span>
+              <template is="dom-if" if="{{checkForRed(assetName)}}">
+                  <span class="changeBarColor" style="background-color: red"></span>
               </template>
             <span class="kpiContent">{{kpiObject.Pressure}}</span><span class="kpiUnits"></span>
 
@@ -356,17 +362,13 @@ width:200px;
             <hr style="margin:0px;">
 			 <px-tree style="color: white;" 
 			 keys='{"id":"label","label":"label","children":"items","icon":"icon"}' 
-			 items='[{"label":"Check for damage to impeller" }, 
-			 {"label":"There is possibility of cavitation", 
-			 "items":[{"label":"Check if NPSHA>NPSHR"},
-			 {"label":"Check for rise in temperature of liquid"}]}, 
-			 {"label":"Possibility of voltage unbalance/ voltage surge"}, 
-			 {"label":"Possibility of current unbalance",
-			 "items":[{"label":"Check for looseness of phase windings"}, 
-			 {"label":"Check for high mechanical overload"},
-			 {"label":"Check for inductance for all 3 phases"},
-			 {"label":"Check insulation quality"}]}, 
-			 {"label":"Sudden Speed decreased Check the governor system"}]'></px-tree>
+			 items='[{"label":"Sudden increase in carbon emissions" },
+			 {"label":"Possibility of low oxygen level"},
+			 {"label":"Possibility of high water pressure"},
+			 {"label":"Check Coal Quality"},
+			 {"label":"Possibility of current unbalance"},
+			 {"label":"Sudden Speed decreased Check the governor system"}]'>
+             </px-tree>
 
             <!--ul>
               <template is="dom-repeat" items="{{alertList}}">
@@ -425,14 +427,14 @@ width:200px;
           register-config='{"type":"horizontal"}'
           selection-type="xy"
           chart-data='{{LoadData}}'
-          series-config='{"y0":{"name":"Flow","x":"x","y":"y","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}'
+          series-config='{"y0":{"name":"Water","x":"x","y":"y","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y","type":"max","value":850},{"for":"y","type":"min","value":500}]'
           display-threshold-title
           threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
           "min":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
           x-axis-config='{"title":"Date"}'
-          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Water","titleTruncation":false,"unit":"usgpm"}}'navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
 
         <!--  event-data='[{"id":"123","time":1498938000000,"label":"Alert"}]'
@@ -507,7 +509,7 @@ width:200px;
           register-config='{"type":"horizontal"}'
           selection-type="xy"
           chart-data='{{gravityData}}'
-          series-config='{"y0":{"name":"Vibration","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"2"}}}'
+          series-config='{"y0":{"name":"Carbon Emissions","x":"timeStamp","y":"y0","yAxisUnit":"mm/s2","axis":{"id":"axis1","side":"left","number":"2"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y0","type":"max","value":0.1}]'
           display-threshold-title
@@ -517,7 +519,7 @@ width:200px;
         </px-vis-timeseries>
         </div>
       </px-card>
-      <px-card id="secondCard" header-text="Flow & Speed" chevron>
+      <px-card id="secondCard" header-text="Water & Coal" chevron>
         <div id="column2" >
           <h3></h3>
           <px-rangepicker id="flowspeedRangeId" range="{{flowspeedSelectedRange}}">
@@ -533,15 +535,15 @@ width:200px;
           register-config='{"type":"horizontal"}'
           selection-type="xy"
           chart-data='{{flowspeedData}}'
-          series-config='{"y0":{"name":"Flow","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},
-          "y1":{"name":"Speed","x":"timeStamp","y":"y1","yAxisUnit":"%","axis":{"id":"axis2","side":"right","number":"1"}}}'
+          series-config='{"y0":{"name":"Water","x":"timeStamp","y":"y0","yAxisUnit":"usgpm","axis":{"id":"axis1","side":"left","number":"1"}},
+          "y1":{"name":"Coal","x":"timeStamp","y":"y1","yAxisUnit":"%","axis":{"id":"axis2","side":"right","number":"1"}}}'
           chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
           threshold-data='[{"for":"y0","type":"max","value":1400},{"for":"y0","type":"min","value":250},{"for":"y1","type":"max","value":98}]'
           display-threshold-title
           threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false},
           "min":{"color":"red","dashPattern":"5,0","title":"","showThresholdBox":false,"displayTitle":false}}'
           x-axis-config='{"title":"Date"}'
-          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Flow","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Speed","titleTruncation":false,"unit":"%"}}'
+          y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Water","titleTruncation":false,"unit":"usgpm"},"axis2":{"title":"Coal","titleTruncation":false,"unit":"%"}}'
           navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'>
         </px-vis-timeseries>
           <!-- <px-vis-xy-chart
@@ -645,6 +647,13 @@ Polymer({
     console.log('it comes here');
     document.getElementById('pop').hide();
   },
+    checkForGreen: function (assetName) {
+        return assetName == 'Gasoline Boiler' || assetName == 'Stoker Lump Boiler';
+        //return true;
+    },
+    checkForRed: function (assetName) {
+        return assetName == 'Pulverized Coal Boiler';
+    },
   _getDefaultRange: function(months) {
     var from;
     var to;
@@ -1036,14 +1045,14 @@ alertCount = document.querySelectorAll('.pump-name').length;
             format: '{value}'
         },
         title: {
-            text: 'Efficiency [%]'
+            text: 'Coal'
         },
         opposite: true
 
     }, { // Secondary yAxis
         gridLineWidth: 0,
         title: {
-            text: 'Head [ft]'
+            text: 'Water'
         },
         labels: {
             format: '{value}'
@@ -1054,9 +1063,9 @@ alertCount = document.querySelectorAll('.pump-name').length;
         formatter: function() {
             console.log(this)
             if (this.color == '#434348' || this.color=='#c10b23') {
-                return 'Efficiency: '+this.key + ' usgpm / ' + this.y + ' %';
+                return 'Coal: '+this.key + ' usgpm / ' + this.y + ' %';
             } else {
-                return 'Head: '+this.key + ' usgpm / ' + this.y + ' ft';
+                return 'Water: '+this.key + ' usgpm / ' + this.y + ' ft';
             }
         }
     },
@@ -1068,7 +1077,7 @@ alertCount = document.querySelectorAll('.pump-name').length;
             lineWidth: 0,
             symbol: 'circle'
         },
-        name: 'Head',
+        name: 'Water',
         yAxis: 1,
         data: head
 
@@ -1080,7 +1089,7 @@ alertCount = document.querySelectorAll('.pump-name').length;
             lineWidth: 0,
             symbol: 'circle'
         },
-        name: 'Efficiency',
+        name: 'Coal',
         data: efficiency
     }]
 });
